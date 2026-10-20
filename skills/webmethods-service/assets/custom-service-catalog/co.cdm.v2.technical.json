@@ -1,0 +1,205 @@
+{
+ "folder": "co.cdm.v2.technical",
+ "generated_by": "wm_inspect.py catalog",
+ "total_services": 0,
+ "services": [],
+ "document_types": [
+  {
+   "name": "co.cdm.v2.technical:docAttribute",
+   "package": "COCDMV002",
+   "fields": [
+    {
+     "name": "name",
+     "type": "String",
+     "required": true
+    },
+    {
+     "name": "value",
+     "type": "String",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "co.cdm.v2.technical:docEnvelope",
+   "package": "COCDMV002",
+   "fields": [
+    {
+     "name": "flowID",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "flowName",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "correlationID",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "externalID",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "processName",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "processID",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "sourceSystem",
+     "type": "String",
+     "required": true
+    },
+    {
+     "name": "sourceType",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "sourceEndpoint",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "joinTransaction",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "invocationMode",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "customerID",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "userID",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "language",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "internalTimestamp",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "externalTimestamp",
+     "type": "String",
+     "required": true
+    },
+    {
+     "name": "attributes",
+     "type": "String[]",
+     "required": false
+    }
+   ]
+  },
+  {
+   "name": "co.cdm.v2.technical:docFile",
+   "package": "COCDMV002",
+   "fields": [
+    {
+     "name": "fileStream",
+     "type": "Object",
+     "required": true
+    },
+    {
+     "name": "extension",
+     "type": "String",
+     "required": true
+    },
+    {
+     "name": "fileName",
+     "type": "String",
+     "required": true
+    },
+    {
+     "name": "filenameEncoding",
+     "type": "String",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "co.cdm.v2.technical:docResponseHeaders",
+   "package": "COCDMV002",
+   "fields": [
+    {
+     "name": "flowID",
+     "type": "String",
+     "required": true
+    },
+    {
+     "name": "flowName",
+     "type": "String",
+     "required": true
+    }
+   ]
+  },
+  {
+   "name": "co.cdm.v2.technical:docResult",
+   "package": "COCDMV002",
+   "fields": [
+    {
+     "name": "isSuccess",
+     "type": "Boolean",
+     "required": true
+    },
+    {
+     "name": "errorCode",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "errorDescription",
+     "type": "String",
+     "required": false
+    },
+    {
+     "name": "errorDetails",
+     "type": "String[]",
+     "required": false
+    },
+    {
+     "name": "sourceErrorDetails",
+     "type": "Doc[]",
+     "required": true,
+     "fields": [
+      {
+       "name": "systemId",
+       "type": "String",
+       "required": true
+      },
+      {
+       "name": "code",
+       "type": "String",
+       "required": true
+      },
+      {
+       "name": "description",
+       "type": "String",
+       "required": true
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+  "folder": "JDBC",
+  "description": [
+    "You use the elements in the JDBC folder to obtain information about Integration Server JDBC pools."
+  ],
+  "total_services": 1,
+  "services": [
+    {
+      "name": "pub.jdbc:getPoolInfo",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-jdbc-folder#A73644__title__1",
+      "description": [
+        "WmPublic. Returns run-time information about the JDBC pool associated with a specified functional alias."
+      ],
+      "input_parameters": [
+        {
+          "name": "functionalAlias",
+          "type": "String",
+          "description": [
+            "Name of the Integration Server functional alias for which you want to obtain JDBC information."
+          ]
+        },
+        {
+          "name": "getConnectionWait",
+          "type": "String",
+          "description": [
+            "Optional. Number of milliseconds the service will wait to obtain a connection to a JDBC connection pool. The default is 10 seconds (10000 milliseconds). If a connection is not obtained within this time, the service ends with a status of fail."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "minConnections",
+          "type": "String",
+          "description": [
+            "The minimum number of connections the pool can have."
+          ]
+        },
+        {
+          "name": "maxConnections",
+          "type": "String",
+          "description": [
+            "The maximum number of connections the pool can have."
+          ]
+        },
+        {
+          "name": "totalConnections",
+          "type": "String",
+          "description": [
+            "The total number of connections currently in the pool. This number includes connections that are already in use and connections that are available for use."
+          ]
+        },
+        {
+          "name": "availableConnections",
+          "type": "String",
+          "description": [
+            "The number of connections that are available for use."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "A status indicating whether the service was able to connect to the pool. A value of: - Active indicates that the service was able to connect to the JDBC pool. - Inactive indicates that the service was not able to connect to the JDBC pool or an invalid functional alias was specified. If the attempt to connect to the JDBC pool failed with a SQLException, the service might throw an exception. If the service does not throw an exception, it will return a message in the message variable."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Conditional. Returned only if the service was not able to connect to the JDBC pool. Contains one of the following explanations: Invalid functional alias. An invalid or non-existent functional alias was specified with the functionalAlias input parameter. No pool is associated with this function or the pool may have failed during initialization. A valid functional alias was specified, but no pool is associated with the functional alias, or the pool did not properly initialize."
+          ]
+        }
+      ]
+    }
+  ]
+}

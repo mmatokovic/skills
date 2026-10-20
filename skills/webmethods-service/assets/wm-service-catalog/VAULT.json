@@ -1,0 +1,430 @@
+{
+  "folder": "VAULT",
+  "description": [
+    "Use the elements in the vault folder to manage your Integration Server secrets by using a vault. In the context of a vault, a secret is one or more key-value pairs. For example, a username and password can be stored as a key-value pair in a secret in the vault."
+  ],
+  "usage_notes": [
+    {
+      "title": "Prerequisite Tasks",
+      "content": [
+        "- All vault services require a vault connection alias that identifies the vault server to use. Create a vault connection alias by using configuration variables. For more information, see Creating a Vault Connection . The vault connection alias that you need to run the vault services is the alias portion of the key names. For example, in the key, vault.hashiCorpVault.properties.VAULT_ADDR, hashiCorpVault is the vault connection alias.",
+        "- By default, the secrets cache is enabled for a vault connection alias. A secrets cache is the local memory that Integration Server uses to store the secrets retrieved from a vault. Using a cache makes sure that secret keys are readily available for frequent retrieval and limits repeated requests to the vault. You can configure the secrets cache according to your caching requirements."
+      ]
+    }
+  ],
+  "total_services": 9,
+  "services": [
+    {
+      "name": "pub.vault:clearCache",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-vault-folder#re-pub_security_vaults_clearcache__title__1",
+      "description": [
+        "WmPublic. Removes retrieved secrets from the cache."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "A message that indicates whether the cached secrets for the provided alias are removed or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Complete the Prerequisite Tasks before you run this service. Integration Server caches secrets in memory for the time-to-live period that is configured for the vault connection alias after which Integration Server automatically clears the stale entries. If you specify a package-level vault connection alias, the service clears the secrets cache only for that package. Otherwise, the service clears the entire secrets cache."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.vault:decrypt",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-vault-folder#re-pub_security_vaults_decrypt__title__1",
+      "description": [
+        "WmPublic. Decrypts ciphertext by using a vault server."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Optional. A user-defined package that contains the vault connection alias. Specify a package to use a package-level vault connection alias. Leave this field empty to use a server-level vault connection alias."
+          ]
+        },
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "The name of the vault connection alias that determines the vault server to use for decrypting the provided ciphertext."
+          ]
+        },
+        {
+          "name": "cipherText",
+          "type": "String",
+          "description": [
+            "The ciphertext that you want to decrypt by using the vault server."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "plainText",
+          "type": "String",
+          "description": [
+            "The decrypted data in plaintext."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Complete the Prerequisite Tasks before you run this service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.vault:encrypt",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-vault-folder#re-pub_security_vaults_encrypt__title__1",
+      "description": [
+        "WmPublic. Encrypts plaintext by using a vault server."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Optional. A user-defined package that contains the vault connection alias. Specify a package to use a package-level vault connection alias. Leave this field empty to use a server-level vault connection alias."
+          ]
+        },
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "The name of the vault connection alias that determines the vault server to use for encrypting the provided text."
+          ]
+        },
+        {
+          "name": "plainText",
+          "type": "String",
+          "description": [
+            "The plaintext that you want to encrypt by using the vault server."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "cipherText",
+          "type": "String",
+          "description": [
+            "The plaintext in the encrypted format. For example, see the sample cipherText ."
+          ],
+          "references": [
+            {
+              "title": "cipherText",
+              "url": "https://developer.hashicorp.com/vault/docs/secrets/transit#usage"
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Complete the Prerequisite Tasks before you run this service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.vault:getSecretSubkey",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-vault-folder#re-pub_security_vaults_getsecretsubkey__title__1",
+      "description": [
+        "WmPublic. Retrieves a secret subkey from a vault."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Optional. A user-defined package that contains the vault connection alias. Specify a package to use a package-level vault connection alias. Leave this field empty to use a server-level vault connection alias."
+          ]
+        },
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "The name of the vault connection alias that identifies the vault server containing the secret subkey to retrieve."
+          ]
+        },
+        {
+          "name": "secretKey",
+          "type": "String",
+          "description": [
+            "The secret subkey that you want to get from a secret in the vault."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "secretValue",
+          "type": "String",
+          "description": [
+            "The value of the subkey retrieved from the vault."
+          ]
+        },
+        {
+          "name": "cacheHit",
+          "type": "String",
+          "description": [
+            "Conditional. Indicates whether the subkey was found in the secrets cache or not. The service returns one of the following values: - true, if secretKey is retrieved from the secrets cache. - false, if secretKey is not retrieved from the secrets cache because the secretKey is not available in the cache or it is retrieved for the first time. This parameter is returned only when the secrets cache for the vault connection alias is enabled."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Complete the Prerequisite Tasks before you run this service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.vault:refreshCache",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-vault-folder#re-pub_security_vaults_refreshcache__title__1",
+      "description": [
+        "WmPublic. Updates retrieved secrets in the cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Optional. A user-defined package that contains the vault connection alias. Specify a package to use a package-level vault connection alias. Leave this field empty to use a server-level vault connection alias."
+          ]
+        },
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "The name of the vault connection alias that identifies the vault server from which secrets are retrieved to refresh the secrets cache. If you specify a package-level vault connection alias, the service refreshes the secrets cache only for the package. Otherwise, the service refreshes the entire secrets cache."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "A message that indicates whether the cached secrets for the provided alias are refreshed or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Complete the Prerequisite Tasks before you run this service. The pub.vault:refreshCache services refreshes cached secretes that were retrieved using the provided alias. Refreshing the secrets prevents the use of stale entries."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.vault:removeSecret",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-vault-folder#re-pub_security_vaults_removesecret__title__1",
+      "description": [
+        "WmPublic. Removes a secret from a vault."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Optional. A user-defined package that contains the vault connection alias. Specify a package to use a package-level vault connection alias. Leave this field empty to use a server-level vault connection alias."
+          ]
+        },
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "The vault connection alias that identifies the vault server to remove secrets."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "A message that indicates whether the secret is removed or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Complete the Prerequisite Tasks before you run this service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.vault:removeSecretSubkey",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-vault-folder#re-pub_security_vaults_removesecretsubkey__title__1",
+      "description": [
+        "WmPublic. Removes a secret subkey from a vault."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Optional. A user-defined package that contains the vault connection alias. Specify a package to use a package-level vault connection alias. Leave this field empty to use a server-level vault connection alias."
+          ]
+        },
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "The vault connection alias that identifies the vault server containing the secret subkey to remove."
+          ]
+        },
+        {
+          "name": "secretKey",
+          "type": "String",
+          "description": [
+            "The secret subkey to remove from a secret in the vault."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "A message that indicates whether the secret subkey is removed or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Complete the Prerequisite Tasks before you run this service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.vault:setSecretSubkey",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-vault-folder#re-pub_security_vaults_setsecretsubkey__title__1",
+      "description": [
+        "WmPublic. Inserts a secret subkey into a vault or updates a secret subkey in the vault."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Optional. A user-defined package that contains the vault connection alias. Specify a package to use a package-level vault connection alias. Leave this field empty to use a server-level vault connection alias."
+          ]
+        },
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "The vault connection alias that identifies the vault server to insert or update a secret subkey."
+          ]
+        },
+        {
+          "name": "secretKey",
+          "type": "String",
+          "description": [
+            "Name of the secret subkey."
+          ]
+        },
+        {
+          "name": "secretValue",
+          "type": "String",
+          "description": [
+            "Value of the secret subkey."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "A message that indicates whether the secret subkey is set or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Complete the Prerequisite Tasks before you run this service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.vault:upsertSecret",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-vault-folder#re-pub_security_vaults_upsertsecret__title__1",
+      "description": [
+        "WmPublic. Inserts a secret into a vault or updates a secret in a vault."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Optional. A user-defined package that contains the vault connection alias. Specify a package to use a package-level vault connection alias. Leave this field empty to use a server-level vault connection alias."
+          ]
+        },
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "The vault connection alias that identifies the vault server to insert or update a secret."
+          ]
+        },
+        {
+          "name": "secrets",
+          "type": "Document List",
+          "description": [
+            "The secret that must be inserted or updated."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Name of a secret subkey."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Value of the secret subkey."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "A message that indicates whether insertion or update of secrets is successful or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Complete the Prerequisite Tasks before you run this service. The pub.vault:upsertSecret service either updates an existing secret in a vault with the provided key-value pairs or creates a new secret by adding the provided key-value pairs to the vault."
+          ]
+        }
+      ]
+    }
+  ]
+}

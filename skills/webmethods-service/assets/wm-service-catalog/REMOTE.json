@@ -1,0 +1,349 @@
+{
+  "folder": "REMOTE",
+  "description": [
+    "You use the elements in the remote folder to invoke services on other IBM webMethods Integration Server.",
+    "You can also use remote services for guaranteed delivery transactions. For more information about guaranteed delivery transactions, see the Guaranteed Delivery Developer’s Guide and IBM webMethods Integration Server Administrator’s Guide ."
+  ],
+  "total_services": 9,
+  "services": [
+    {
+      "name": "pub.remote:invoke",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-remote-folder#Apub_remote_invoke__title__1",
+      "description": [
+        "WmPublic. Invokes a service on a remote IBM webMethods Integration Server. The remote server is identified by an alias, which is configured on the Remote Servers tab in the Integration Server Administrator. Connection and authentication to the remote server is managed transparently to the caller of this service. All current pipeline inputs are passed to the remote service. To improve performance and minimize the amount of data sent over the wire, scope the pipeline to a separate document or drop unneeded fields before invoking this service. The same advice applies to the output values of the remote service because all values returned from the service are sent over the wire in response to the caller."
+      ],
+      "input_parameters": [
+        {
+          "name": "$alias",
+          "type": "String",
+          "description": [
+            "Name of the target server on which to invoke the specified service. This name and its associated connection attributes are defined on the Create Remote Server Alias page in the Integration Server Administrator . Note: If you protect the alias using an Access Control List, the user invoking invoke must be a member of this list or the invocation will fail."
+          ]
+        },
+        {
+          "name": "$service",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the service to invoke on the remote server, in the format folderName.folderName:serviceName (for example: wm.server:ping )."
+          ]
+        },
+        {
+          "name": "$scope",
+          "type": "String",
+          "description": [
+            "Flag that specifies how the session to the remote server should be managed. Set to: - SESSION to store the remote session in the current user session. This is the default. Further calls by the same user to pub.remote:invoke for the same server alias reuse the existing remote session with the server. Stateful interactions with the remote server are maintained and protected inside the current user's session. When the current user disconnects, the remote session expires, or the local server is shut down, the remote session is automatically disconnected. - GLOBAL to tore the remote session in a shared pool of sessions. If another user invokes a service on the same remote server with GLOBAL scope, the session will be reused. Stateful interactions with the remote server could be destroyed by other users' invocations. When the remote session expires due to inactivity or the local server is shut down, the remote session is automatically disconnected."
+          ]
+        },
+        {
+          "name": "$close",
+          "type": "String",
+          "description": [
+            "Optional. Flag to indicate whether Integration Server closes the connection to the remote server after the service invocation or keeps the connection open until it times out. Set to: - true to close the connection to the remote server immediately after the service invocation. - false to keep the connection open until it times out. This is the default. Note: If the watt.server.trigger.reuseSession server configuration parameter is set to true, Integration Server expects trigger sessions to be reused and the connection to the remote server to remain open. Hence, if watt.server.trigger.reuseSession parameter is set to true, Integration Server will ignore the value of the $close parameter when a trigger service for IBM webMethods messaging trigger executes the pub.remote:invoke service."
+          ]
+        },
+        {
+          "name": "$clusterRetry",
+          "type": "String",
+          "description": [
+            "Optional. Flag to indicate whether Integration Server should retry a failed connection request on other Integration Server s in the cluster. Set to: - true to retry a request automatically on other Integration Servers in the cluster if the initial attempt to connect to a remote Integration Server fails. Integration Serverwill attempt to connect to each Integration Servers in the cluster until the connection is made or all Integration Servers have been tried with no success. If the service cannot connect to another Integration Server in the cluster, the service tries to connect to the retry server specified in the alias definition for the remote server. - false to issue an error if the attempt to connect to the remote Integration Server fails. If the alias definition for the remote server specifies a retry server, the service tries to connect to that server. Note: Once a connection to a remote server has been established, that connection is cached and reused. The $clusterRetry setting is established when the connection is first created and used. Subsequent invokes to the same remote server will not change the $clusterRetry setting, even if a different value is passed in the pipeline. Client applications must determine whether or not they want cluster retries before establishing the connection."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If pub.remote:invoke does not receive a response within the timeout period specified in the server's watt.net.timeout parameter, it will throw an exception. For information about the watt.net.timeout parameter, see IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.remote.gd:end",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-remote-folder#Apub_remote_gd_end__title__1",
+      "description": [
+        "WmPublic. Ends a guaranteed delivery transaction."
+      ],
+      "input_parameters": [
+        {
+          "name": "tid",
+          "type": "String",
+          "description": [
+            "Transaction ID of the transaction you want to end."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is used to eliminate a guaranteed delivery transaction from the jobstore."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.remote.gd:getStatus",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-remote-folder#Apub_remote_gd_getStatus__title__1",
+      "description": [
+        "WmPublic. Returns the status of the guaranteed delivery transaction."
+      ],
+      "input_parameters": [
+        {
+          "name": "tid",
+          "type": "String",
+          "description": [
+            "Transaction identification number."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Current status of the transaction. status can have one of the following values: - NEW indicates that the transaction is new. - PENDING indicates that the transaction is pending. - DONE indicates that the transaction is completed. - FAILED indicates that the transaction expired because the time-to-live or the retry limit has been exceeded. - UNKNOWN indicates that the transaction identification number in tid is not recognized."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use the pub.remote.gd:restart service to restart a FAILED (expired) guaranteed delivery transaction."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.remote.gd:invoke",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-remote-folder#Apub_remote_gd_invoke__title__1",
+      "description": [
+        "WmPublic. Invokes the service for a guaranteed delivery transaction by making a synchronous call to a remote IBM webMethods Integration Server."
+      ],
+      "input_parameters": [
+        {
+          "name": "service",
+          "type": "String",
+          "description": [
+            "Name of the service to be run on the remote IBM webMethods Integration Server ."
+          ]
+        },
+        {
+          "name": "tid",
+          "type": "String",
+          "description": [
+            "Transaction identification number for the service."
+          ]
+        },
+        {
+          "name": "inputs",
+          "type": "Document",
+          "description": [
+            "Optional. Document (IData object) containing the inputs for the service."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "results",
+          "type": "Document",
+          "description": [
+            "Conditional. Document (IData object) containing the pipeline as it exists after the service is invoked."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To use an asynchronous call to the server to invoke a service for a guaranteed delivery transaction, use the pub.remote.gd:submit service. If the remote server does not respond within the timeout limit specified in this server's watt.net.timeout setting, the Integration Server treats it as a failed attempt and retries the request."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.remote.gd:restart",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-remote-folder#Apub_remote_gd_restart__title__1",
+      "description": [
+        "WmPublic. Restarts an expired guaranteed delivery transaction."
+      ],
+      "input_parameters": [
+        {
+          "name": "tid",
+          "type": "String",
+          "description": [
+            "Transaction identification number for the guaranteed delivery transaction you want to restart."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If a guaranteed delivery transaction failed because of server or network failure, use this service to restart the transaction without resubmitting it."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.remote.gd:retrieve",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-remote-folder#Apub_remote_gd_retrieve__title__1",
+      "description": [
+        "WmPublic. Retrieves the results of a guaranteed delivery transaction submitted asynchronously or synchronously to a remote IBM webMethods Integration Server."
+      ],
+      "input_parameters": [
+        {
+          "name": "tid",
+          "type": "String",
+          "description": [
+            "Transaction identification number."
+          ]
+        },
+        {
+          "name": "block",
+          "type": "String",
+          "description": [
+            "Optional. Flag that specifies whether to block or poll for the results of the transaction. Set to: - true to wait until the invoked service completes before retrieving results. This is also known as blocking mode. This is the default. - false to retrieve the results immediately, whether or not the invoked service is completed. This is also known as polling mode."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "results",
+          "type": "Document",
+          "description": [
+            "Conditional. Document (IData object) containing the results of the service in the guaranteed delivery transaction."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If block is false, and the results of the transaction are still pending when this service executes, the results are returned as null."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.remote.gd:send",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-remote-folder#Apub_remote_gd_send__title__1",
+      "description": [
+        "WmPublic. Makes a guaranteed one-way call (fire-and-forget) to the IBM webMethods Integration Server to invoke a service for which no output is needed or expected."
+      ],
+      "input_parameters": [
+        {
+          "name": "service",
+          "type": "String",
+          "description": [
+            "Service to be run on the remote Integration Server ."
+          ]
+        },
+        {
+          "name": "tid",
+          "type": "String",
+          "description": [
+            "Transaction identification number for the service."
+          ]
+        },
+        {
+          "name": "inputs",
+          "type": "Document",
+          "description": [
+            "Optional. Document (IData object) containing the inputs for the service."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The results of the service specified in service cannot be retrieved. However, errors that occur will be logged when the guaranteed delivery transaction ends. Use the pub.remote.gd:send service to invoke a service remotely only if you want to run a guaranteed delivery transaction and are not concerned about the results of the invoked service. After pub.remote.gd:send completes the call, the service ends the transaction; therefore, you do not need to use the pub.remote.gd:end service to end the transaction."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.remote.gd:start",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-remote-folder#Apub_remote_gd_start__title__1",
+      "description": [
+        "WmPublic. Starts a guaranteed delivery transaction."
+      ],
+      "input_parameters": [
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "Name of the IBM webMethods Integration Server on which you want to invoke a guaranteed delivery transaction. This name and its associated connection attributes are defined on the Remote Servers tab of the Integration Server Administrator ."
+          ]
+        },
+        {
+          "name": "ttl",
+          "type": "String",
+          "description": [
+            "Optional. Transaction time-to-live measured in minutes. The transaction expires when ttl is exceeded. Default is the value set in the watt.tx.defaultTTLMins property or, if the property is not set, 30 minutes."
+          ]
+        },
+        {
+          "name": "retries",
+          "type": "String",
+          "description": [
+            "Optional. Maximum number of times to retry the transaction. Default is 0 (no retry limit)."
+          ]
+        },
+        {
+          "name": "followtid",
+          "type": "String",
+          "description": [
+            "Optional. Identification number of the transaction you want this guaranteed delivery transaction to follow. The current transaction executes only after the transaction indicated by followtid completes."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "tid",
+          "type": "String",
+          "description": [
+            "Transaction identification number."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.remote.gd:submit",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-remote-folder#Apub_remote_gd_submit__title__1",
+      "description": [
+        "WmPublic. Invokes a service for a guaranteed delivery transaction by making an asynchronous call to a remote IBM webMethods Integration Server."
+      ],
+      "input_parameters": [
+        {
+          "name": "service",
+          "type": "String",
+          "description": [
+            "Service to be run on the remote IBM webMethods Integration Server ."
+          ]
+        },
+        {
+          "name": "tid",
+          "type": "String",
+          "description": [
+            "Transaction identification number for the service."
+          ]
+        },
+        {
+          "name": "inputs",
+          "type": "Document",
+          "description": [
+            "Optional. Document (IData object) containing the inputs for the service."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To remove the transaction from the remote IBM webMethods Integration Server, use the pub.remote.gd:end service. To use a synchronous call to invoke the service, use the pub.remote.gd:invoke service."
+          ]
+        }
+      ]
+    }
+  ]
+}

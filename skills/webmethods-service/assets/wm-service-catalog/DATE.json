@@ -1,0 +1,1240 @@
+{
+  "folder": "DATE",
+  "description": [
+    "You can use the elements in the date folder to generate and format date values."
+  ],
+  "usage_notes": [
+    {
+      "title": "Pattern String Symbols",
+      "content": [
+        "Many of the date services require you to specify pattern strings describing the data's current format and/or the format to which you want it converted. For services that require a pattern string, use the symbols in the following table to describe the format of your data. For example, to describe a date in the January 15, 1999 format, you would use the pattern string MMMM dd, yyyy. To describe the format 01/15/99, you would use the pattern string MM/dd/yy. For more information about these pattern string symbols, see the Oracle Java API documentation for the SimpleDateFormat class.",
+        "Overview on using the symbols to describe the format of your data.",
+        {
+          "table": [
+            [
+              "Symbol",
+              "Meaning",
+              "Presentation",
+              "Example"
+            ],
+            [
+              "G",
+              "era designator",
+              "Text",
+              "AD"
+            ],
+            [
+              "y",
+              "year",
+              "Number",
+              "1996 or 96"
+            ],
+            [
+              "M",
+              "month in year",
+              "Text or Number",
+              "July or Jul or 07"
+            ],
+            [
+              "d",
+              "day in month",
+              "Number",
+              "10"
+            ],
+            [
+              "h",
+              "hour in am/pm (1-12)",
+              "Number",
+              "12"
+            ],
+            [
+              "H",
+              "hour in day (0-23)",
+              "Number",
+              "0"
+            ],
+            [
+              "m",
+              "minute in hour",
+              "Number",
+              "30"
+            ],
+            [
+              "s",
+              "second in minute",
+              "Number",
+              "55"
+            ],
+            [
+              "S",
+              "millisecond",
+              "Number",
+              "978"
+            ],
+            [
+              "E",
+              "day in week",
+              "Text",
+              "Tuesday or Tue"
+            ],
+            [
+              "D",
+              "day in year",
+              "Number",
+              "189"
+            ],
+            [
+              "F",
+              "day of week in month",
+              "Number",
+              "2 (2nd Wed in July)"
+            ],
+            [
+              "w",
+              "week in year",
+              "Number",
+              "27"
+            ],
+            [
+              "W",
+              "week in month",
+              "Number",
+              "2"
+            ],
+            [
+              "a",
+              "am/pm marker",
+              "Text",
+              "PM"
+            ],
+            [
+              "k",
+              "hour in day (1-24)",
+              "Number",
+              "24"
+            ],
+            [
+              "K",
+              "hour in am/pm (0-11)",
+              "Number",
+              "0"
+            ],
+            [
+              "z",
+              "time zone",
+              "Text",
+              "Pacific Standard Time or PST or GMT-08:00"
+            ],
+            [
+              "Z",
+              "RFC 822 time zone (JVM 1.4 or later)",
+              "Number",
+              "-0800 (offset from GMT/UT)"
+            ],
+            [
+              "'",
+              "escape for text",
+              "Delimiter",
+              ""
+            ],
+            [
+              "' '",
+              "single quote",
+              "Literal",
+              "'"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Time Zones",
+      "content": [
+        "When working with date services, you can specify time zones. The Earth is divided into 24 standard time zones, one for every 15 degrees of longitude. Using the time zone including Greenwich, England (known as Greenwich Mean Time, or GMT) as the starting point, the time is increased by an hour for each time zone east of Greenwich and decreases by an hour for each time zone west of Greenwich. The time difference between a time zone and the time zone including Greenwich, England (GMT) is referred to as the raw offset.",
+        "The following table identifies the different time zones for the Earth and the raw offset for each zone from Greenwich, England. The effects of daylight savings time are ignored in this table.",
+        "Note: Greenwich Mean Time (GMT) is also known as Universal Time (UT).",
+        {
+          "table": [
+            [
+              "ID",
+              "Raw Offset",
+              "Name"
+            ],
+            [
+              "MIT",
+              "-11",
+              "Midway Islands Time"
+            ],
+            [
+              "HST",
+              "-10",
+              "Hawaii Standard Time"
+            ],
+            [
+              "AST",
+              "-9",
+              "Alaska Standard Time"
+            ],
+            [
+              "PST",
+              "-8",
+              "Pacific Standard Time"
+            ],
+            [
+              "PNT",
+              "-7",
+              "Phoenix Standard Time"
+            ],
+            [
+              "MST",
+              "-7",
+              "Mountain Standard Time"
+            ],
+            [
+              "CST",
+              "-6",
+              "Central Standard Time"
+            ],
+            [
+              "EST",
+              "-5",
+              "Eastern Standard Time"
+            ],
+            [
+              "IET",
+              "-5",
+              "Indiana Eastern Standard Time"
+            ],
+            [
+              "PRT",
+              "-4",
+              "Puerto Rico and U.S. Virgin Islands Time"
+            ],
+            [
+              "CNT",
+              "-3.5",
+              "Canada Newfoundland Time"
+            ],
+            [
+              "AGT",
+              "-3",
+              "Argentina Standard Time"
+            ],
+            [
+              "BET",
+              "-3",
+              "Brazil Eastern Time"
+            ],
+            [
+              "GMT",
+              "0",
+              "Greenwich Mean Time"
+            ],
+            [
+              "ECT",
+              "+1",
+              "European Central Time"
+            ],
+            [
+              "CAT",
+              "+2",
+              "Central Africa Time"
+            ],
+            [
+              "EET",
+              "+2",
+              "Eastern European Time"
+            ],
+            [
+              "ART",
+              "+2",
+              "(Arabic) Egypt Standard Time"
+            ],
+            [
+              "EAT",
+              "+3",
+              "Eastern African Time"
+            ],
+            [
+              "MET",
+              "+3.5",
+              "Middle East Time"
+            ],
+            [
+              "NET",
+              "+4",
+              "Near East Time"
+            ],
+            [
+              "PLT",
+              "+5",
+              "Pakistan Lahore Time"
+            ],
+            [
+              "IST",
+              "+5.5",
+              "India Standard Time"
+            ],
+            [
+              "BST",
+              "+6",
+              "Bangladesh Standard Time"
+            ],
+            [
+              "VST",
+              "+7",
+              "Vietnam Standard Time"
+            ],
+            [
+              "CTT",
+              "+8",
+              "China Taiwan Time"
+            ],
+            [
+              "JST",
+              "+9",
+              "Japan Standard Time"
+            ],
+            [
+              "ACT",
+              "+9.5",
+              "Australian Central Time"
+            ],
+            [
+              "AET",
+              "+10",
+              "Australian Eastern Time"
+            ],
+            [
+              "SST",
+              "+11",
+              "Solomon Standard Time"
+            ],
+            [
+              "NST",
+              "+12",
+              "New Zealand Standard Time"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Examples",
+      "content": [
+        "You can specify timezone input parameters in the following formats:",
+        "- As a full name. For example:",
+        {
+          "table": [
+            [
+              "Asia/Tokyo",
+              "America/Los_Angeles"
+            ]
+          ]
+        },
+        "You can use the java.util.TimeZone.getAvailableIDs() method to obtain a list of the valid full name time zone IDs that your JVM version supports.",
+        "- As a custom time zone ID, in the format GMT[+ | -]hh[ [:]mm]. For example:",
+        {
+          "table": [
+            [
+              "GMT+2:00",
+              "All time zones 2 hours east of Greenwich (that is, Central Africa Time, Eastern European Time, and Egypt Standard Time)"
+            ],
+            [
+              "GMT-3:00",
+              "All time zones 3 hours west of Greenwich (that is, Argentina Standard Time and Brazil Eastern Time)"
+            ],
+            [
+              "GMT+9:30",
+              "All time zones 9.5 hours east of Greenwich (that is, Australian Central Time)"
+            ]
+          ]
+        },
+        "- As a three-letter abbreviation from the table above. For example:",
+        {
+          "table": [
+            [
+              "PST",
+              "Pacific Standard Time"
+            ]
+          ]
+        },
+        "Note: Because some three-letter abbreviations can represent multiple time zones (for example, \"CST\" could represent both U.S. \"Central Standard Time\" and \"China Standard Time\"), all abbreviations are deprecated. Use the full name or custom time zone ID formats instead."
+      ]
+    },
+    {
+      "title": "Notes on Invalid Dates",
+      "content": [
+        "The dates you use with a date service must adhere to the java.text.SimpleDateFormat class.",
+        "If you use an invalid date with a date service, the date service automatically translates the date to a legal date. For example, if you specify 1999/02/30 as input, the date service interprets the date as 1999/03/02 (two days after 2/28/1999).",
+        "If you use 00 for the month or day, the date service interprets 00 as the last month or day in the Gregorian calendar. For example, if you specify 00 for the month, the date service interprets it as 12."
+      ]
+    },
+    {
+      "title": "Notes on Date and Time Format",
+      "content": [
+        "Year Format",
+        "If the pattern yy is used for the year, the date service uses a 50-year moving window to interpret the value of yy. The date service establishes the window by subtracting 49 years from the current year and adding 50 years to the current year. For example, if you are running the IBM webMethods Integration Server in the year 2000, the moving window would be from 1951 to 2050. The date service interprets 2-digit years as falling into this window (for example, 12 would be 2012, 95 would be 1995).",
+        "Milliseconds Format",
+        "If you need milliseconds in the timestamp, it is recommended to use triple S (SSS) in the date pattern.",
+        "When you use services that accept date and time as inputs, it is recommended to use three digits for milliseconds. Otherwise, the services might show inconsistent results. If you specify SSS for milliseconds in the date pattern (yyyy-MM-dd'T'H:mm:ss.SSS'Z'), enter three digits in place of SSS. For example, 2021-07-08T1:20:20.001Z."
+      ]
+    }
+  ],
+  "total_services": 13,
+  "services": [
+    {
+      "name": "pub.date:calculateDateDifference",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#A23488__title__1",
+      "description": [
+        "WmPublic. Calculates the difference between two dates and returns the result as seconds, minutes, hours, and days."
+      ],
+      "input_parameters": [
+        {
+          "name": "startDate",
+          "type": "String",
+          "description": [
+            "Starting date and time."
+          ]
+        },
+        {
+          "name": "endDate",
+          "type": "String",
+          "description": [
+            "Ending date and time."
+          ]
+        },
+        {
+          "name": "startDatePattern",
+          "type": "String",
+          "description": [
+            "Format in which the startDate parameter is to be specified (for example, yyyyMMdd HH:mm:ss.SSS). For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "endDatePattern",
+          "type": "String",
+          "description": [
+            "Format in which the endDate parameter is to be specified (for example, yyyyMMdd HH:mm:ss.SSS). For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "dateDifferenceSeconds",
+          "type": "String",
+          "description": [
+            "The difference between the startingDateTime and endingDateTime , truncated to the nearest whole number of seconds."
+          ]
+        },
+        {
+          "name": "dateDifferenceMinutes",
+          "type": "String",
+          "description": [
+            "The difference between the startingDateTime and endingDateTime , truncated to the nearest whole number of minutes."
+          ]
+        },
+        {
+          "name": "dateDifferenceHours",
+          "type": "String",
+          "description": [
+            "The difference between the startingDateTime and endingDateTime , truncated to the nearest whole number of hours."
+          ]
+        },
+        {
+          "name": "dateDifferenceDays",
+          "type": "String",
+          "description": [
+            "The difference between the startingDateTime and endingDateTime , truncated to the nearest whole number of days."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Each output value represents the same date difference, but in a different scale. Do not add these values together. Make sure your subsequent flow steps use the correct output, depending on the scale required."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:compareDates",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#reference_CF32164054094AF0AD20D474818B9F63__title__1",
+      "description": [
+        "WmPublic. Compares two dates and returns the result as an integer."
+      ],
+      "input_parameters": [
+        {
+          "name": "startDate",
+          "type": "String",
+          "description": [
+            "Starting date to compare against endDate ."
+          ]
+        },
+        {
+          "name": "endDate",
+          "type": "String",
+          "description": [
+            "Ending date to compare against startDate ."
+          ]
+        },
+        {
+          "name": "startDatePattern",
+          "type": "String",
+          "description": [
+            "Format in which the startDate parameter is specified (for example, yyyyMMdd HH:mm:ss.SSS). For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "endDatePattern",
+          "type": "String",
+          "description": [
+            "Format in which the endDate parameter is specified (for example, yyyyMMdd HH:mm:ss.SSS). For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "result",
+          "type": "String",
+          "description": [
+            "Checks whether startDate is before, the same, or after endDate .",
+            "A value of +1 indicates that The startDate is after the endDate.",
+            "A value of 0 indicates that The startDate is the same as the endDate.",
+            "A value of -1 indicates that The startDate is before the endDate."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the formats specified in the startDatePattern and endDatePattern parameters are different, Integration Server takes the units that are not specified in the starDate and endDate values as 0. That is, if the startDatePattern is yyyyMMdd HH:mm and the startDate is 20151030 11:11 and if the endDatePattern is yyyyMMdd HH:mm:ss.SSSand the endDate is 20151030 11:11:55:111, then the pub.date:compareDates service considers start date to be before the end date and will return the result as -1. To calculate the difference between two dates, use the pub.date:calculateDateDifference service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:currentNanoTime",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#A81481__title__1",
+      "description": [
+        "WmPublic. Returns the current time returned by the most precise system timer, in nanoseconds."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "nanoTime",
+          "type": "java.lang.Long",
+          "description": [
+            "Current time returned by the most precise system timer, in nanoseconds."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:dateBuild",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#A007__title__1",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.datetime:build. Builds a date String using the specified pattern and date elements."
+      ],
+      "input_parameters": [
+        {
+          "name": "pattern",
+          "type": "String",
+          "description": [
+            "Pattern representing the format in which you want the date returned. For pattern-string notation, see Pattern String Symbols . If you do not specify pattern , dateBuild returns null. If pattern contains a time zone and timezone is not specified, the default time zone of IBM webMethods Integration Server is used."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "year",
+          "type": "String",
+          "description": [
+            "Optional. The year expressed in yyyy or yy format (for example, 01 or 2001 ). If you do not specify year or you specify an invalid value, dateBuild uses the current year."
+          ]
+        },
+        {
+          "name": "month",
+          "type": "String",
+          "description": [
+            "Optional. The month expressed as a number (for example, 1 for January, 2 for February). If you do not specify month or you specify an invalid value, dateBuild uses the current month."
+          ]
+        },
+        {
+          "name": "dayofmonth",
+          "type": "String",
+          "description": [
+            "Optional. The day of the month expressed as a number (for example, 1 for the first day of the month, 2 for the second day of the month). If you do not specify dayofmonth or you specify an invalid value, dateBuild uses the current day."
+          ]
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "description": [
+            "Optional. Time zone in which you want the output date and time expressed. Specify a time zone code as shown in Time Zones (for example, EST for Eastern Standard Time). If you do not specify timezone, the value of the server's \"user timezone\" property is used. If this property has not been set, GMT is used."
+          ],
+          "references": [
+            {
+              "title": "Time Zones",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            }
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. Locale in which the date is to be expressed. For example, if locale is en (for English), the pattern EEE d MMM yyyy will produce Friday 23 August 2002 , and the locale of fr (for French) will produce vendredi 23 août 2002 . If locale is not specified, Integration Serveruses the value of the watt.server.session.locale.ignore server configuration parameter to determine whether the locale is obtained from the session used by the client that invoked the service or if the locale is the locale of Integration Server."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "The date specified by year , month , and dayofmonth , in the format of pattern ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.date:dateBuild service creates a date String by using the supplied year, month, and dayofmonth to first create a local java.util.Date object. The local java.util.Date object uses the timezone of the machine running Integration Server. The pub.date:dateBuild service then applies the offset between the local timezone and the specified timezone. Finally, the service uses pattern to convert the java.util.Date object to the String returned in value. Due to the way in which the pub.date:dateBuild service works, if you run the pub.date:dateBuild service with the same set of inputs on two different machines, each located in a different timezone, you will get different results."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:dateTimeBuild",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#APub_date_dateTimeBuild__title__1",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.datetime:build. Builds a date/time string using the specified pattern and date/time elements."
+      ],
+      "input_parameters": [
+        {
+          "name": "pattern",
+          "type": "String",
+          "description": [
+            "Pattern representing the format in which you want the time returned. For pattern-string notation, see Pattern String Symbols . If you do not specify pattern , dateTimeBuild returns null. If pattern contains a time zone and the timezone parameter is not set, the time zone of Integration Server is used."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "year",
+          "type": "String",
+          "description": [
+            "Optional. The year expressed in yyyy or yy format (for example, 01 or 2001 ). If you do not specify year or you specify an invalid value, dateTimeBuild uses the current year."
+          ]
+        },
+        {
+          "name": "month",
+          "type": "String",
+          "description": [
+            "Optional. The month expressed as a number (for example, 1 for January, 2 for February). If you do not specify month or you specify an invalid value, dateTimeBuild uses the current month."
+          ]
+        },
+        {
+          "name": "dayofmonth",
+          "type": "String",
+          "description": [
+            "Optional. The day of the month expressed as a number (for example, 1 for the first day of the month, 2 for the second day of the month). If you do not specify dayofmonth or you specify an invalid value, dateTimeBuild uses the current day."
+          ]
+        },
+        {
+          "name": "hour",
+          "type": "String",
+          "description": [
+            "Optional. The hour expressed as a number based on a 24-hour clock. For example, specify 0 for midnight, 2 for 2:00 A.M., and 14 for 2:00 P.M. If you do not specify hour or you specify an invalid value, dateTimeBuild uses 0 as the hour value."
+          ]
+        },
+        {
+          "name": "minute",
+          "type": "String",
+          "description": [
+            "Optional. Minutes expressed as a number. If you do not specify minute or you specify an invalid value, dateTimeBuild uses 0 as the minute value."
+          ]
+        },
+        {
+          "name": "second",
+          "type": "String",
+          "description": [
+            "Optional. Seconds expressed as a number. If you do not specify second or you specify an invalid value, dateTimeBuild uses 0 as the second value."
+          ]
+        },
+        {
+          "name": "millis",
+          "type": "String",
+          "description": [
+            "Optional. Milliseconds expressed as a number. If you do not specify millis or you specify an invalid value, dateTimeBuild uses 0 as the millis value."
+          ]
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "description": [
+            "Optional. Time zone in which you want the output date and time expressed. Specify a time zone code as shown in Time Zones (for example, EST for Eastern Standard Time). If you do not specify timezone, the value of the server's \"user timezone\" property is used. If this property has not been set, GMT is used."
+          ],
+          "references": [
+            {
+              "title": "Time Zones",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            }
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. Locale in which the date is to be expressed. For example, if locale is en (for English), the pattern EEE d MMM yyyy will produce Friday 23 August 2002 , and the locale of fr (for French) will produce vendredi 23 août 2002 . If locale is not specified, Integration Server uses the value of the watt.server.session.locale.ignore server configuration parameter to determine whether the locale is obtained from the session used by the client that invoked the service or if the locale is the locale of Integration Server."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Date and time in format of pattern ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.date:dateTimeBuild service creates a date String by using the supplied year, month, dayofmonth, hour, minute, second, and millis to first create a local java.util.Date object. The local java.util.Date object uses the timezone of the machine running Integration Server. The pub.date:dateTimeBuild service then applies the offset between the local timezone and the specified timezone. Finally, the service uses pattern to convert the java.util.Date object to the String returned in value. Due to the way in which the pub.date:dateTimeBuild service works, if you run the pub.date:dateTimeBuild service with the same set of inputs on two different machines, each located in a different timezone, you will get different results."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:dateTimeFormat",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#Apub_date_dateTimeFormat__title__1",
+      "description": [
+        "WmPublic. Converts date/time (represented as a String) string from one format to another."
+      ],
+      "input_parameters": [
+        {
+          "name": "inString",
+          "type": "String",
+          "description": [
+            "Date/time that you want to convert. Important: If inString contains a character in the last position, that character is interpreted as 0. This can result in an inaccurate date. For information about invalid dates, see Notes on Invalid Dates."
+          ],
+          "references": [
+            {
+              "title": "Notes on Invalid Dates",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#AAPPX_NoteInvalidDates"
+            }
+          ]
+        },
+        {
+          "name": "currentPattern",
+          "type": "String",
+          "description": [
+            "Pattern string that describes the format of inString . For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "newPattern",
+          "type": "String",
+          "description": [
+            "Pattern string that describes the format in which you want inString returned. For pattern-string syntax, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the language and regional format of the input date string. For example, if the locale is en (for English), and the pattern is EEE d MMM yyyy , the input string should be Friday 23 August 2002 . If the locale is fr (for French), the input string should be vendredi 23 août 2002 . If the selected locale does not match the language of the input string, the service fails with a Failed to parse error. If locale is not specified, Integration Server uses the value of the watt.server.session.locale.ignore server configuration parameter to determine whether the locale is obtained from the session used by the client that invoked the service or if the locale is the locale of Integration Server."
+          ]
+        },
+        {
+          "name": "lenient",
+          "type": "String",
+          "description": [
+            "Optional. A flag indicating whether Integration Server throws an exception if the inString value does not adhere to the format specified in currentPattern parameter. Set to: - true to perform a lenient check. This is the default. In a lenient check, if the format of the date specified in the inString parameter does not match the format specified in the currentPattern parameter, Integration Server interprets and returns the date in the format specified in the currentPattern parameter. If the interpretation is incorrect, the service will return an invalid date. - false to perform a strict check. In a strict check, the Integration Server throws an exception if the format of the date specified in the inString parameter does not match the format specified in the currentPattern parameter."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "The date/time given by inString , in the format of newPattern ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "As described in Notes on Invalid Dates, if the pattern yy is used for the year, dateTimeFormat uses a 50-year moving window to interpret the value of the year. If you need to change this behavior so that the year is interpreted as 80 years before or 20 years after the current date (as described in the Java class java.text.SimpleDateFormat), set the server configuration parameter watt.server.pubDateTimeFormat.javaSlidingWindow to true. For information about setting configuration parameters, see IBM webMethods Integration Server Administrator’s Guide . By default, the Integration Server throws an exception if no input is passed to the service. To suppress the error message and return a null value for the value parameter, set the server configuration parameter watt.server.date.suppressPatternError to true. For information about setting configuration parameters, see IBM webMethods Integration Server Administrator’s Guide . If currentPattern does not contain a time zone, the value is assumed to be in the time zone of the IBM webMethods Integration Server. If newPattern contains a time zone, the time zone of the IBM webMethods Integration Server is used."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:elapsedNanoTime",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#A46729__title__1",
+      "description": [
+        "WmPublic. Calculates the time elapsed between the current time and the given time, in nanoseconds."
+      ],
+      "input_parameters": [
+        {
+          "name": "nanoTime",
+          "type": "java.lang.Long",
+          "description": [
+            "Time in nanoseconds. If nanoTime is less than zero, then the service treats it as zero."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "elapsedNanoTime",
+          "type": "java.lang.Long",
+          "description": [
+            "The difference between the current time in nanoseconds and nanoTime . If nanoTime is greater than the current nano time, the service returns zero."
+          ]
+        },
+        {
+          "name": "elapsedNanoTimeStr",
+          "type": "String",
+          "description": [
+            "The difference between the current time in nanoseconds and nanoTime . The difference is expressed as a String, in this format: [years] [days] [hours] [minutes] [seconds] [millisec] [microsec] <nanosec> If nanoTime is greater than the current nano time, the service returns zero."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:formatDate",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#Apub_date_formatDate__title__1",
+      "description": [
+        "WmPublic. Formats a Date object as a string."
+      ],
+      "input_parameters": [
+        {
+          "name": "date",
+          "type": "java.util.Date",
+          "description": [
+            "Optional. Date/time that you want to convert."
+          ]
+        },
+        {
+          "name": "pattern",
+          "type": "String",
+          "description": [
+            "Pattern string that describes the format in which you want the date returned. For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "description": [
+            "Optional. Time zone in which you want the output date and time expressed. Specify a time zone code as shown in Time Zones (for example, EST for Eastern Standard Time). If you do not specify timezone, the value of the server's \"user timezone\" property is used. If this property has not been set, GMT is used."
+          ],
+          "references": [
+            {
+              "title": "Time Zones",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            }
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. Locale in which the date is to be expressed. For example, if locale is en (for English), the pattern EEE d MMM yyyy will produce Friday 23 August 2002 , and the locale of fr (for French) will produce vendredi 23 août 2002 . If locale is not specified, Integration Server uses the value of the watt.server.session.locale.ignore server configuration parameter to determine whether the locale is obtained from the session used by the client that invoked the service or if the locale is the locale of Integration Server."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "The date/time given by date in the format specified by pattern."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:getCurrentDate",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#A63550__title__1",
+      "description": [
+        "WmPublic. Returns the current date as a Date object."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "date",
+          "type": "java.util.Date",
+          "description": [
+            "Current date."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:getCurrentDateString",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#Apub_date_getCurrentDateString__title__1",
+      "description": [
+        "WmPublic. Returns the current date as a String in a specified format."
+      ],
+      "input_parameters": [
+        {
+          "name": "pattern",
+          "type": "String",
+          "description": [
+            "Pattern representing the format in which you want the date returned. For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "description": [
+            "Optional. Time zone in which you want the output date and time expressed. Specify a time zone code as shown in Time Zones (for example, EST for Eastern Standard Time). If you do not specify timezone, the value of the server's \"user timezone\" property is used. If this property has not been set, GMT is used. Alternatively, you can also specify the timezone as a full name. For more information, see Time Zones. For regions where Daylight Saving Time (DST) is observed, use the full name of the timezone for accurate time representation. For example, specifying the EST timezone code yields the current time as Eastern Standard Time without applying DST. To obtain Eastern Standard Time with DST adjustment, use America/New_York."
+          ],
+          "references": [
+            {
+              "title": "Time Zones",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            },
+            {
+              "title": "Time Zones",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            }
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. Locale in which the date is to be expressed. For example, if locale is en (for English), the pattern EEE d MMM yyyy will produce Friday 23 August 2002 , and the locale of fr (for French) will produce vendredi 23 août 2002 . If locale is not specified, Integration Server uses the value of the watt.server.session.locale.ignore server configuration parameter to determine whether the locale is obtained from the session used by the client that invoked the service or if the locale is the locale of Integration Server."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Current date in the format specified by pattern ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:getWorkingDays",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#A12925__title__1",
+      "description": [
+        "WmPublic. Returns the number of working days between two dates. The number of working days returned includes the startDate, but excludes the endDate."
+      ],
+      "input_parameters": [
+        {
+          "name": "startDate",
+          "type": "String",
+          "description": [
+            "Starting date and time."
+          ]
+        },
+        {
+          "name": "endDate",
+          "type": "String",
+          "description": [
+            "Ending date and time."
+          ]
+        },
+        {
+          "name": "startDatePattern",
+          "type": "String",
+          "description": [
+            "Format in which the startDate parameter is to be specified (for example, yyyyMMdd HH:mm:ss.SSS). For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "endDatePattern",
+          "type": "String",
+          "description": [
+            "Format in which the endDate parameter is to be specified (for example, yyyyMMdd HH:mm:ss.SSS). For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "workingDays",
+          "type": "String",
+          "description": [
+            "Number of days between startDate and endDate excluding weekends and holidays."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.date:getWorkingDays service requires you to configure holidays and weekend days in the holidays.cnf configuration file in Integration Server_directory \\instances\\instance_name\\packages\\WmPublic\\config directory. The pub.date:getWorkingDays service uses this configuration file to find the number of working days between two dates. Note: If you make any changes to the holidays.cnf, you must reload the WmPublic package or restart Integration Server for the changes to take effect."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:incrementDate",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#reference_096E40673E70497190B2DCF00453ED46__title__1",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.datetime:increment. Increments a date by a specified amount of time."
+      ],
+      "input_parameters": [
+        {
+          "name": "startDate",
+          "type": "String",
+          "description": [
+            "Starting date and time."
+          ]
+        },
+        {
+          "name": "startDatePattern",
+          "type": "String",
+          "description": [
+            "Format in which the startDate parameter is specified (for example, yyyyMMdd HH:mm:ss.SSS). For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "endDatePattern",
+          "type": "String",
+          "description": [
+            "Optional. Pattern representing the format in which you want the endDate to be returned. For pattern-string notation, see Pattern String Symbols . If no endDatePattern is specified, the endDate will be returned in the format specified in the startDatePattern parameter."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "addYears",
+          "type": "String",
+          "description": [
+            "Optional. Number of years to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addMonths",
+          "type": "String",
+          "description": [
+            "Optional. Number of months to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addDays",
+          "type": "String",
+          "description": [
+            "Optional. Number of days to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addHours",
+          "type": "String",
+          "description": [
+            "Optional. Number of hours to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addMinutes",
+          "type": "String",
+          "description": [
+            "Optional. Number of minutes to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addSeconds",
+          "type": "String",
+          "description": [
+            "Optional. Number of seconds to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addMilliSeconds",
+          "type": "String",
+          "description": [
+            "Optional. Number of milliseconds to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "description": [
+            "Optional. Time zone in which you want the endDate to be expressed. Specify a time zone code as shown in Time Zones (for example, EST for Eastern Standard Time). If you do not specify timezone , the value of the server's \"user timezone\" property is used. If this property has not been set, GMT is used."
+          ],
+          "references": [
+            {
+              "title": "Time Zones",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            }
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. Locale in which the endDate is to be expressed. For example, if locale is en (for English), the pattern EEE d MMM yyyy will produce Friday 23 August 2002 , and the locale of fr (for French) will produce vendredi 23 août 2002 . If locale is not specified, Integration Server uses the value of the watt.server.session.locale.ignore server configuration parameter to determine whether the locale is obtained from the session used by the client that invoked the service or if the locale is the locale of Integration Server."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "endDate",
+          "type": "String",
+          "description": [
+            "The end date and time, calculated by incrementing the startDate with the specified years, months, days, hours, minutes, seconds, and/or milliseconds. The endDate will be in the endDatePattern format, if specified. If no endDatePattern is specified or if blank spaces are specified as the value, the endDate will be returned in the format specified in the startDatePattern parameter."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The addYears, addMonths, addDays, addHours, addMinutes, addSeconds, and addMilliSeconds input parameters can take positive or negative values. For example, If startDate is 10/10/2001, startDatePattern is MM/dd/yyyy, addYears is 1, and addMonths is -1, endDate will be 09/10/2002. If you specify only the startDate, startDatePattern, and endDatePattern input parameters and do not specify any of the optional input parameters to increment the period, the pub.date:incrementDate service just converts the format of startDate from startDatePattern to endDatePattern and returns it as endDate. Integration Server issues an exception if the format of the date specified in the startDate parameter does not match the format specified in the startDatePattern. Integration Server issues a similar exception if the format of the date specified in the endDate parameter does not match the endDatePatternformat."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.date:stringToDate",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#reference_qlc_11v_4bc__title__1",
+      "description": [
+        "WmPublic. Converts a String value to a Date object."
+      ],
+      "input_parameters": [
+        {
+          "name": "inString",
+          "description": [
+            "String Date or time in the string format that you want to convert to a Date object."
+          ]
+        },
+        {
+          "name": "pattern",
+          "type": "String",
+          "description": [
+            "Pattern string that describes the format of inString . For pattern-string notation, see Pattern String Symbols ."
+          ],
+          "references": [
+            {
+              "title": "Pattern String Symbols",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#idf51b03a6-f862-431f-bd3b-abccb250e546"
+            }
+          ]
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "description": [
+            "Optional. Time zone in which you want the input date and time expressed. Specify a time zone code as shown in Time Zones (for example, EST for Eastern Standard Time). If you do not specify timezone, the value of the server's \"user timezone\" property is used. If this property is not set, GMT is used."
+          ],
+          "references": [
+            {
+              "title": "Time Zones",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-date-folder#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            }
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the language and regional format of the input date string. For example, if the locale is en (for English), and the pattern is EEE d MMM yyyy , the input string should be Friday 23 August 2002 . If the locale is fr (for French), the input string should be vendredi 23 août 2002 . If the selected locale does not match the language of the input string, the service fails with a Failed to parse error. If locale is not specified, Integration Server uses the value of the watt.server.session.locale.ignore server configuration parameter to determine whether the locale is obtained from the session used by the client that invoked the service or if the locale is the locale of Integration Server."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "date",
+          "type": "Object",
+          "description": [
+            "The output date, which is of the java.util.Date wrapper type. This is dependent on the timezone specified. If nothing is specified, then the Integration Server timezone is used."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When you provide the input date, pattern, and timezone, the service automatically calculates the output date according to the specified timezone. For regions where Daylight Saving Time (DST) is observed, the service automatically adjusts the output date to reflect DST changes. You must ensure that the date you provide as inString matches the specified pattern."
+          ]
+        }
+      ]
+    }
+  ]
+}

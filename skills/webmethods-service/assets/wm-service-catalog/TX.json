@@ -1,0 +1,81 @@
+{
+  "folder": "TX",
+  "description": [
+    "Use services in the tx folder to perform administrative tasks for guaranteed delivery transactions. For more information about guaranteed delivery, see the Guaranteed Delivery Developer’s Guide and IBM webMethods Integration Server Administrator’s Guide ."
+  ],
+  "total_services": 3,
+  "services": [
+    {
+      "name": "pub.tx:init",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-tx-folder#Apub_tx_init__title__1",
+      "description": [
+        "WmPublic. Starts processing inbound guaranteed delivery requests. These are guaranteed delivery transactions sent to Integration Server from client applications."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "Operation",
+          "type": "String",
+          "description": [
+            "A message indicating whether the service completed successfully. The service returns an exception if an error is encountered."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If you shut down the guaranteed delivery capabilities of Integration Server to correct a configuration problem or to make an administrative change, use this service to reinitialize guaranteed delivery. You can also use this service to reinitialize guaranteed delivery if it becomes disabled due to an error (for example, because of a disk full condition or if the job store database becomes inaccessible). Reinitialize guaranteed delivery after you correct the problem."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.tx:shutdown",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-tx-folder#Apub_tx_shutdown__title__1",
+      "description": [
+        "WmPublic. Stops processing inbound guaranteed delivery requests. These are guaranteed delivery transactions sent to Integration Server from client applications."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "Operation",
+          "type": "String",
+          "description": [
+            "A message indicating whether the service completed successfully. The service returns an exception if an error is encountered."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You might want to shut down guaranteed delivery to perform some administration functions, such as correcting configuration errors or starting a new audit-trail log. (To start a new audit-trail log, move or rename the existing log; the server automatically starts a new log if one does not already exist.)"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.tx:resetOutbound",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-tx-folder#Apub_tx_resetOutbound__title__1",
+      "description": [
+        "WmPublic. Reinitializes the processing of outbound guaranteed delivery requests. Outbound guaranteed delivery requests are those sent to another Integration Server."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "Operation",
+          "type": "String",
+          "description": [
+            "A message indicating whether the service completed successfully. The service returns an exception if an error is encountered."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If guaranteed delivery capabilities for outbound transactions become disabled due to an error (for example, if the server encounters a disk full condition or if the job store database becomes inaccessible), use this service to reinitialize guaranteed delivery after you correct the problem. If you invoke this service while outbound guaranteed delivery is functioning normally, the service will throw an exception and outbound guaranteed delivery will not be reinitialized."
+          ]
+        }
+      ]
+    }
+  ]
+}

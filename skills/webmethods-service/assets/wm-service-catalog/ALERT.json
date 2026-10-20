@@ -1,0 +1,2145 @@
+{
+  "folder": "ALERT",
+  "description": [
+    "Integration Server generates alerts for pre-defined events to provide visibility into the system behavior. For example, alerts are raised when Integration Server license is about to expire or a security certificate is about to expire. These alerts are displayed as notifications in Integration Server Administrator based on system or user-defined criteria.",
+    "You can create and manage notifiers using the services in the notifier sub-folder. A notifier defines settings to fetch alerts and perform related tasks. For example, you can create a notifier that can be used to fetch alerts for server errors that are critical and send the notification to an administrator.",
+    "Note: The jobs created for the notifiers follow the exactly-once processing model for all the alerts.",
+    "In Integration Server Administrator, if you select the Disable Alerts and Notifications option on the Server > Quiesce page and the server is in quiesce mode, alerts are not emitted, and running alerts and notifier services throws an exception."
+  ],
+  "total_services": 22,
+  "services": [
+    {
+      "name": "pub.alert.notifier:create",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#reference_68C44CCBA0974B9BB217270D3CE1F913__title__1",
+      "description": [
+        "WmPublic. Creates a notifier."
+      ],
+      "input_parameters": [
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Name of the notifier."
+          ]
+        },
+        {
+          "name": "enabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether the notifier is enabled or not. Set to: - true to enable the notifier. - false to disable the notifier. This is the default. If a notifier is disabled, alerts are not fetched for the notifier."
+          ]
+        },
+        {
+          "name": "consumptionMode",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether notifications are created for all alerts or only the latest alerts. Set to: - earliest to get notifications for all alerts in the system. This is the default. - latest to get notifications only for the alerts emitted after the notifier is created."
+          ]
+        },
+        {
+          "name": "autoMark",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether notifications are automatically marked as read or a user must do it manually. Set to: - true to automatically mark a notification as read after the service specified in the notifier settings is invoked. This is the default. - false to manually dismiss a notification from Integration Server Administrator, which marks the notification as read."
+          ]
+        },
+        {
+          "name": "channelIds",
+          "type": "Object[]",
+          "description": [
+            "Identifies the channels for which you want to receive notifications. You can specify either an individual channel identifier or a list of identifiers. For example, channelIds[0] as 2 for \"Server Error\" or channelIds[1] as 10 for \"Threat Protection\" or channelIds[0] as 2 and channelIds[1] as 1 for both."
+          ]
+        },
+        {
+          "name": "intervalInSeconds",
+          "type": "Short",
+          "description": [
+            "Time in seconds after which the system task created for the notifier should check for unread alerts."
+          ]
+        },
+        {
+          "name": "severityCutoff",
+          "type": "String",
+          "description": [
+            "The severity to consider for fetching alerts. For example, if you set this value as Critical , you will receive notifications only for critical events. If you set this value as Error , you will receive notifications for critical and error events. Set the parameter to one of the following values: - Critical. This is the default. - Error - Information - Warning"
+          ]
+        },
+        {
+          "name": "notifyInstantly",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether or not notifications are generated as soon as an alert is raised. Set to: - true to instantly generate a notification for an alert. - false if an instant notification is not required for an alert. This is the default. Note: If intervalInSeconds is also specified, the notifyInstantly parameter takes precedence."
+          ]
+        },
+        {
+          "name": "webSocketEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether or not Integration Server uses a WebSocket connection to send notifications. Set to: - true to enable a WebSocket connection to send notifications. - false to disable a WebSocket connection. This is the default."
+          ]
+        },
+        {
+          "name": "webSocketSender",
+          "type": "Document",
+          "description": [
+            "Optional. Sends a message on a connected WebSocket session."
+          ],
+          "children": [
+            {
+              "name": "endPointURL",
+              "type": "String",
+              "description": [
+                "The URL of the remote WebSocket server that Integration Server uses to send notifications."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "serviceInvokeEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether a service is invoked with the notifier parameters as pipeline variables or not. Set to: - true to invoke a service using the notifier parameters. - false to disable service invocation for the notifier. This is the default."
+          ]
+        },
+        {
+          "name": "serviceInvokeSender",
+          "type": "Document",
+          "description": [
+            "Optional. Invokes a service for alerts fetched for this notifier."
+          ],
+          "children": [
+            {
+              "name": "nsName",
+              "type": "String",
+              "description": [
+                "The namespace of the service. For example, pub.flow:tracePipeline ."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "smtpEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether Integration Server uses an SMTP server to send notifications or not. Set to: - true to use an SMTP server to send notifications. - false if you do not want to use an SMTP server to send notifications. This is the default."
+          ]
+        },
+        {
+          "name": "smtpSender",
+          "type": "Document",
+          "description": [
+            "Optional. Details of the SMTP Server and client used to send the notifications."
+          ],
+          "children": [
+            {
+              "name": "to",
+              "type": "String",
+              "description": [
+                "E-mail address of the recipient for a notification. If you specify multiple addresses, separate them with commas."
+              ]
+            },
+            {
+              "name": "from",
+              "type": "String",
+              "description": [
+                "E-mail address of the sender. If you do not specify this value, Integration Server uses the value specified for the mail.smtp.from JVM property. Furthermore, if a value is not specified for that property, Integration Server uses the default value, user@servername , where the user is the operating system user ID, and servername is the host name of Integration Server ."
+              ]
+            },
+            {
+              "name": "mailhost",
+              "type": "String",
+              "description": [
+                "Hostname of the SMTP server."
+              ]
+            },
+            {
+              "name": "mailhostPort",
+              "type": "Integer",
+              "description": [
+                "Optional. The port on which the SMTP server listens to incoming connections."
+              ]
+            },
+            {
+              "name": "auth",
+              "type": "Document",
+              "description": [
+                "Optional. Authorization information that the SMTP service submits to the SMTP server."
+              ],
+              "children": [
+                {
+                  "name": "user",
+                  "type": "String",
+                  "description": [
+                    "Username that Integration Server uses to send notifications."
+                  ]
+                },
+                {
+                  "name": "pass",
+                  "type": "String",
+                  "description": [
+                    "Password associated with the user."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "secure",
+              "type": "Document",
+              "description": [
+                "Parameters specifying the security protocol and trust store information to perform certificate validation, which Integration Server uses to communicate with the SMTP server port."
+              ],
+              "children": [
+                {
+                  "name": "transport​Layer​Security",
+                  "type": "String",
+                  "description": [
+                    "Type of the security protocol that Integration Server uses to communicate with the SMTP server port. Set to: - none, to use a non-secure mode to communicate with the port on the SMTP server. This is the default. - explicit, to use explicit security when communicating with the port on the SMTP server. With explicit security, Integration Server establishes an un-encrypted connection to the e-mail server, and then switches to the secure mode. - implicit, to use implicit security to communicate with the port on the SMTP server. With implicit security, Integration Server always establishes an encrypted connection to the e-mail server."
+                  ]
+                },
+                {
+                  "name": "truststore​Alias",
+                  "type": "String",
+                  "description": [
+                    "Alias for the truststore that contains the list of certificates that Integration Server uses to validate the trust relationship. If you do not specify a truststore alias, the default truststore alias is used."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether the notifier is successfully created or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If you specify the intervalInSeconds parameter while creating a notifier, Integration Server creates a simple interval task that runs in the background and does the tasks specified in the notifier such as invoking a service or sending a mail, and so on. Prior to Integration Server version 10.15, the pub.alert.notifier:create service included the smtpSender/secure/useJSSE input parameter which specified whether Integration Server created the outbound connection using the Java Secure Socket Extension (JSSE) library. Beginning with Integration Serverversion 10.15, Integration Server establishes all secure outbound connections with JSSE. If you migrated to Integration Server 10.15 and a migrated service invokes pub.alert.notifier:create, the smtpSender/secure/useJSSE parameter still appears in the pipeline. However, Integration Server ignores the value of the smtpSender/secure/useJSSE parameter, proceeding as if useJSSE were set to yes."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert.notifier:delete",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_notifier_delete__title__1",
+      "description": [
+        "WmPublic. Deletes the specified notifier."
+      ],
+      "input_parameters": [
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Name of the notifier that you want to delete."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether the specified notifier is deleted or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The simple interval task scheduled for a notifier executes once, even after the notifier is deleted or disabled. Each notifier maintains a separate record of read and unread alerts. These records are cleared when the notifier is deleted. However, the alerts themselves are not deleted."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert.notifier:disable",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_notifier_disable__title__1",
+      "description": [
+        "WmPublic. Disables the specified notifier."
+      ],
+      "input_parameters": [
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Name of the notifier that you want to disable."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether the specified notifier is disabled or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The simple interval task scheduled for a notifier executes once, even after the notifier is deleted or disabled."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert.notifier:enable",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_notifier_enable__title__1",
+      "description": [
+        "WmPublic. Enables the specified notifier."
+      ],
+      "input_parameters": [
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Name of the notifier that you want to enable."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether the specified notifier is enabled or not."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert.notifier:list",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_notifier_list__title__1",
+      "description": [
+        "WmPublic. Lists all the notifiers in the system."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "notifiers",
+          "type": "Document List",
+          "description": [
+            "The list of notifiers in the system. Each notifier has the following keys:"
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name of the notifier."
+              ]
+            },
+            {
+              "name": "enabled",
+              "type": "Boolean",
+              "description": [
+                "Specifies whether the notifier is enabled or not. A value of: - true indicates that the notifier is enabled. - false indicates that the notifier is disabled. If a notifier is disabled, alerts are not fetched for the notifier."
+              ]
+            },
+            {
+              "name": "consumption​Mode",
+              "type": "String",
+              "description": [
+                "Specifies whether notifications are created for all alerts or only the latest alerts. A value of: - earliest indicates that the notifications are generated for all alerts in the system. - latest indicates that the notifications are generated only for the alerts emitted after the notifier is created."
+              ]
+            },
+            {
+              "name": "autoMark",
+              "type": "Boolean",
+              "description": [
+                "Specifies whether notifications should be automatically marked as read or a user must do it manually. A value of: - true indicates that the system automatically processes the notification. For example, a notification is automatically marked as read after the service specified in the notifier settings is invoked. - false indicates that a user must manually mark the notification as read."
+              ]
+            },
+            {
+              "name": "channelIds",
+              "type": "Object[]",
+              "description": [
+                "List of identifiers of the channels for which you want to receive notifications."
+              ]
+            },
+            {
+              "name": "interval​InSeconds",
+              "type": "Short",
+              "description": [
+                "Time in seconds after which the notifier should check for unread alerts."
+              ]
+            },
+            {
+              "name": "severityCutoff",
+              "type": "String",
+              "description": [
+                "The severity to consider for fetching alerts. For example, if this value is Critical , you will receive notifications only for critical events. If this value is Error , you will receive notifications for critical and error events. This parameter can have one of the following values: - Critical - Error - Information - Warning"
+              ]
+            },
+            {
+              "name": "notifyInstantly",
+              "type": "Boolean",
+              "description": [
+                "Specifies whether or not notifications is generated as soon as an alert is raised. A value of: - true indicates that notifications are generated instantly for an alert. - false indicates that notifications are not generated instantly for an alert. Note: If intervalInSeconds is also specified, the notifyInstantly parameter takes precedence."
+              ]
+            },
+            {
+              "name": "webSocket​Enabled",
+              "type": "Boolean",
+              "description": [
+                "Specifies whether or not Integration Server uses a WebSocket connection to send notifications. A value of : - true indicates that a WebSocket connection is enabled to send notifications. - false indicates that a WebSocket connection is disabled."
+              ]
+            },
+            {
+              "name": "webSocket​Sender",
+              "type": "Document",
+              "description": [
+                "Sends a message on a connected WebSocket session."
+              ],
+              "children": [
+                {
+                  "name": "endPointURL",
+                  "type": "String",
+                  "description": [
+                    "The URL of the remote WebSocket server that Integration Server uses to send notifications."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "service​InvokeEnabled",
+              "type": "Boolean",
+              "description": [
+                "Specifies whether a service is invoked with the notifier parameters as pipeline variables or not. A value of: - true indicates that a service can be invoked using the notifier parameters. - false indicates that a service invocation is disabled for the notifier."
+              ]
+            },
+            {
+              "name": "service​InvokeSender",
+              "type": "Document",
+              "description": [
+                "Invokes a service for alerts fetched for this notifier."
+              ],
+              "children": [
+                {
+                  "name": "nsName",
+                  "type": "String",
+                  "description": [
+                    "The namespace of the service. For example, pub.flow:tracePipeline"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "smtpEnabled",
+              "type": "Boolean",
+              "description": [
+                "Specifies whether Integration Server uses an SMTP server to send notifications or not."
+              ]
+            },
+            {
+              "name": "smtpSender",
+              "type": "Document",
+              "description": [
+                "Details of the SMTP Server and client used to send the notifications."
+              ],
+              "children": [
+                {
+                  "name": "to",
+                  "type": "String",
+                  "description": [
+                    "E-mail address of the recipient for a notification. Multiple addresses are separated with commas."
+                  ]
+                },
+                {
+                  "name": "from",
+                  "type": "String",
+                  "description": [
+                    "E-mail address of the sender. If you do not specify this value, Integration Server uses the value specified for the mail.smtp.from JVM property. Furthermore, if a value is not specified for that property, Integration Server uses the default value, user@servername , where the user is the operating system user ID, and servername is the host name of Integration Server ."
+                  ]
+                },
+                {
+                  "name": "mailhost",
+                  "type": "String",
+                  "description": [
+                    "Hostname of the SMTP server."
+                  ]
+                },
+                {
+                  "name": "mailhostPort",
+                  "type": "Integer",
+                  "description": [
+                    "The port on which the SMTP server listens to incoming connections."
+                  ]
+                },
+                {
+                  "name": "auth",
+                  "type": "Document",
+                  "description": [
+                    "Authorization information that the SMTP service submits to the SMTP server."
+                  ],
+                  "children": [
+                    {
+                      "name": "user",
+                      "type": "String",
+                      "description": [
+                        "Username that Integration Server uses to send notifications."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "secure",
+                  "type": "Document",
+                  "description": [
+                    "Parameters specifying the security protocol and trust store information to perform certificate validation, which Integration Server uses to communicate with the SMTP server port."
+                  ],
+                  "children": [
+                    {
+                      "name": "transport​Layer​Security",
+                      "type": "String",
+                      "description": [
+                        "Type of the security protocol that Integration Server uses to communicate with the SMTP server port. Set to: - none, to use a non-secure mode to communicate with the port on the SMTP server. This is the default. - explicit, to use explicit security when communicating with the port on the SMTP server. With explicit security, Integration Server establishes an un-encrypted connection to the e-mail server, and then switches to the secure mode. - implicit, to use implicit security to communicate with the port on the SMTP server. With implicit security, Integration Server always establishes an encrypted connection to the e-mail server."
+                      ]
+                    },
+                    {
+                      "name": "truststore​Alias",
+                      "type": "String",
+                      "description": [
+                        "Alias for the truststore that contains the list of certificates that Integration Server uses to validate the trust relationship. If you do not specify a truststore alias, the default truststore alias is used."
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Prior to Integration Server version 10.15, the pub.alert.notifier:list service included the smtpSender/secure/useJSSE output parameter which specified whether Integration Server created the outbound connection using the Java Secure Socket Extension (JSSE) library. Beginning with Integration Serverversion 10.15, Integration Server establishes all secure outbound connections with JSSE. If you migrated to Integration Server 10.15 and a migrated service invokes pub.alert.notifier:list, the smtpSender/secure/useJSSE parameter still appears in the pipeline. However, Integration Server ignores the value of the smtpSender/secure/useJSSE parameter, proceeding as if smtpSender/secure/useJSSE were set to yes."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert.notifier:update",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_notifier_update__title__1",
+      "description": [
+        "WmPublic. Updates the parameters of an existing notifier."
+      ],
+      "input_parameters": [
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Name of the notifier."
+          ]
+        },
+        {
+          "name": "enabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether the notifier is enabled or not. Set to: - true to enable the notifier. - false to disable the notifier. This is the default. If a notifier is disabled, alerts are not fetched for the notifier."
+          ]
+        },
+        {
+          "name": "consumptionMode",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether notifications are created for all alerts or only the latest alerts. Set to: - earliest to get notifications for all alerts in the system. This is the default. - latest to get notifications only for the alerts emitted after the notifier is created."
+          ]
+        },
+        {
+          "name": "autoMark",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether notifications are automatically marked as read or a user must do it manually. Set to: - true to automatically mark a notification as read after the service specified in the notifier settings is invoked. This is the default. - false to manually dismiss a notification from Integration Server Administrator, which marks the notification as read."
+          ]
+        },
+        {
+          "name": "channelIds",
+          "type": "Object[]",
+          "description": [
+            "Identifies the channels for which you want to receive notifications. You can specify either an individual channel identifier or a list of identifiers. For example, channelIds[0] as 2 for \"Server Error\" or channelIds[1] as 10 for \"Threat Protection\" or channelIds[0] as 2 and channelIds[1] as 1 for both."
+          ]
+        },
+        {
+          "name": "intervalInSeconds",
+          "type": "Short",
+          "description": [
+            "Time in seconds after which the system task created for the notifier should check for unread alerts."
+          ]
+        },
+        {
+          "name": "severityCutoff",
+          "type": "String",
+          "description": [
+            "The severity to consider for fetching alerts. For example, if you set this value as Critical , you will receive notifications only for critical events. If you set this value as Error , you will receive notifications for critical and error events. Set the parameter to one of the following values: - Critical. This is the default. - Error - Information - Warning"
+          ]
+        },
+        {
+          "name": "notifyInstantly",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether or not notifications are generated as soon as an alert is raised. Set to: - true to instantly generate a notification for an alert. - false if an instant notification is not required for an alert. This is the default. Note: If intervalInSeconds is also specified, the notifyInstantly parameter takes precedence."
+          ]
+        },
+        {
+          "name": "webSocketEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether or not Integration Server uses a WebSocket connection to send notifications. Set to: - true to enable a WebSocket connection to send notifications. - false to disable a WebSocket connection. This is the default."
+          ]
+        },
+        {
+          "name": "webSocketSender",
+          "type": "Document",
+          "description": [
+            "Optional. Sends a message on a connected WebSocket session."
+          ],
+          "children": [
+            {
+              "name": "endPointURL",
+              "type": "String",
+              "description": [
+                "The URL of the remote WebSocket server that Integration Server uses to send notifications."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "serviceInvokeEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether a service is invoked with the notifier parameters as pipeline variables or not. Set to: - true to invoke a service using the notifier parameters. - false to disable service invocation for the notifier. This is the default."
+          ]
+        },
+        {
+          "name": "serviceInvokeSender",
+          "type": "Document",
+          "description": [
+            "Optional. Invokes a service for alerts fetched for this notifier."
+          ],
+          "children": [
+            {
+              "name": "nsName",
+              "type": "String",
+              "description": [
+                "The namespace of the service. For example, pub.flow:tracePipeline ."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "smtpEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether Integration Server uses an SMTP server to send notifications or not. Set to: - true to use an SMTP server to send notifications. - false if you do not want to use an SMTP server to send notifications. This is the default."
+          ]
+        },
+        {
+          "name": "smtpSender",
+          "type": "Document",
+          "description": [
+            "Optional. Details of the SMTP Server and client used to send the notifications."
+          ],
+          "children": [
+            {
+              "name": "to",
+              "type": "String",
+              "description": [
+                "E-mail address of the recipient for a notification. If you specify multiple addresses, separate them with commas."
+              ]
+            },
+            {
+              "name": "from",
+              "type": "String",
+              "description": [
+                "E-mail address of the sender. If you do not specify this value, Integration Server uses the value specified for the mail.smtp.from JVM property. Furthermore, if a value is not specified for that property, Integration Server uses the default value, user@servername , where the user is the operating system user ID, and servername is the host name of Integration Server ."
+              ]
+            },
+            {
+              "name": "mailhost",
+              "type": "String",
+              "description": [
+                "Hostname of the SMTP server."
+              ]
+            },
+            {
+              "name": "mailhostPort",
+              "type": "Integer",
+              "description": [
+                "Optional. The port on which the SMTP server listens to incoming connections."
+              ]
+            },
+            {
+              "name": "auth",
+              "type": "Document",
+              "description": [
+                "Optional. Authorization information that the SMTP service submits to the SMTP server."
+              ],
+              "children": [
+                {
+                  "name": "user",
+                  "type": "String",
+                  "description": [
+                    "Username that Integration Server uses to send notifications."
+                  ]
+                },
+                {
+                  "name": "pass",
+                  "type": "String",
+                  "description": [
+                    "Password associated with the user."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "secure",
+              "type": "Document",
+              "description": [
+                "Parameters specifying the security protocol and trust store information to perform certificate validation, which Integration Server uses to communicate with the SMTP server port."
+              ],
+              "children": [
+                {
+                  "name": "transport​Layer​Security",
+                  "type": "String",
+                  "description": [
+                    "Type of the security protocol that Integration Server uses to communicate with the SMTP server port. Set to: - none, to use a non-secure mode to communicate with the port on the SMTP server. This is the default. - explicit, to use explicit security when communicating with the port on the SMTP server. With explicit security, Integration Server establishes an un-encrypted connection to the e-mail server, and then switches to the secure mode. - implicit, to use implicit security to communicate with the port on the SMTP server. With implicit security, Integration Server always establishes an encrypted connection to the e-mail server."
+                  ]
+                },
+                {
+                  "name": "truststore​Alias",
+                  "type": "String",
+                  "description": [
+                    "Alias for the truststore that contains the list of certificates that Integration Server uses to validate the trust relationship. If you do not specify a truststore alias, the default truststore alias is used."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether a notifier is successfully updated or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When a notifier is enabled, if consumptionMode is changed from earliest to latest, all alerts generated until then are marked as read. Prior to Integration Server version 10.15, the pub.alert.notifier:update service included the smtpSender/secure/useJSSE input parameter which specified whether Integration Server created the outbound connection using the Java Secure Socket Extension (JSSE) library. Beginning with Integration Serverversion 10.15, Integration Server establishes all secure outbound connections with JSSE. If you migrated to Integration Server 10.15 and a migrated service invokes pub.alert.notifier:update, the smtpSender/secure/useJSSE parameter still appears in the pipeline. However, Integration Server ignores the value of the smtpSender/secure/useJSSE parameter, proceeding as if useJSSE were set to yes."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:channels",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_channels__title__1",
+      "description": [
+        "WmPublic. Gets all alert channels in the system. Channels help classify alerts and lets you subscribe to a specific type of alerts."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "Channels",
+          "type": "Document List",
+          "description": [
+            "The list of alert channels in Integration Server . By default, there are 13 channels. All channels have the following keys:"
+          ],
+          "children": [
+            {
+              "name": "id",
+              "type": "Integer",
+              "description": [
+                "Identifier of a channel. This is a system assigned value and cannot be modified. Note: Channel IDs for custom channels start with 1001."
+              ]
+            },
+            {
+              "name": "displayName",
+              "type": "String",
+              "description": [
+                "Name of the alert channel."
+              ]
+            },
+            {
+              "name": "description",
+              "type": "String",
+              "description": [
+                "Description for the channel."
+              ]
+            },
+            {
+              "name": "emissionEnabled",
+              "type": "Boolean",
+              "description": [
+                "Indicates whether an alert is generated for the channel and stored in the database or not. A value of: - true indicates that alerts are emitted for the channel and stored in the database. - false indicates that alerts are disabled for the channel."
+              ]
+            },
+            {
+              "name": "systemNotificationEnabled",
+              "type": "Boolean",
+              "description": [
+                "Indicates whether an alert generated for the channel is displayed as a notification or not. - true indicates that notifications are generated for the channel. - false indicates that notifications are disabled for the channel."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The default channels, events when alerts are raised for a channel, and the corresponding severity are described in the following table:",
+            {
+              "table": [
+                [
+                  "Channel ID",
+                  "Channel Name",
+                  "Events",
+                  "Severity"
+                ],
+                [
+                  "1",
+                  "Service Error",
+                  "Service execution errors. Note: By default, service error notifications are disabled.",
+                  "Error"
+                ],
+                [
+                  "2",
+                  "Server Error",
+                  "Server errors such as HTTP 404. Note: By default, server error notifications are disabled.",
+                  "Error"
+                ],
+                [
+                  "3",
+                  "Password Management",
+                  "A user password expires.",
+                  "Critical"
+                ],
+                [
+                  "A user password is about to expire.",
+                  "Warning"
+                ],
+                [
+                  "Default administrator password is not changed."
+                ],
+                [
+                  "4",
+                  "License Management",
+                  "Integration Server license expires.",
+                  "Critical"
+                ],
+                [
+                  "Integration Server license is about to expire.",
+                  "Warning"
+                ],
+                [
+                  "5",
+                  "Certificate Management",
+                  "A security certificate is about to expire.",
+                  "Warning"
+                ],
+                [
+                  "6",
+                  "Account Locking",
+                  "Multiple login attempt failures that result in a locked account.",
+                  "Critical"
+                ],
+                [
+                  "A locked account is unlocked.",
+                  "Information"
+                ],
+                [
+                  "7",
+                  "Server Configuration",
+                  "Server configuration properties (watt properties) are updated, which requires a server restart.",
+                  "Warning"
+                ],
+                [
+                  "JDBC or LDAP configuration is changed, which requires a server restart.",
+                  "Warning"
+                ],
+                [
+                  "8",
+                  "Authentication",
+                  "Login failure limit is reached.",
+                  "Error"
+                ],
+                [
+                  "9",
+                  "Package Management",
+                  "Package subscription (Delivery) Package subscription (Release) Note: By default, package management notifications are disabled.",
+                  "Information"
+                ],
+                [
+                  "10",
+                  "Threat Protection",
+                  "Enterprise Gateway deny rule violation.",
+                  "Critical"
+                ],
+                [
+                  "Enterprise Gateway allow rule violation.",
+                  "Warning"
+                ],
+                [
+                  "11",
+                  "Metering Log",
+                  "Errors connecting to the Metering agent server.",
+                  "Error"
+                ],
+                [
+                  "12",
+                  "User Management",
+                  "User management related alerts",
+                  "Warning"
+                ],
+                [
+                  "13",
+                  "Master Password",
+                  "A master password expires.",
+                  "Warning"
+                ],
+                [
+                  "Default master password is not changed."
+                ],
+                [
+                  "14",
+                  "Hybrid Connections",
+                  "Tenant connection disconnected",
+                  "Error"
+                ],
+                [
+                  "Tenant connection restored",
+                  "Information"
+                ],
+                [
+                  "Account disconnected",
+                  "Error"
+                ],
+                [
+                  "Account restored",
+                  "Information"
+                ],
+                [
+                  "15",
+                  "Metering Configuration",
+                  "IBM webMethods Metering Agent is not configured for on-premises use.",
+                  "Critical"
+                ],
+                [
+                  "16",
+                  "Hybrid Connectivity",
+                  "The on-premises Integration Server's fixes are older than fixes on webMethods Integration.",
+                  "Warning"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:countAll",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_countAll__title__1",
+      "description": [
+        "WmPublic. Gets the count of all alerts in the system, read and unread, or a subset of alerts that meet the filter criteria."
+      ],
+      "input_parameters": [
+        {
+          "name": "filter",
+          "type": "Document",
+          "description": [
+            "Optional. To get the count of a subset of alerts, specify the criteria using the following keys:"
+          ],
+          "children": [
+            {
+              "name": "startTime",
+              "type": "Long",
+              "description": [
+                "Optional. Start of the time interval in which alerts are emitted. Specify the value in UNIX epoch format in milliseconds."
+              ]
+            },
+            {
+              "name": "endTime",
+              "type": "Long",
+              "description": [
+                "Optional. End of the time interval in which alerts are emitted. Specify the value in UNIX epoch format in milliseconds."
+              ]
+            },
+            {
+              "name": "severities",
+              "type": "String[]",
+              "description": [
+                "Optional. List of severities."
+              ]
+            },
+            {
+              "name": "channelIds",
+              "type": "Object[]",
+              "description": [
+                "Optional. List of channel identifiers."
+              ]
+            },
+            {
+              "name": "user",
+              "type": "String",
+              "description": [
+                "Optional. The Integration Server user who triggered the alerts or Administrator for alerts emitted by the server. For example, specify Administrator for Password Management alerts."
+              ]
+            },
+            {
+              "name": "keyword",
+              "type": "String",
+              "description": [
+                "Optional. A keyword that identifies the alerts."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "count",
+          "type": "Long",
+          "description": [
+            "The count of all alerts in the system, read and unread, or a subset of alerts, if the filter criteria are passed as inputs."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To get the count of all alerts in the system, read and unread, do not specify the filter criteria as inputs."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:countUnread",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_countUnread__title__1",
+      "description": [
+        "WmPublic. Gets the count of all unread alerts in the system or a subset of unread alerts for the notifier and filter criteria."
+      ],
+      "input_parameters": [
+        {
+          "name": "notifierName",
+          "type": "String",
+          "description": [
+            "Optional. Name of the notifier for which alerts are to be fetched. If you do not specify the notifier name, all unread alerts in the system or a subset of the unread alerts that meet the filter criteria are considered."
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "Document",
+          "description": [
+            "Optional. To get the count of a subset of unread alerts, specify the criteria using the following keys:"
+          ],
+          "children": [
+            {
+              "name": "startTime",
+              "type": "Long",
+              "description": [
+                "Optional. Start of the time interval in which alerts are emitted. Specify the value in UNIX epoch format in milliseconds."
+              ]
+            },
+            {
+              "name": "endTime",
+              "type": "Long",
+              "description": [
+                "Optional. End of the time interval in which alerts are emitted. Specify the value in UNIX epoch format in milliseconds."
+              ]
+            },
+            {
+              "name": "severities",
+              "type": "String[]",
+              "description": [
+                "Optional. List of severities."
+              ]
+            },
+            {
+              "name": "channelIds",
+              "type": "Object[]",
+              "description": [
+                "Optional. List of channel identifiers."
+              ]
+            },
+            {
+              "name": "user",
+              "type": "String",
+              "description": [
+                "Optional. The Integration Server user who triggered the alerts or Administrator for alerts emitted by the server. For example, specify Administrator for Password Management alerts."
+              ]
+            },
+            {
+              "name": "keyword",
+              "type": "String",
+              "description": [
+                "Optional. A keyword that identifies the alerts."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "count",
+          "type": "Long",
+          "description": [
+            "The count of all unread alerts in the system or a subset of unread alerts, if the notifier name and the filter criteria are specified."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Integration Server uses the pub.alert:countUnread service to display the count of unread notifications on the Notifications icon in Integration Server Administrator. When notifierName is specified in the pub.alert:countUnread service, the severities and channelIds parameters under filter are evaluated in the following manner: - When only notifierName is specified without the severities and channelIds parameters under filter, the notifier's severityCutoff and channelIds parameters are considered to get the count of unread alerts. - When notifierName is specified along with the severities and channelIds parameters under filter: If none of the channelIds under filter match with the notifier's channelIds, the notifier's channelIds are considered to get the count of unread alerts. The channelIds under filter are ignored. If none of the severities under filter are within the notifier's severityCutoff, the notifier's severityCutoff is considered to get the count of unread alerts. The severities under filter are ignored. Otherwise, the channelIds and severities under filter are considered to get the count of unread alerts. Consider a notifier with the following settings and the notifierName is passed to the pub.alert:countUnread service. - channelIds: 1001, 1002 - severityCutoff: Error The following table describes how filter values are evaluated against notifier settings using sample values.",
+            {
+              "table": [
+                [
+                  "#",
+                  "Scenario",
+                  "Evaluation"
+                ],
+                [
+                  "1",
+                  "filter",
+                  ""
+                ],
+                [
+                  "",
+                  "channelId[0]: 1001",
+                  "Is one of the notifier's channelIds."
+                ],
+                [
+                  "",
+                  "severities[0]: Critical",
+                  "Is within the notifier's severityCutoff."
+                ],
+                [
+                  "",
+                  "Result: Unread alerts for channelId: 1001 with severity: Critical are considered."
+                ],
+                [
+                  "2",
+                  "filter",
+                  ""
+                ],
+                [
+                  "",
+                  "channelId[0]: 1004",
+                  "Is not among the notifier's channelIds."
+                ],
+                [
+                  "",
+                  "severities[0]: Critical",
+                  "Is within the notifier's severityCutoff."
+                ],
+                [
+                  "",
+                  "Result: Unread alerts for channelIds: 1001 and 1002 with severity: Critical are considered. channelId[0]: 1004 is ignored."
+                ],
+                [
+                  "3",
+                  "filter",
+                  ""
+                ],
+                [
+                  "",
+                  "channelId[0]: 1001",
+                  "Is one of the notifier's channelIds."
+                ],
+                [
+                  "",
+                  "severities[0]: Warning/Information",
+                  "Is not within the notifier's severityCutoff."
+                ],
+                [
+                  "",
+                  "Result: Unread alerts for channelId: 1001 with severity: Error or Critical are considered. severities[0]: Warning/Information is ignored."
+                ],
+                [
+                  "4",
+                  "filter",
+                  ""
+                ],
+                [
+                  "",
+                  "",
+                  "channelId[0]: 1005",
+                  "Is not among the notifier's channelIds."
+                ],
+                [
+                  "",
+                  "",
+                  "severities[0]: Warning/Information",
+                  "Is not within the notifier's severityCutoff."
+                ],
+                [
+                  "",
+                  "",
+                  "Result: Unread alerts for channelIds: 1001 and 1002 with severity: Error or Critical are considered. channelId[0]: 1005 and severities[0]: Warning/Information are ignored."
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:deregisterChannel",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#reference_w1h_qf4_npb__title__1",
+      "description": [
+        "WmPublic. Deregisters a registered custom channel."
+      ],
+      "input_parameters": [
+        {
+          "name": "channelId",
+          "type": "Integer",
+          "description": [
+            "Identifier of the channel that you want to deregister."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "deregistered",
+          "type": "Boolean",
+          "description": [
+            "Indicates whether the channel is deregistered or not. A value of: - true indicates that the channel is deregistered. - false indicates that the channel is not deregistered."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Channel IDs for custom channels are generated by the system and cannot be modified. The first custom channel gets 1001 as the channel ID and subsequent custom channels have consecutive numbers. Once a custom channel is deregistered, the channel ID is no longer available for a new custom channel until Integration Server is restarted. Deregistering a channel also deletes all the alerts for that channel."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:emit",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_emit__title__1",
+      "description": [
+        "WmPublic. Generates an alert when a pre-configured condition is met. For example, User or Master Password Expiry, License Key Update, Enterprise Gateway Rule Violation, Service Error, and so on. This service is invoked by Integration Server components to raise alerts."
+      ],
+      "input_parameters": [
+        {
+          "name": "channelID",
+          "type": "Integer",
+          "description": [
+            "Identifier of the channel associated with the alert."
+          ]
+        },
+        {
+          "name": "severity",
+          "type": "String",
+          "description": [
+            "Severity associated with the alert channel."
+          ]
+        },
+        {
+          "name": "subject",
+          "type": "String",
+          "description": [
+            "Subject of the alert message."
+          ]
+        },
+        {
+          "name": "contentType",
+          "type": "String",
+          "description": [
+            "Type of information in the alert. For example, text/plain ."
+          ]
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "description": [
+            "Content of an alert. For example, Alert {0} Message Size Limit filter failed.\\nClient IP Address: {1}\\n Request URL : {2}\\n Date & Time : {3}"
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "alertId",
+          "type": "Long",
+          "description": [
+            "A unique identifier assigned to each alert emitted."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:fetchAll",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_fetchAll__title__1",
+      "description": [
+        "WmPublic. Fetches all alerts in the system, read and unread, or a subset of alerts that meet the filter criteria."
+      ],
+      "input_parameters": [
+        {
+          "name": "filter",
+          "type": "Document",
+          "description": [
+            "Optional. To fetch a subset of alerts, specify the criteria using the following keys:"
+          ],
+          "children": [
+            {
+              "name": "startTime",
+              "type": "Long",
+              "description": [
+                "Optional. Start of the time interval in which alerts are emitted. Specify the value in the UNIX epoch format in milliseconds."
+              ]
+            },
+            {
+              "name": "endTime",
+              "type": "Long",
+              "description": [
+                "Optional. End of the time interval in which alerts are emitted. Specify the value in the UNIX epoch format in milliseconds."
+              ]
+            },
+            {
+              "name": "severities",
+              "type": "String[]",
+              "description": [
+                "Optional. List of severities."
+              ]
+            },
+            {
+              "name": "channelIds",
+              "type": "Object[]",
+              "description": [
+                "Optional. List of channel identifiers."
+              ]
+            },
+            {
+              "name": "user",
+              "type": "String",
+              "description": [
+                "Optional. The Integration Server user who triggered the alerts or Administrator for alerts emitted by the server. For example, specify Administrator for Password Management alerts."
+              ]
+            },
+            {
+              "name": "keyword",
+              "type": "String",
+              "description": [
+                "Optional. A keyword that identifies the alerts."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "sortOrder",
+          "type": "String",
+          "description": [
+            "Optional. The order in which the fetched alerts are sorted. Select ASC or DESC . The default is DESC ."
+          ]
+        },
+        {
+          "name": "sortBy",
+          "type": "String",
+          "description": [
+            "Optional. The criteria to sort the fetched alerts. Select one of the following options: - channel - severity - subject - timestamp The default is timestamp ."
+          ]
+        },
+        {
+          "name": "pageSize",
+          "type": "Integer",
+          "description": [
+            "The number of notifications on a page."
+          ]
+        },
+        {
+          "name": "pageNumber",
+          "type": "Integer",
+          "description": [
+            "In a paginated list of notifications, the page where Integration Server loads the notifications. Note: Page number starts with 0."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "alerts",
+          "type": "Document List",
+          "description": [
+            "A list of the alerts retrieved by the service. Each alert has the following details:"
+          ]
+        },
+        {
+          "name": "id",
+          "type": "Long",
+          "description": [
+            "Alert identifier."
+          ]
+        },
+        {
+          "name": "ts",
+          "type": "Long",
+          "description": [
+            "Date and time when the alert is generated, in the UNIX epoch time format."
+          ]
+        },
+        {
+          "name": "serverId",
+          "type": "String",
+          "description": [
+            "IP address of the host where Integration Server is running."
+          ]
+        },
+        {
+          "name": "memberName",
+          "type": "String",
+          "description": [
+            "Member name of the machine that hosts Integration Server in a cluster."
+          ]
+        },
+        {
+          "name": "user",
+          "type": "String",
+          "description": [
+            "Integration Server user who triggered the alert."
+          ]
+        },
+        {
+          "name": "channelId",
+          "type": "Integer",
+          "description": [
+            "Channel identifier for the alert."
+          ]
+        },
+        {
+          "name": "channel",
+          "type": "String",
+          "description": [
+            "Channel for the alert."
+          ]
+        },
+        {
+          "name": "severityId",
+          "type": "Integer",
+          "description": [
+            "Severity identifier of the alert."
+          ]
+        },
+        {
+          "name": "severity",
+          "type": "String",
+          "description": [
+            "Severity of the alert."
+          ]
+        },
+        {
+          "name": "subject",
+          "type": "String",
+          "description": [
+            "Subject of the alert message."
+          ]
+        },
+        {
+          "name": "contentType",
+          "type": "String",
+          "description": [
+            "Text that identifies the type of content in the alert such as text/plain and text/html ."
+          ]
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "description": [
+            "Content of the alert."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To fetch all read and unread alerts in the system, do not specify the filter criteria as inputs. The number of notifications on a page is identified by pageSize and the current page is identified by pageNumber."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:fetchUnread",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_fetch__title__1",
+      "description": [
+        "WmPublic. Fetches all the unread alerts in the system or a subset of unread alerts for the notifier and filter criteria."
+      ],
+      "input_parameters": [
+        {
+          "name": "notifierName",
+          "type": "String",
+          "description": [
+            "Optional. If you do not specify the notifier name, all the unread alerts in the system or a subset of the unread alerts that meet the filter criteria are fetched."
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "Document",
+          "description": [
+            "Optional. To fetch a subset of alerts, specify the criteria using the following keys:"
+          ],
+          "children": [
+            {
+              "name": "startTime",
+              "type": "Long",
+              "description": [
+                "Optional. Start of the time interval in which alerts are emitted. Specify the value in the UNIX epoch format in milliseconds."
+              ]
+            },
+            {
+              "name": "endTime",
+              "type": "Long",
+              "description": [
+                "Optional. End of the time interval in which alerts are emitted. Specify the value in the UNIX epoch format in milliseconds."
+              ]
+            },
+            {
+              "name": "severities",
+              "type": "String[]",
+              "description": [
+                "Optional. List of severities."
+              ]
+            },
+            {
+              "name": "channelIds",
+              "type": "Object[]",
+              "description": [
+                "Optional. List of channel identifiers."
+              ]
+            },
+            {
+              "name": "user",
+              "type": "String",
+              "description": [
+                "Optional. The Integration Server user who triggered the alerts or Administrator for alerts emitted by the server. For example, specify Administrator for Password Management alerts."
+              ]
+            },
+            {
+              "name": "keyword",
+              "type": "String",
+              "description": [
+                "Optional. A keyword that identifies the alerts."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "sortOrder",
+          "type": "String",
+          "description": [
+            "Optional. The order in which the fetched alerts are sorted. Select ASC or DESC . The default is DESC ."
+          ]
+        },
+        {
+          "name": "sortBy",
+          "type": "String",
+          "description": [
+            "Optional. The criteria to sort the fetched alerts. Select one of the following options: - channel - severity - subject - timestamp The default is timestamp ."
+          ]
+        },
+        {
+          "name": "pageSize",
+          "type": "Integer",
+          "description": [
+            "The number of notifications on a page, identified by pageNumber"
+          ]
+        },
+        {
+          "name": "pageNumber",
+          "type": "Integer",
+          "description": [
+            "In a paginated list of notifications, the page where Integration Server loads the notifications. Note: Page number starts with 0."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "alerts",
+          "type": "Document List",
+          "description": [
+            "A list of the alerts fetched by the service. Each alert has the following details:"
+          ]
+        },
+        {
+          "name": "id",
+          "type": "Long",
+          "description": [
+            "Alert identifier."
+          ]
+        },
+        {
+          "name": "ts",
+          "type": "Long",
+          "description": [
+            "Date and time when the alert is generated, in the UNIX epoch time format."
+          ]
+        },
+        {
+          "name": "serverId",
+          "type": "String",
+          "description": [
+            "IP address of the host where Integration Server is running."
+          ]
+        },
+        {
+          "name": "memberName",
+          "type": "String",
+          "description": [
+            "Member name of the machine that hosts Integration Server in a cluster."
+          ]
+        },
+        {
+          "name": "user",
+          "type": "String",
+          "description": [
+            "Integration Server user who triggered the alert."
+          ]
+        },
+        {
+          "name": "channelId",
+          "type": "Integer",
+          "description": [
+            "Channel identifier for the alert."
+          ]
+        },
+        {
+          "name": "channel",
+          "type": "String",
+          "description": [
+            "Channel for the alert."
+          ]
+        },
+        {
+          "name": "severityId",
+          "type": "Integer",
+          "description": [
+            "Severity identifier of the alert."
+          ]
+        },
+        {
+          "name": "severity",
+          "type": "String",
+          "description": [
+            "Severity of the alert."
+          ]
+        },
+        {
+          "name": "subject",
+          "type": "String",
+          "description": [
+            "Subject of the alert message."
+          ]
+        },
+        {
+          "name": "contentType",
+          "type": "String",
+          "description": [
+            "Text that identifies the type of content in the alert such as text/plain and text/html ."
+          ]
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "description": [
+            "Content of the alert."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Integration Server uses the pub.alert:fetchUnread service to display the unread notifications in Integration Server Administrator. When notifierName is specified in the pub.alert:fetchUnread service, the severities and channelIds parameters under filter are evaluated in the following manner: - When only notifierName is specified without the severities and channelIds parameters under filter, the notifier's severityCutoff and channelIds parameters are considered to fetch the unread alerts. - When notifierName is specified along with the severities and channelIds parameters under filter: If none of the channelIds under filter match with the notifier's channelIds, the notifier's channelIds are considered to fetch the unread alerts. The channelIds under filter are ignored. If none of the severities under filter are within the notifier's severityCutoff, the notifier's severityCutoff is considered to fetch the unread alerts. The severities under filter are ignored. Otherwise, the channelIds and severities under filter are considered to fetch the unread alerts. Consider a notifier with the following settings and the notifierName is passed to the pub.alert:fetchUnread service. - channelIds: 1001, 1002 - severityCutoff: Error The following table describes how filter values are evaluated against notifier settings using sample values.",
+            {
+              "table": [
+                [
+                  "#",
+                  "Scenario",
+                  "Evaluation"
+                ],
+                [
+                  "1",
+                  "filter",
+                  ""
+                ],
+                [
+                  "",
+                  "channelId[0]: 1001",
+                  "Is one of the notifier's channelIds."
+                ],
+                [
+                  "",
+                  "severities[0]: Critical",
+                  "Is within the notifier's severityCutoff."
+                ],
+                [
+                  "",
+                  "Result: Unread alerts are fetched for channelId: 1001 with severity: Critical."
+                ],
+                [
+                  "2",
+                  "filter",
+                  ""
+                ],
+                [
+                  "",
+                  "channelId[0]: 1004",
+                  "Is not among the notifier's channelIds"
+                ],
+                [
+                  "",
+                  "severities[0]: Critical",
+                  "Is within the notifier's severityCutoff."
+                ],
+                [
+                  "",
+                  "Result: Unread alerts are fetched for channelIds: 1001 and 1002 with severity: Critical. channelId[0]: 1004 is ignored."
+                ],
+                [
+                  "3",
+                  "filter",
+                  ""
+                ],
+                [
+                  "",
+                  "channelId[0]: 1001",
+                  "Is one of the notifier's channelIds."
+                ],
+                [
+                  "",
+                  "severities[0]: Warning/Information",
+                  "Is not within the notifier's severityCutoff."
+                ],
+                [
+                  "",
+                  "Result: Unread alerts are fetched for channelId: 1001 with severity: Error or Critical. severities[0]: Warning/Information is ignored."
+                ],
+                [
+                  "4",
+                  "filter",
+                  ""
+                ],
+                [
+                  "",
+                  "channelId[0]: 1005",
+                  "Is not among the notifier's channelIds."
+                ],
+                [
+                  "",
+                  "severities[0]: Warning/Information",
+                  "Is not within the notifier's severityCutoff."
+                ],
+                [
+                  "",
+                  "Result: Unread alerts are fetched for channelIds: 1001 and 1002 with severity: Error or Critical. channelId[0]: 1005 and severities[0]: Warning/Information are ignored."
+                ]
+              ]
+            },
+            "The number of notifications on a page is identified by pageSize and the current page is identified by pageNumber. If pageSize is 10 and pageNumber is 0, with sortBy and sortOrder having default values, the latest 10 notifications are listed on the first page."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:getChannel",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#reference_B42A0CC270BF48159A9161D73CDBD9EF__title__1",
+      "description": [
+        "WmPublic. Gets the details of a specific channel."
+      ],
+      "input_parameters": [
+        {
+          "name": "channelId",
+          "type": "Integer",
+          "description": [
+            "Identifier of the channel that you want to retrieve."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "displayName",
+          "type": "String",
+          "description": [
+            "Name of the channel."
+          ]
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "description": [
+            "Description for the channel."
+          ]
+        },
+        {
+          "name": "emissionEnabled",
+          "type": "Boolean",
+          "description": [
+            "Indicates whether an alert is generated for the channel and stored in the database or not. A value of: - true indicates that alerts are emitted for the channel and stored in the database. - false indicates that alerts are disabled for the channel."
+          ]
+        },
+        {
+          "name": "systemNotificationEnabled",
+          "type": "Boolean",
+          "description": [
+            "Indicates whether an alert generated for the channel is displayed as a notification or not. - true indicates that notifications are generated for the channel. - false indicates that notifications are disabled for the channel."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:getSettings",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_getSettings__title__1",
+      "description": [
+        "WmPublic. Gets the settings of the system notifier."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "enabled​Emission​Channels",
+          "type": "Object[]",
+          "description": [
+            "List of channels for which alerts can be generated and stored in the database."
+          ]
+        },
+        {
+          "name": "enabledSystem​NotifierChannels",
+          "type": "Object[]",
+          "description": [
+            "List of channels for which alerts are generated and displayed as notifications."
+          ]
+        },
+        {
+          "name": "system​Notifier​​Severity​Cutoff",
+          "type": "String",
+          "description": [
+            "Notifications are generated only for alerts with severity equal to, or more than this value."
+          ]
+        },
+        {
+          "name": "retentionPeriod​InDays",
+          "type": "Integer",
+          "description": [
+            "Determines how long the alerts are stored in the database."
+          ]
+        },
+        {
+          "name": "certificate​Expiry​​Warning​InDays",
+          "type": "Integer",
+          "description": [
+            "Number of days before the certificate expiry date, when the alert should be generated."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:markAllAsRead",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_markAllAsRead__title__1",
+      "description": [
+        "WmPublic. Marks all alert messages as read."
+      ],
+      "input_parameters": [
+        {
+          "name": "notifierName",
+          "type": "String",
+          "description": [
+            "Optional. Name of the notifier for which all the alerts are to be marked as read. If you do not specify the notifier name, alerts of system channels are marked as read."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "updateCount",
+          "type": "Long",
+          "description": [
+            "Updated count of the unread alerts in the system."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Invoke pub.alert:markAllAsRead to dismiss all notifications at once."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:markAsRead",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_markAsRead__title__1",
+      "description": [
+        "WmPublic. Marks the specified message as read."
+      ],
+      "input_parameters": [
+        {
+          "name": "alertId",
+          "type": "Long",
+          "description": [
+            "Specifies the alert that should be marked as read."
+          ]
+        },
+        {
+          "name": "notifierName",
+          "type": "String",
+          "description": [
+            "Optional. Name of the notifier for which for which the alert should be marked as read."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "updateCount",
+          "type": "Long",
+          "description": [
+            "Updated count of the unread alerts in the system."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Integration Server invokes pub.alert:markAsRead to dismiss a specific notification."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:markAsUnread",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_markAsUnread__title__1",
+      "description": [
+        "WmPublic. Marks a specific alert as unread."
+      ],
+      "input_parameters": [
+        {
+          "name": "alertId",
+          "type": "Long",
+          "description": [
+            "The alert that you want to mark as unread."
+          ]
+        },
+        {
+          "name": "notifierName",
+          "type": "String",
+          "description": [
+            "Optional. The notifier for which the alert should be marked as unread."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "updateCount",
+          "type": "Long",
+          "description": [
+            "Updated count of the unread alerts in the system."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:registerChannel",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#reference_sdz_rr4_npb__title__1",
+      "description": [
+        "WmPublic. Registers a custom channel."
+      ],
+      "input_parameters": [
+        {
+          "name": "displayName",
+          "type": "String",
+          "description": [
+            "Name of the channel that you want to register."
+          ]
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "description": [
+            "Optional. Description of the channel."
+          ]
+        },
+        {
+          "name": "emissionEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Indicates whether an alert is generated for the channel and stored in the database or not. Set to: - true to emit alerts for the channel and store them in the database. - false to disable alerts for the channel. The default value is true for custom channels as well as system channels other than Service Error and Server Error."
+          ]
+        },
+        {
+          "name": "systemNotificationEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Indicates whether the alert generated for the channel is displayed as a notification or not. Set to: - true to generate notifications for the channel. - false to disable notifications for the channel. The default value is true for custom channels as well as system channels other than Service Error and Server Error."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "channelId",
+          "type": "Integer",
+          "description": [
+            "Identifier of the registered channel. Note: Channel IDs for custom channels start with 1001."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For custom channels, channel IDs are generated by the system and cannot be modified. The first custom channel gets 1001 as the channel ID and subsequent custom channels have consecutive numbers. Once a custom channel is deregistered, the channel ID is no longer available for a new custom channel until Integration Server is restarted."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:setSettings",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_setSettings__title__1",
+      "description": [
+        "WmPublic. Updates the settings of the system notifier."
+      ],
+      "input_parameters": [
+        {
+          "name": "enabled​Emission​Channels",
+          "type": "Object[]",
+          "description": [
+            "List of channels for which alerts can be generated and stored in the database."
+          ]
+        },
+        {
+          "name": "enabledSystem​NotifierChannels",
+          "type": "Object[]",
+          "description": [
+            "List of channels for which alerts are generated and displayed as notifications."
+          ]
+        },
+        {
+          "name": "systemNotifier​​SeverityCutoff",
+          "type": "String",
+          "description": [
+            "Notifications are generated only for alerts with severity equal to, or more than this value."
+          ]
+        },
+        {
+          "name": "retentionPeriod​​InDays",
+          "type": "Integer",
+          "description": [
+            "Determines how long the alerts are stored in the database."
+          ]
+        },
+        {
+          "name": "certificate​Expiry​​WarningInDays",
+          "type": "Integer",
+          "description": [
+            "Number of days before the certificate expiry date when the alert should be generated."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether the system notifier settings are updated or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Based on the value of the retentionPeriodInDays parameter, a purge job clears the alerts stored in the database."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:severities",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#pub_alert_severities__title__1",
+      "description": [
+        "WmPublic. Lists the pre-defined severities that you can associate with an alert channel. The severity associated with an alert lets you assess the relative impact of a business event on the system."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "Severities",
+          "type": "Document List",
+          "description": [
+            "The list of default severities available in the system. By default, 4 severities are configured."
+          ],
+          "children": [
+            {
+              "name": "id",
+              "type": "Integer",
+              "description": [
+                "Identifier for a severity. The default severities and their IDs are as follows: 0: Critical, 1: Error, 2: Warning, 3: Information"
+              ]
+            },
+            {
+              "name": "displayName",
+              "type": "String",
+              "description": [
+                "The severity name."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.alert:updateChannel",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-alert-folder#reference_tqs_lw4_npb__title__1",
+      "description": [
+        "WmPublic. Updates the settings of a channel."
+      ],
+      "input_parameters": [
+        {
+          "name": "channelId",
+          "type": "Integer",
+          "description": [
+            "Identifier of the alert channel that you want to update. Note: Channel IDs for custom channels start with 1001."
+          ]
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "description": [
+            "Optional. Description of the channel."
+          ]
+        },
+        {
+          "name": "emissionEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Indicates whether an alert is generated for the channel and stored in the database or not. Set to: - true to emit alerts for the channel and store them in the database. - false to disable alerts for the channel. The default value is true for custom channels as well as system channels other than Service Error and Server Error."
+          ]
+        },
+        {
+          "name": "systemNotificationEnabled",
+          "type": "Boolean",
+          "description": [
+            "Optional. Indicates whether the alert generated for the channel is displayed as a notification or not. Set to: - true to generate notifications for the channel. - false to disable notifications for the channel. The default value is true for custom channels as well as system channels other than Service Error and Server Error."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether the channel is successfully updated or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Invoke the pub.alert:updateChannel service to ignore a notification of a specific type or restore an ignored notification from Integration Server Administrator."
+          ]
+        }
+      ]
+    }
+  ]
+}

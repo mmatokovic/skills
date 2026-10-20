@@ -1,0 +1,1218 @@
+{
+  "folder": "XML",
+  "description": [
+    "You use the elements in the xml folder to perform operations on XML documents."
+  ],
+  "total_services": 11,
+  "services": [
+    {
+      "name": "pub.xml:documentToXMLString",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_docToXMLString__title__1",
+      "description": [
+        "WmPublic. Converts a document (IData object) to an XML string. This service recurses through a given document, building an XML representation from the elements within it. Key names are turned into XML elements, and the key values are turned into the contents of those elements."
+      ],
+      "input_parameters": [
+        {
+          "name": "attrPrefix",
+          "type": "String",
+          "description": [
+            "Optional. Prefix that designates keys containing attributes. The default prefix is \"@\". For example, if you set attrPrefix to ATT_ and document contained the following element: pub.xml:documentToXMLString would convert the ATT_currency key to the attribute, currency=dollars, in the <tx> element as shown below: <tx currency=dollars> <acct>cash</acct> <amt>120.00</amt> </tx>"
+          ]
+        },
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "IData object that is to be converted to XML. Note that if you want to produce a valid XML document (one with a single root node), document must contain only one top-level IData object (that is, a single document). The name of that document will serve as the name of the XML document's root element. For example, document shown in the example in this service's description contains one top-level document named AcctInfo, which would result in one root element named <AcctInfo> in the resulting XML String. If you needed to produce an XML fragment (for example, a loose collection of elements that are not encompassed within a single root element) then document can contain multiple top-level elements. To produce this type of output, you must also set the addHeader and enforceLegalXML parameters to false."
+          ]
+        },
+        {
+          "name": "nsDecls",
+          "type": "Document",
+          "description": [
+            "Optional. Namespaces associated with any namespace prefixes that are used in the key names in document . Each entry in nsDecls represents a namespace prefix/URI pair, where a key name represents a prefix and the value of the key specifies the namespace URI. For example, to define the URIs associated with two prefixes called GSX and TxMon, you would set nsDecls as follows: For each prefix specified in nsDecls, pub.xml:documentToXMLString generates an xmlns attribute and inserts it into the top-most element of the resulting XML String. For example, if nsDecls had the two keys shown above, pub.xml:documentToXMLString would insert the following attributes into the root element of the XML String: xmlns:gsx=\"http://www.gsx.com\" xmlns:TxMon=\"http:www.acrtrak/txMonitor\" Note: Alternatively, you can declare a namespace by including an @xmlns key in document. (If you were not using the @ character to designate attributes, use the correct attribute prefix in your code.)"
+          ]
+        },
+        {
+          "name": "addHeader",
+          "type": "String",
+          "description": [
+            "Optional. Flag specifying whether the header element: <?xml version=\"1.0\"?> is to be included in the resulting XML String. Set to: - true to include the header. This is the default. - false to omit the header. (You would omit the header to generate an XML fragment or to insert a custom header.)"
+          ]
+        },
+        {
+          "name": "encode",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether to HTML-encode the data. Set this parameter to true if your XML data contains special characters, including the following: < > & \" ' Set to: - true to HTML-encode the data. For example, the string expression 5 < 6 would be converted to <expr>5 &lt; 6</expr>, which is valid. If you do not want a leading & (ampersand) character encoded when it appears as part of a character or entity reference, set preserveRefs to true. - false to not HTML-encode the data. This is the default. For example, the string expression 5 < 6would be converted to <expr>5 < 6</expr>, which is invalid. The behavior of this parameter can be restricted by the strictEncodeElements parameter. If the strictEncodeElements parameter is set to true when the encode parameter is true, then only the < > & characters in the element content are HTML-encoded (the apostrophe and quote characters are not HTML-encoded). The default value of the encode parameter is false."
+          ]
+        },
+        {
+          "name": "strictEncodeElements",
+          "type": "String",
+          "description": [
+            "Optional. Controls the behavior of the encode parameter. If this parameter is set to true when the encode parameter is true, then only the < > & characters in the element content are HTML-encoded (the apostrophe and quote characters are not HTML-encoded). The default value of the strictEncodeElements parameter is false."
+          ]
+        },
+        {
+          "name": "preseveRefs",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether the leading & (ampersand) of a well-formed entity or character reference is left as & or further encoded as &amp; when the data is to be HTML-encoded ( encode is set to true ). Set to: - true to preserve the leading & (ampersand) in an entity or character reference when the service HTML-encodes the data. - false to encode the leading & (ampersand) as &amp; when the & appears in an entity or character reference. This is the default. The pub.xml:documentToXMLString service ignores the value of preseveRefs when encode is set to false."
+          ]
+        },
+        {
+          "name": "documentTypeName",
+          "type": "String",
+          "description": [
+            "Optional. Fully qualified name of the document type that describes the structure and format of the output document (for example, examples.rtd:exampleRecord1 ). You can use this parameter to ensure that the output includes elements that might not be present in document at run time, or to describe the order in which elements are to appear in the resulting XML String. If you are using derived type processing, you must provide this parameter."
+          ]
+        },
+        {
+          "name": "generateRequiredTags",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether empty tags are to be included in the output document if a mandatory element appears in the document type specified in documentTypeName but does not appear in document . Set to: - true to include mandatory elements if they are not present in document. - false to omit mandatory elements if they are not present in document. This is the default. Note: The generateRequiredTags is only applicable if documentTypeName is provided."
+          ]
+        },
+        {
+          "name": "generateNilTags",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether the resulting XML string includes the attribute xsi:nil for elements that are null. Set to: - true to generate the xsi:nil attribute for an element if the Allow null property for the corresponding field is set to true and the field is null in document. Note: generateRequiredTags must also be set to true to generate the xsi:nil attribute in the XML String. - false to omit the xsi:nil attribute even if a nillable field is, in fact, null. This is the default."
+          ]
+        },
+        {
+          "name": "enforceLegalXML",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether the service throws an exception when document contains multiple root elements or illegal XML tag names. Set to: - true to throw an exception if document would produce an XML String containing multiple root elements and/or illegal XML tag names. - false to allow the resulting XML String to contain multiple root elements and/or illegal XML tag names. You would use this setting, for example, to create an XML fragment composed of multiple elements that were not all enclosed within a root element. This is the default."
+          ]
+        },
+        {
+          "name": "prettyPrint",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether the service performs pretty print formatting for the XML String returned in the xmldata output. Pretty print uses new lines and indentation to make the XML String more readable in a text editor. Set to: - true to perform pretty print formatting. - false to not use pretty print formatting. - <none> to use the value specified by the watt.server.xml.prettyPrint server configuration parameter to determine if pretty print formatting is performed."
+          ]
+        },
+        {
+          "name": "dtdHeaderInfo",
+          "type": "Document",
+          "description": [
+            "Optional. Contents of the DOCTYPE header to be inserted into the XML String. (You can retrieve this information from an incoming document using pub.xml:getXMLNodeType .)"
+          ],
+          "references": [
+            {
+              "title": "pub.xml:getXMLNodeType",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_getXMLNodeType"
+            }
+          ],
+          "children": [
+            {
+              "name": "systemID",
+              "type": "String",
+              "description": [
+                "Optional. System identifier for the DTD, if any."
+              ]
+            },
+            {
+              "name": "publicID",
+              "type": "String",
+              "description": [
+                "Optional. Public identifier for the DTD, if any."
+              ]
+            },
+            {
+              "name": "rootNSPrefix",
+              "type": "String",
+              "description": [
+                "Optional. Namespace prefix of the rootLocalName , if any."
+              ]
+            },
+            {
+              "name": "rootLocalName",
+              "type": "String",
+              "description": [
+                "Optional. Local name (excluding the namespace prefix) of the root element."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bufferSize",
+          "type": "String",
+          "description": [
+            "Optional. Initial size (in bytes) of the String buffer that documentToXMLString uses to assemble the output XML String. If the String buffer fills up before documentToXMLString is finished generating the XML String, it reallocates the buffer, expanding it by this amount each time the buffer becomes full. If you do not set bufferSize, documentToXMLString looks to see whether a default buffer size is specified in the following parameter on the server: watt.server.recordToDocument.bufferSize If so, it uses this value to allocate the String buffer. If this parameter is not set, documentToXMLString uses a default buffer size of 4096 bytes. For best performance, you should always set bufferSize to a value that closely matches the size of the XML String that you expect documentToXMLString to produce. This practice will spare the server from having to enlarge the buffer repeatedly if the XML String is many times larger than the default buffer or if you arbitrarily set bufferSize to a value that is too small. Setting bufferSize to an appropriately sized value will also prevent your service from unnecessarily consuming more memory than it needs if the XML String is much smaller than the default buffer size or if you arbitrarily set bufferSize to a value that is too large."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "xmldata",
+          "type": "String",
+          "description": [
+            "XML String produced from document ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "this_service_would_convert_this_document_idata_object": []
+        },
+        {
+          "to_an_xml_document_that_looks_like_this": [
+            "<?xml version=\"1.0\" ?> <tns:AcctInfo> xmlns:tns=\"http://localhost/DerivedAddress/schema.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" > <name>Midwest Extreme Sports</name> <rep>Laura M. Sanchez</rep> <acctNum type=platinum>G97041A</acctNum> <phoneNum cc=011>216-741-7566</phoneNum> <address country=USA> <street1>10211 Brook Road</street1> <city>Cleveland</city> <state>OH</state> <postalCode>22130</postalCode> </address> <address country=USA xsi:type=\"tns:DerivedAddress\"> <street1>10211 Brook Road</street1> <city>Cleveland</city> <state>OH</state> <postalCode>22130</postalCode> <landMark>Besides Ohio River-Bank Square</landMark> <telNo>001222555</telNo> </address> <serialNum>19970523A</serialNum> <serialNum>20001106G</serialNum> <serialNum>20010404K</serialNum> </tns:AcctInfo>"
+          ]
+        },
+        {
+          "usage_notes": [
+            "If you are building an IData that will be converted to an XML String, keep the following points in mind: - If you want to generate a simple element that contains only a character value, represent it with a String element in document as shown in the following: - If you want to generate an element that contains children, represent with an IData in document as shown in the following. To produce attributes, put the attribute values in keys whose name starts with the character(s) specified in attrPrefix. For example, if you use the default attrPrefix, the names of all keys containing attributes (and only those keys containing attributes) must start with the @ character (for example, @type, @xmlns). Also, when you include attributes, make sure that keys representing attributes are direct children of the elements in which they are to be applied. For example, if you want to include an xmlns attribute in the <AcctInfo> element in the example shown in the description of this service, you must create a String field named @xmlns in the AcctInfo field within document. - If you want to generate a simple element that contains a character value and one or more attributes, you must represent it as an IData that has one key for each attribute and a key named *body that contains element's value. For example, if you wanted to produce the following element: <phoneNum cc=011>216-741-7566</phoneNum> You would include the following in document: - To include namespaces, make sure you do the following: Include the appropriate namespace prefix in the key names in document. For example, to produce an element called acctNum that belongs to a namespace that is represented by the \"GSX\" prefix, you would include a key named GSX:acctNum in document. Define the URIs for the prefixes that appear in document. You can do this through nsDecls or by including an @xmlns key in the element where you want the xmlns attribute to be inserted. See the nsDecls description above for more information about declaring namespaces. To return the processed XML document to the client that originally submitted it, invoke pub.flow:setResponse. Keep in mind that you may need to modify the encoding. To generate the xsi:nil attribute for an element in the XML String, the following must be true: - documentTypeName must be provided. - generateRequiredTags and generateNilTags must be set to true. - The element must correspond to a field that is nillable. That is, the Allow null property must be set to True. - If the element corresponds to a document field, at run time, the document must not contain any content. However, if the document contains a *body field, the pub.xml:documentToXMLString service generates the xsi:nil attribute for the corresponding element if the value of *body is null. If a document field is nillable and is null at run time, the resulting XML String does not contain any child elements for the element that corresponds to the document. By default, the pub.xml:documentToXMLString service uses the prefix \"xsi\" for the nil attribute, where xsi refers to the namespace http://www.w3.org/2001/XMLSchema-instance. If nsDecls declares a different prefix for this namespaces, the service uses that prefix instead of xsi."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xml:freeXMLNode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_freeXMLNode__title__1",
+      "description": [
+        "WmPublic. Frees the resources allocated to a given XML node. You can optionally call this service when you are using a NodeIterator to iterate over an XML node and you decide to stop processing the node before reaching the end. By explicitly calling pub.xml:freeXMLNode, you immediately free the resources associated with the node instead of waiting for Java garbage collection to do this. Although it is not mandatory to call this service when you finish processing an XML node with a NodeIterator, doing so can boost server performance. Note that after you have freed an XML node using this service, the node becomes unstable and should not be used by any subsequent processes."
+      ],
+      "input_parameters": [
+        {
+          "name": "rootNode",
+          "type": "com.wm.lang.xml.Document",
+          "description": [
+            "XML node or enhanced XML node whose resources you want to release. This parameter supports the following types of input: - com.wm.lang.xml.Document An XML node whose resources you want to release. - enhanced XML node An enhanced XML node whose resources you want to release. Specify the same type of input that you supplied to pub.xml:getXMLNodeIterator."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.xml:getNextXMLNode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_getNextXMLNode__title__1",
+      "description": [
+        "WmPublic. Gets the next XML node from a NodeIterator."
+      ],
+      "input_parameters": [
+        {
+          "name": "iterator",
+          "type": "com.wm.app.b2b.util.NodeIterator",
+          "description": [
+            "NodeIterator from which to retrieve the next node."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "next",
+          "type": "Document",
+          "description": [
+            "Conditional. The requested node. Will be null when the NodeIterator has no more nodes to return. Otherwise, next will contain the following:"
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Element type name of the node. If the element belongs to a namespace and the namespace was declared at the time the NodeIterator was constructed, name will have the prefix declared for that namespace. If the namespace is not declared, name will use prefix that occurs in the XML."
+              ]
+            },
+            {
+              "name": "node",
+              "type": "com.wm.lang.xml.Node",
+              "description": [
+                "XML node identified by the input criteria used to originally generate the NodeIterator. node will be one of the following types and depends on what was supplied to the node input parameter for the pub.xml:getXMLNodeIterator: service: - com.wm.lang.xml.Node - enhanced XML node"
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "A NodeIterator is acquired via the service pub.xml:getXMLNodeIterator. The output of that service is a document (IData object) containing the element type name of the node and the node itself. The instance of this document is only valid until the next getNextXMLNode call on the same NodeIterator, because getNextXMLNode uses the same document object for each call."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xml:getXMLNodeIterator",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#A21764__title__1",
+      "description": [
+        "WmPublic. Creates and returns a NodeIterator. A NodeIterator iterates over the element node descendants of an XML node and returns the element nodes that satisfy the given criteria. The client application or flow service uses the service pub.xml:getNextXMLNode to get each node in turn. NodeIterators can only be created for XML nodes (not for HTML nodes). pub.xml:getXMLNodeIterator is useful for loading and parsing documents on demand. Large or slow documents need only be loaded as far as needed to get the desired data. NodeIterators are also useful for providing service as the pertinent information in the document arrives rather than first waiting for the entire document to load. This service is primarily intended to deal with large documents or documents that arrive slowly. NodeIterator provides a moving-window mode, in which the only node that is resident in memory is the last node returned by pub.xml:getNextXMLNode. In this mode, when pub.xml:getNextXMLNode is called, all nodes preceding the newly returned node become invalid, including all nodes previously returned by pub.xml:getNextXMLNode. The client must fully complete processing preceding nodes before advancing the window by calling pub.xml:getNextXMLNode again. In moving-window mode, the document consumes at least enough memory to hold the most recently returned node. Moving-window mode allows the server to process multi-megabyte XML documents using very little memory. Moving-window mode may only be used on a node that represents an entire XML document and not on any descendant node. In other words, in moving-window mode, the input node must be the top-level node returned by pub.xml:xmlStringToXMLNode or pub.xml:loadXMLNode. When operating in moving-window mode, the NodeIterator skips XML nodes that do not match the criteria set for the NodeIterator in pub.xml:getXMLNodeIterator. The NodeIterator frees skipped XML nodes after every pub.xml:getNextXMLNode execution. While this is the preferred and more performant behavior, some implementations might rely on earlier behavior where the NodeIterator retains skipped XML nodes until a successful match is found. Retaining skipped XML nodes makes it difficult to iterate over large XML files when there is a large number of intervening non-matching nodes between successful matches. Integration Server provides the server configuration parameter watt.core.nodeIterator.retainFailures to obtain the behavior of retaining skipped XML nodes. When watt.core.nodeIterator.retainFailures is set to true, a NodeIterator operating in moving-window mode retains skipped XML nodes until a successful match is found for the criteria specified in pub.xml:getXMLNodeIterator. NodeIterator purges the skipped XML nodes only after a successful pub.xml:getNextXMLNode. When watt.core.nodeIterator.retainFailures is set to false, a NodeIterator operating in moving-window mode frees skipped XML nodes after every pub.xml:getNextXMLNode execution. The default value is false. Note: You can use moving-window mode if the input node is of type com.wm.lang.xml.Node only. Moving-window mode cannot be used with an enhanced XML node."
+      ],
+      "input_parameters": [
+        {
+          "name": "node",
+          "type": "com.wm.lang.xml.Node",
+          "description": [
+            "The XML node or enhanced XML node for which you want to produce a NodeIterator. This parameter supports the following types of input: - com.wm.lang.xml.Node XML node for which you want to produce a NodeIterator. The node can represent either an XML document or an element of an XML document; however, if the NodeIterator will be used in moving-window mode, a whole XML document must be used. This is because moving window mode is only meaningful for managing the loading process of a document, and to operate on a node is to have already loaded the node - enhanced XML node An enhanced XML node for which you want to produce a NodeIterator. An enhanced XML node can be produced by pub.xml:loadEnhancedXMLNode, pub.xml:xmlStringToEnhancedXMLNode, or a content handler that receives an XML document in a request for which xmlFormat is set to enhanced."
+          ],
+          "references": [
+            {
+              "title": "pub.xml:loadEnhancedXMLNode",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#CEHBFIHJ"
+            },
+            {
+              "title": "pub.xml:xmlStringToEnhancedXMLNode",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#CEHJAFHA"
+            }
+          ]
+        },
+        {
+          "name": "criteria",
+          "type": "String List",
+          "description": [
+            "Optional. Pattern strings identifying the nodes that the iterator is to return. A pattern string may take either the form <localName> or the form <prefix>:<localName> . When a pattern takes the first form, it identifies an element whose local name is <localName> and that belongs to the default XML namespace. When a pattern takes the second form, it identifies an element whose local name is <localName> and whose XML namespace is given by the prefix <prefix>. If the input parameter nsDecls declares this prefix, the namespace URI of the element must match the URI declared for the prefix. If the prefix is not declared in nsDecls, the prefix is matched against prefixes found in the XML. <prefix> and <localName> can each optionally take the value \"*\" (asterisk) to match any namespace or local name. A \"*\" prefix also matches elements residing in the default namespace. If you do not specify criteria, all element node children of the root element are returned."
+          ]
+        },
+        {
+          "name": "nsDecls",
+          "type": "Document",
+          "description": [
+            "Optional. Namespaces associated with any namespace prefixes used in criteria . Each entry in nsDecls represents a namespace prefix/URI pair, where a key name represents a prefix and the value of the key specifies the namespace URI. For example, to define the URIs associated with two prefixes called GSX and TxMon, you would set nsDecls as follows:"
+          ]
+        },
+        {
+          "name": "movingWindow",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether the NodeIterator is to iterate using a moving window, as described above. In moving-window mode, the entire document preceding the node most recently returned by getXMLNodeIterator is discarded. Subsequent attempts to return preceding portions of the document will return either the repeating text *PURGED* or the proper data, depending on whether the data falls within an area that the server was able to discard. When iterating with a moving window, the current node should be queried and completely examined prior to requesting the next node. Set to: - true to use the NodeIterator in moving-window mode. - false to use the NodeIterator in normal mode. This is the default. Note: If node is an enhanced XML node, set movingWindow to false."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "iterator",
+          "type": "com.wm.app.b2b.util.NodeIterator",
+          "description": [
+            "NodeIterator for use with the service pub.xml:getNextXMLNode ."
+          ],
+          "references": [
+            {
+              "title": "pub.xml:getNextXMLNode",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_getNextXMLNode"
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "order_of_node_traversal": [
+            "The NodeIterator traverses the nodes in XML document order, sometimes called depth-first traversal order. Basically, this is the same order that individual elements appear in the source XML. However, unlike a full traversal, when a node satisfies the search criterion and is returned, the search for the next node ignores the children of the returned node. Instead on the next call to pub.xml:getNextXMLNode, the search resumes with the next peer of the returned element. If there is no next peer, the search resumes with the next peer of the returned node's parent node. Consider the following input XML document: <alpha id=\"1\" > <beta id=\"2\" > <gamma id=\"3\" > <delta id=\"4\" /> <delta id=\"5\" /> </gamma> <beta id=\"6\" /> <alpha id=\"7\" /> </beta> <gamma id=\"8\" /> <delta id=\"9\" /> </alpha> For a NodeIterator with search criterion \"alpha\", a call to pub.xml:getNextXMLNode returns only the document element <alpha id=\"1\">. The children of <alpha id=”1”> are not searched. Subsequent calls to pub.xml:getNextXMLNode return null. For a NodeIterator with search criterion \"beta\", a call to pub.xml:getNextXMLNode returns only the element <beta id=\"2\">. The children of <beta id=”2”> are not searched. Subsequent calls to pub.xml:getNextXMLNode return null because there are no elements named beta among the following peer elements. For a NodeIterator with search criterion \"gamma\", the first call to pub.xml:getNextXMLNode returns the element <gamma id=\"3\">. The next call to a call to pub.xml:getNextXMLNode returns <gamma id=\"8\"/>. For a NodeIterator with search criterion \"delta\", the first call to pub.xml:getNextXMLNode returns the element <delta id=\"4\"/>. Subsequent calls to pub.xml:getNextXMLNode return the element <delta id=\"5\"/> and then the element <delta id=\"9\"/> . For a NodeIterator with search criteria \"gamma\" or \"delta\", the first call to pub.xml:getNextXMLNode returns the element <gamma id=\"3\">. Subsequent calls to pub.xml:getNextXMLNode return the element <gamma id=\"8\"/> and then the element <delta id=\"9\"/>. Elements <delta id=\"4\"/> and <delta id=\"5\"/> are not returned because they are children of <gamma id=\"3\"> which satisfied the search request in the first call to pub.xml:getNextXMLNode. As a result, the children of <gamma id=\"3\"> are not searched in subsequent calls to pub.xml:getNextXMLNode."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xml:getXMLNodeType",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_getXMLNodeType__title__1",
+      "description": [
+        "WmPublic. Returns information about an XML node."
+      ],
+      "input_parameters": [
+        {
+          "name": "rootNode",
+          "type": "com.wm.lang.xml.Document",
+          "description": [
+            "XML node about which you want information."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "systemID",
+          "type": "String",
+          "description": [
+            "Conditional. System identifier, as provided by the DTD associated with rootNode . If rootNode does not have a system identifier, this value is null."
+          ]
+        },
+        {
+          "name": "publicID",
+          "type": "String",
+          "description": [
+            "Conditional. Public identifier, as provided by the DTD associated with rootNode . If rootNode does not have a public identifier, this value is null."
+          ]
+        },
+        {
+          "name": "rootNamespace",
+          "type": "String",
+          "description": [
+            "URI of the XML namespace to which rootNode's root element belongs."
+          ]
+        },
+        {
+          "name": "rootNSPrefix",
+          "type": "String",
+          "description": [
+            "Conditional. Namespace prefix of root element in rootNode , if any."
+          ]
+        },
+        {
+          "name": "rootLocalName",
+          "type": "String",
+          "description": [
+            "Conditional. Local name (excluding the namespace prefix) of the root element in rootNode , if any."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xml:loadEnhancedXMLNode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#CEHBFIHJ__title__1",
+      "description": [
+        "WmPublic. Retrieves an XML document via HTTP or HTTPS, parses it using the enhanced XML parser, and produces an org.w3c.dom.Node object. An DOM node is a special representation of an XML document that can be consumed by any program that uses standard DOM APIs. The pub.xml:xmlNodeToDocument service and the pub.xmldata.domeNodetoXMLData service can accept a DOM object as input."
+      ],
+      "input_parameters": [
+        {
+          "name": "url",
+          "type": "String",
+          "description": [
+            "The URL of the document you want to load. This string must begin with http: or https: . For example: http://www.rubicon.com/orders/orders.html —OR— https://localhost:5555/WmPublic/index.html You can include a query string (for example, a collection of \"name=value\" pairs) with the string that you specify. However, you might want to use the data variable for this type of information instead. It is usually a more practical place for \"name=value\" data, because it allows you to link individual variables in the query string."
+          ]
+        },
+        {
+          "name": "method",
+          "type": "String",
+          "description": [
+            "Optional. Set this value to specify the HTTP method (GET or POST) that you want the target server to execute on the resource specified in url . This value determines the way in which pub.xml:loadEnhancedXMLNode submits data values (if any) to the resource identified in url . - If you set method to get, pub.xml:loadEnhancedXMLNode appends the values you specify in data to the value in url. (Note that only certain data elements are valid when you use the GET method). The default is get. - If you set method to post, pub.xml:loadEnhancedXMLNode sends the values in data in the body of the HTTP or HTTPS request."
+          ]
+        },
+        {
+          "name": "auth",
+          "type": "Document",
+          "description": [
+            "Optional. Authentication and authorization information that pub.xml:loadEnhancedXMLNode will use if the requested resource is protected. Note: If you include your data with the string in url, do not specify a value in data."
+          ],
+          "children": [
+            {
+              "name": "type",
+              "type": "String",
+              "description": [
+                "Type of authentication pub.xml:loadEnhancedXMLNode will use to submit this request. Leave this field blank, as the only option currently available is basic HTTP authentication."
+              ]
+            },
+            {
+              "name": "user",
+              "type": "String",
+              "description": [
+                "User name that pub.xml:loadEnhancedXMLNode will submit if the requested resource is protected. The user name must have authority to access the resource specified in url. This value defaults to the value of watt.net.httpUser in the server's configuration file (server.cnf)."
+              ]
+            },
+            {
+              "name": "pass",
+              "type": "String",
+              "description": [
+                "Password associated with the user name specified in user . If the user does not require a password, leave pass empty. This value defaults to the value of watt.net.httpPass in the server's configuration file (server.cf)."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "Optional. The data that you want pub.xml:loadEnhancedXMLNode to submit with the request. Specify data using one or more of the following elements. Note: When you use more than one element to submit data, args is appended first, table is appended second, and string is appended last."
+          ],
+          "children": [
+            {
+              "name": "args",
+              "type": "Document",
+              "description": [
+                "Optional. Specifies name=value pairs that pub.xml:loadEnhancedXMLNode is to submit to the resource in url . You can use args to submit data via either the POST or GET method. To specify data using args, create one element for each name=value pair that you want to submit, where the key represents the name portion of the pair and the value represents the value portion of the pair. Note that when you use args, pub.xml:loadEnhancedXMLNode will automatically: - URL-encode name=value pair, so you do not need to URL-encode the values you specify in args. - Insert the \"&\" character between pairs, so you do not need to include it in args. - Prefix the entire query string with the \"?\" character if it submits the data in args via a GET. You do not need to include this character in args. When you submit data using the args variable, Integration Server automatically sets the value of the Content-Type header to application/x-www-form-urlencoded. If you want to explicitly specify a different Content-Type, you must submit your data using the string or bytes variable."
+              ]
+            },
+            {
+              "name": "table",
+              "type": "String Table",
+              "description": [
+                "Optional. Specifies data that pub.xml:loadEnhancedXMLNode will use to construct a query string to submit to the resource specified in url . table is similar to args, but it allows you to submit unnamed values in a query string, not just name=value pairs. To specify data using table, create one row for each value that you want to submit, where: - The contents of column 0 represent the name portion of the pair (leave this column null to submit an unnamed value, and... - The contents of column 1 represent the value portion of the pair. When you submit data using the table variable, the Integration Server automatically sets the value of the Content-Type header to application/x-www-form-urlencoded. If you want to explicitly specify a different Content-Type, you must submit your data using the string or bytes variable. Note that when you use table, pub.xml:loadEnhancedXMLNode will automatically: - URL-encode name=value pair, so you do not need to URL-encode the values you specify in table. - Insert the \"&\" character between the pairs (or unnamed values) that it constructs, so you do not need to include it in table. - Prefix the entire query string with the \"?\" character if it submits the data in table via the GET method. You do not need to include this character in table."
+              ]
+            },
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. Text that you want pub.xml:loadEnhancedXMLNode to submit to the resource in url . You can use string to submit data via either the POST or GET method. If you use string to specify your data, make sure that you specify the string exactly as you want it presented in the HTTP request. (If you are using the GET method, make sure you URL-encode the contents of string). When performing a POST the string is submitted to the resource as the body of the document."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. Data that pub.xml:loadEnhancedXMLNode is to submit to the resource in url . You can use bytes only to submit data via the POST method. Note: When you use bytes and another element (args, table, or string) to submit data with pub.xml:loadEnhancedXMLNode, the service appends the data from the args, table, or string element to url. The service appends args to url first, table second, and string last. The service encodes the data from the bytes element in the body of the post."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. Data that pub.xml:loadEnhancedXMLNode is to submit to the resource in url . You can use stream only to submit data via the POST method. Note: When you use stream and another element (args, table, or string) to submit data with pub.xml:loadEnhancedXMLNode, the service appends the data from the args, table, or string element to url. The service appends args to url first, table second, and string last. The service encodes the data from the stream element in the body of the post. If stream is specified, bytes is ignored."
+              ]
+            },
+            {
+              "name": "encoding",
+              "type": "String",
+              "description": [
+                "Optional. Name of a registered IANA character set."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "headers",
+          "type": "Document",
+          "description": [
+            "Optional. Fields that you want to explicitly override in the HTTP request header issued by pub.xml:loadEnhancedXMLNode . Specify one element for each header field that you want to set, where the element's name represents the name of the header field, and the element's value represents the value of that header field. If headers is not set, pub.xml:loadEnhancedXMLNode will use its default header values. Note: You do not need to type a colon after the field name because pub.xml:loadEnhancedXMLNode will automatically insert the colon when it inserts this field into the request header. If you want to assign specific values to header fields used by pub.xml:loadEnhancedXMLNode, keep the following points in mind: - When you specify the value of a header field, you override whatever default value IBM webMethods Integration Server is configured to use for HTTP requests. For example, if you set the User-Agent header field to B2B/3.0, the server uses that value instead of the default value specified by the watt.net.userAgent parameter. - The pub.xml:loadEnhancedXMLNode service automatically determines the value of the Content-Length header field. You cannot specify a value for Content-Length. - Be aware that when you submit data using the args or table elements, pub.xml:loadEnhancedXMLNode automatically sets the Content-Type header field to application/x-www-formurlencoded. You cannot override this setting using the headers variable. If you want to explicitly specify a content type in headers, make sure to use the string or bytes element to submit your data, not args or table. - Certain header fields are automatically derived from other input parameters assigned to pub.xml:loadEnhancedXMLNode. For example, the Authorization header field is automatically derived from your auth parameter setting. Except for the Content-Length header field and the Content-Type header field (which, as described above, you cannot override when submitting data via args or table), a value that you specify in headers overrides the value that pub.xml:loadEnhancedXMLNode might otherwise derive from other parameter settings."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Character set in which the returned document is encoded. The parser requires this value in order to interpret a document correctly. Set to: - autoDetect to determine the document's character set from the document, where UTF-8 is the default character set for XML. - The name of a registered IANA character set to decode the document using that character set (for example, ISO-8859-1)."
+          ]
+        },
+        {
+          "name": "failOnHTTPError",
+          "type": "String",
+          "description": [
+            "Optional. Determines whether pub.xml:loadEnhancedXMLNode will fail (throw an exception) if the requested URL is not loaded correctly based on an HTTP status code. This parameter allows for customized error handling of the load failure. Set to: - true to throw a service exception if the URL is not loaded as indicated by an HTTP status code between 400 and 599, inclusive. - false to ignore HTTP errors. If there is an error, pub.xml:loadEnhancedXMLNode returns status and statusMessage. This is the default."
+          ]
+        },
+        {
+          "name": "inputProcessing",
+          "type": "Document",
+          "description": [
+            "Optional. Contains a set of input parameters that instruct Integration Server how to read the XML document. The fields are comparable to those in the javax.xml.stream.XMLInputFactory class."
+          ],
+          "children": [
+            {
+              "name": "isValidating",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server performs DTD validation. Set to: - true to perform DTD validation. - false to disable DTD validation. This is the default."
+              ]
+            },
+            {
+              "name": "isNamespaceAware",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server provides namespace processing for XML 1.0 support while parsing the XML document. Set to: - true to enable namespace processing. This is the default. - false to disable namespace processing."
+              ]
+            },
+            {
+              "name": "isCoalescing",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server coalesces adjacent character data while parsing the XML document. Set to: - true to coalesce adjacent character data. - false to indicate that Integration Server does not coalesce adjacent character data. This is the default."
+              ]
+            },
+            {
+              "name": "isReplacingEntityReferences",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether, while parsing the XML document, Integration Server replaces internal entity references with replacement text and treats them as characters. Set to: - true to replace entity references. - false to indicate entity references will not be replaced. This is the default."
+              ]
+            },
+            {
+              "name": "isSupportingExternalEntities",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server resolves external parsed entities while parsing the XML document. Set to: - true to resolve external parsed entities. - false to indicate Integration Server does not resolve external parsed entities. The JVM in which Integration Server runs determines the default."
+              ]
+            },
+            {
+              "name": "supportDTD",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server supports DTDs while parsing the XML document. Set to: - true to support DTDs while parsing the XML document. - false to disable support of DTDs while parsing the XML document. This is the default."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "partitionSize",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the size, measured in bytes, of the partitions on the heap where the enhanced XML parser stores parsed document information. Specify a suffix of “k” to indicate kilobytes or “m” to indicate megabytes. For example, 10k or 10m. If you do not specify a value, Integration Server uses the default partition size value specified on the Settings > Enhanced XML parsing page in Integration Server Administrator."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "node",
+          "type": "org.w3c.dom.Node",
+          "description": [
+            "Conditional. XML node representing the returned ML document. The pub.xml:loadEnhancedXMLNode service returns node only when Integration Server parses the XML document successfully."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Conditional. The HTTP status code returned by the target server if an HTTP error occurs when loading the requested URL. The pub.xml:loadEnhancedXMLNode service returns status when an HTTP error occurs and failOnHTTPError is set to false."
+          ]
+        },
+        {
+          "name": "statusMessage",
+          "type": "String",
+          "description": [
+            "Conditional. The HTTP status message returned by the target server if an HTTP error occurs when loading the requested URL. The pub.xml:loadEnhancedXMLNode service returns statusMessage when an HTTP error occurs and failOnHTTPError is set to false."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If pub.xml:loadEnhancedXMLNode does not receive a response within the timeout period specified in the server's watt.net.timeout parameter, it will throw an exception. For information about the watt.net.timeout parameter, see IBM webMethods Integration Server Administrator’s Guide . Use the pub.xml:loadXMLNode service to load an XML document and convert it to an XML node using the legacy XML parser. For more information about the legacy XML parser and the enhanced XML parser, see IBM webMethods Integration Server Administrator’s Guide . Keep the following information in mind when specifying a partitionSize - The partitionSize is a hint for the enhanced XML parser so that it can estimate the amount of heap space needed to parse the document. Often, it not possible to determine the size of an inbound XML document before parsing. - As a general rule, IBM recommends a partitionSize that is 1/2 the size of the unparsed XML document. A partitionSize that is considerably larger than 1/2 the size of the unparsed XML document causes the enhanced XML parser to consume more heap space than necessary but might also improve throughput. However, this can impact the overall performance of Integration Server. A partitionSize that is considerably smaller than 1/2 the size of the unparsed XML document causes the enhanced XML parser to create a large number of partitions to parse the document. While this might use less heap space, it may reduce the throughput of the parser. A partitionSize that is three times smaller or three times larger than 1/2 the size of the unparsed XML document will likely have little impact on the performance. - At run time, the enhanced XML parser overrides a partitionSize that consumes all of the available heap space. - At run time, if the partitionSize results in an initial heap allocation that exceeds the single document limit set in the Maximum heap allocation for any single document field the limit for all documents set in the Maximum heap allocation for all documents combined field, the enhanced XML parser reduces the partition size automatically. For more information about heap allocation limits for the enhanced XML parser, see IBM webMethods Integration Server Administrator’s Guide . - If you do not specify partitionSize, the enhanced XML parser uses the default specified in the Default partition size field on the Settings > Enhanced XML parsing page in Integration Server Administrator."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xml:loadXMLNode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_loadXMLNode__title__1",
+      "description": [
+        "WmPublic. Retrieves an XML document via HTTP or HTTPS, parses it using the legacy XML parser, and produces an XML node. An XML node is a special representation of an XML document that can be consumed by the Integration Server. Most webMethods services that operate on XML documents require an XML node as input."
+      ],
+      "input_parameters": [
+        {
+          "name": "url",
+          "type": "String",
+          "description": [
+            "The URL of the document you want to load. This string must begin with http: or https: . For example: http://www.rubicon.com/orders/orders.html —OR— https://localhost:5555/WmPublic/index.html You can include a query string (for example, a collection of \"name=value\" pairs) with the string that you specify. However, you might want to use the data variable for this type of information instead. It is usually a more practical place for \"name=value\" data, because it allows you to link individual variables in the query string."
+          ]
+        },
+        {
+          "name": "method",
+          "type": "String",
+          "description": [
+            "Optional. Set this value to specify the HTTP method ( GET or POST ) that you want the target server to execute on the resource specified in url . This value determines the way in which pub.xml:loadXMLNode submits data values (if any) to the resource identified in url . The default is get . - If you set method to get, pub.xml:loadXMLNode appends the values you specify in data to the value in url. (Note that only certain data elements are valid when you use the GET method). - If you set method to post, pub.xml:loadXMLNode sends the values in data in the body of the HTTP or HTTPS request."
+          ]
+        },
+        {
+          "name": "auth",
+          "type": "Document",
+          "description": [
+            "Optional. Authentication and authorization information that pub.xml:loadXMLNode will use if the requested resource is protected. Note: If you include your data with the string in url, do not specify a value in data."
+          ],
+          "children": [
+            {
+              "name": "type",
+              "type": "String",
+              "description": [
+                "Type of authentication pub.xml:loadXMLNode will use to submit this request. Leave this field blank, as the only option currently available is basic HTTP authentication."
+              ]
+            },
+            {
+              "name": "user",
+              "type": "String",
+              "description": [
+                "User name that pub.xml:loadXMLNode will submit if the requested resource is protected. The user name must have authority to access the resource specified in url. This value defaults to the value of watt.net.httpUser in the server's configuration file (server.cnf)."
+              ]
+            },
+            {
+              "name": "pass",
+              "type": "String",
+              "description": [
+                "Password associated with the user name specified in user . If the user does not require a password, leave pass empty. This value defaults to the value of watt.net.httpPass in the server's configuration file (server.cf)."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "Optional. The data that you want pub.xml:loadXMLNode to submit with the request. Specify data using one or more of the following elements. Note: When you use more than one element to submit data, args is appended first, table is appended second, and string is appended last."
+          ],
+          "children": [
+            {
+              "name": "args",
+              "type": "Document",
+              "description": [
+                "Optional. Specifies name=value pairs that pub.xml:loadXMLNode is to submit to the resource in url . You can use args to submit data via either the POST or GET method. To specify data using args, create one element for each name=value pair that you want to submit, where the key represents the name portion of the pair and the value represents the value portion of the pair. Note that when you use args, pub.xml:loadXMLNode will automatically: - URL-encode name=value pair, so you do not need to URL-encode the values you specify in args. - Insert the \"&\" character between pairs, so you do not need to include it in args. - Prefix the entire query string with the \"?\" character if it submits the data in args via a GET. You do not need to include this character in args. When you submit data using the args variable, the Integration Server automatically sets the value of the Content-Type header to application/x-www-form-urlencoded. If you want to explicitly specify a different Content-Type, you must submit your data using the string or bytes variable."
+              ]
+            },
+            {
+              "name": "table",
+              "type": "String Table",
+              "description": [
+                "Optional. Specifies data that pub.xml:loadXMLNode will use to construct a query string to submit to the resource specified in url . table is similar to args, but it allows you to submit unnamed values in a query string, not just name=value pairs. To specify data using table, create one row for each value that you want to submit, where: - The contents of column 0 represent the name portion of the pair (leave this column null to submit an unnamed value, and... - The contents of column 1 represent the value portion of the pair. When you submit data using the table variable, the Integration Server automatically sets the value of the Content-Type header to application/x-www-form-urlencoded. If you want to explicitly specify a different Content-Type, you must submit your data using the string or bytes variable. Note that when you use table, pub.xml:loadXMLNode will automatically: - URL-encode name=value pair, so you do not need to URL-encode the values you specify in table. - Insert the \"&\" character between the pairs (or unnamed values) that it constructs, so you do not need to include it in table. - Prefix the entire query string with the \"?\" character if it submits the data in table via the GET method. You do not need to include this character in table."
+              ]
+            },
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. Text that you want pub.xml:loadXMLNode to submit to the resource in url . You can use string to submit data via either the POST or GET method. If you use string to specify your data, make sure that you specify the string exactly as you want it presented in the HTTP request. (If you are using the GET method, make sure you URL-encode the contents of string). When performing a POST the string is submitted to the resource as the body of the document."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. Data that pub.xml:loadXMLNode is to submit to the resource in url . You can use bytes only to submit data via the POST method. Note: When you use bytes and another element (args, table, or string) to submit data with pub.xml:loadXMLNode, the service appends the data from the args, table, or string element to url. The service appends args to url first, table second, and string last. The service encodes the data from the bytes element in the body of the post."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. Data that pub.xml:loadXMLNode is to submit to the resource in url . You can use stream only to submit data via the POST method. Note: When you use stream and another element (args, table, or string) to submit data with pub.xml:loadXMLNode, the service appends the data from the args, table, or string element to url. The service appends args to url first, table second, and string last. The service encodes the data from the stream element in the body of the post. If stream is specified, bytes is ignored."
+              ]
+            },
+            {
+              "name": "encoding",
+              "type": "String",
+              "description": [
+                "Optional. Name of a registered IANA character set."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "headers",
+          "type": "Document",
+          "description": [
+            "Optional. Fields that you want to explicitly override in the HTTP request header issued by pub.xml:loadXMLNode . Specify one element for each header field that you want to set, where the element's name represents the name of the header field, and the element's value represents the value of that header field. If headers is not set, pub.xml:loadXMLNode will use its default header values. Note: You do not need to type a colon after the field name because pub.xml:loadXMLNode will automatically insert the colon when it inserts this field into the request header. If you want to assign specific values to header fields used by pub.xml:loadXMLNode, keep the following points in mind: - When you specify the value of a header field, you override whatever default value IBM webMethods Integration Server is configured to use for HTTP requests. For example, if you set the User-Agent header field to B2B/3.0, the server uses that value instead of the default value specified by the watt.net.userAgent parameter. - The pub.xml:loadXMLNode service automatically determines the value of the Content-Length header field. You cannot specify a value for Content-Length. - Be aware that when you submit data using the args or table elements, pub.xml:loadXMLNode automatically sets the Content-Type header field to application/x-www-formurlencoded. You cannot override this setting using the headers variable. If you want to explicitly specify a content type in headers, make sure to use the string or bytes element to submit your data, not args or table. - Certain header fields are automatically derived from other input parameters assigned to pub.xml:loadXMLNode. For example, the Authorization header field is automatically derived from your auth parameter setting. Except for the Content-Length header field and the Content-Type header field (which, as described above, you cannot override when submitting data via args or table), a value that you specify in headers overrides the value that pub.xml:loadXMLNode might otherwise derive from other parameter settings."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Character set in which the returned document is encoded. The parser requires this value in order to interpret a document correctly. Set to: - autoDetect to determine the document's character set based on document type, where: ISO-8859-1 is used for HTML. UTF-8 is used for XML. - The name of a registered IANA character set to decode the document using that character set (for example, ISO-8859-1). If you do not specify an encoding value, pub.xml:loadXMLNode decodes the returned document using the following defaults:"
+          ]
+        },
+        {
+          "name": "expandDTD",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether or not pub.xml:loadXMLNode is to process references to parameter entities in the returned document's DTD. Set to: - true to expand references to parameter entities to their full definition. - false to ignore references to parameter entities. This is the default. Note: You might want or need to use this variable in cases when you have a syntactically correct document that causes a parse error because it violates a definition in an external parameter-entity reference. By setting expandDTD to false, you can bypass the external definition so that pub.xml:loadXMLNode can parse the document successfully."
+          ]
+        },
+        {
+          "name": "isXML",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether the returned document is XML or HTML. pub.xml:loadXMLNode must know this in order to parse a document correctly. Set to: - autoDetect to parse the document based on its type. When you use this option, pub.xml:loadXMLNode senses the document's type based on its <!DOCTYPE...\\> or <?XML...\\> tag. If it cannot determine a document's type, it parses it as HTML. This is the default. - true to parse the document as XML. - false to parse the document as HTML. Note: If you know what type of document pub.xml:loadXMLNode will receive, IBM recommends that you explicitly set isXML instead of using autoDetect. It will cut processing time, because the server will not have to examine the document to determine its type. The default value is autoDetect."
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional. Flag that specifies the form in which you want pub.xml:loadXMLNode to make the parsed document available to subsequent services. Set to: - bytes to make the document available as a byte array. This is the default. Use this option if the document will be used as input to a service that operates on whole documents (for example, pub.xml:queryXMLNode). - stream to make the document available as an InputStream. Use this option if the document will be used as input to a service that can process a document incrementally (for example, pub.xml:getXMLNodeIterator)."
+          ],
+          "references": [
+            {
+              "title": "pub.xml:queryXMLNode",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_queryXMLNode"
+            },
+            {
+              "title": "pub.xml:getXMLNodeIterator",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#A21764"
+            }
+          ]
+        },
+        {
+          "name": "failOnHTTPError",
+          "type": "String",
+          "description": [
+            "Optional. Determines whether pub.xml:loadXMLNode will fail (throw an exception) if the requested URL is not loaded correctly based on an HTTP status code. This parameter allows for customized error handling of the load failure. Set to: - true to throw a service exception if the URL is not loaded as indicated by an HTTP status code between 400 and 599, inclusive. - false to ignore HTTP errors. If there is an error, the HTML page returned by the web server will be sent to the parser. This is the default."
+          ]
+        },
+        {
+          "name": "expandGeneralEntities",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether pub.xml:pub.xml:loadXMLNode should expand references to general entities in the returned document’s DTD. Set to: - true to expand references to general entities to their full definition. This is the default. - false to ignore references to general entities."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "node",
+          "type": "com.wm.lang.xml.Node",
+          "description": [
+            "XML node representing the returned HTML or XML document."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If pub.xml:loadXMLNode does not receive a response within the timeout period specified in the server's watt.net.timeout parameter, it will throw an exception. For information about the watt.net.timeout parameter, see IBM webMethods Integration Server Administrator’s Guide . If expandGeneralEntities is not specified, Integration Server uses the value in watt.core.xml.expandGeneralEntities. If watt.core.xml.expandGeneralEntities is not set, the references to general entities are always expanded. Use the pub.xml:loadEnhancedXMLNode service to load an XML document and convert it too an XML node using the enhanced XML parser. For more information about the legacy XML parser and the enhanced XML parser, see IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xml:queryXMLNode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_queryXMLNode__title__1",
+      "description": [
+        "WmPublic. Queries an XML node. The fields parameter specifies how data is extracted from the node to produce an output variable. This output variable is called a \"binding,\" because the fields parameter binds a certain part of the document to a particular output variable. At run time, this service must include at least one fields entry. The service must include at least one entry in fields. The result of each query you specify in fields is returned in a variable whose name and type you specify."
+      ],
+      "input_parameters": [
+        {
+          "name": "node",
+          "type": "com.wm.lang.xml.Node",
+          "description": [
+            "The XML node or enhanced XML node that you want to query. This parameter supports the following types of input: - com.wm.lang.xml.Node XML node that you want to query. An XML node can be produced by pub.xml:loadXMLNode, pub.xml:xmlStringToXMLNode or an XML content handler. - enhanced XML node The enhanced XML node that you want to query. An enhanced XML node can be produced by pub.xml:loadEnhancedXMLNode, pub.xml:xmlStringToEnhancedXMLNode, or an XML content handler that receives a document with an xmlFormat is set to enhanced. If you supply an enhanced XML node, you must use XQL to query the node."
+          ],
+          "references": [
+            {
+              "title": "pub.xml:loadXMLNode",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_loadXMLNode"
+            },
+            {
+              "title": "pub.xml:xmlStringToXMLNode",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_xmlStringToXMLNode"
+            },
+            {
+              "title": "pub.xml:loadEnhancedXMLNode",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#CEHBFIHJ"
+            },
+            {
+              "title": "pub.xml:xmlStringToEnhancedXMLNode",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#CEHJAFHA"
+            }
+          ]
+        },
+        {
+          "name": "nsDecls",
+          "type": "Document",
+          "description": [
+            "Optional. Namespaces associated with any namespace prefixes used element to specify elements in fields/query . Each entry in nsDecls represents a namespace prefix/URI pair, where a key name represents a prefix and the value of the key specifies the namespace URI. For example, to define the URIs associated with two prefixes called GSX and TxMon, you would set nsDecls as follows:"
+          ]
+        },
+        {
+          "name": "fields",
+          "type": "Document List",
+          "description": [
+            "Optional. Parameters describing how data is to be extracted from node . Each document in the list contains parameters for a single query, as follows:"
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name to assign to resulting value."
+              ]
+            },
+            {
+              "name": "resultType",
+              "type": "String",
+              "description": [
+                "Object type that the query is to yield. The following shows the allowed values for resultType ."
+              ]
+            },
+            {
+              "name": "query",
+              "type": "String",
+              "description": [
+                "Query identifying the data to be extracted from node ."
+              ]
+            },
+            {
+              "name": "queryType",
+              "type": "String",
+              "description": [
+                "Query language in which query is expressed. Valid values are WQL and XQL . If the content of node is an enhanced XML node, you must set queryType to XQL. For information about WQL syntax, see the IBM webMethods Integration Server Built-In Services Reference ."
+              ]
+            },
+            {
+              "name": "onnull",
+              "type": "String",
+              "description": [
+                "Code indicating what you want queryXMLNode to do when the result is null. Set to one of the following: - continue to indicate that all result values are acceptable for this query (including null). - fail to indicate that the service should fail if the result of this query is null and continue in all other cases. - succeed to indicate that the service should continue if the result of this query is null and fail in all other cases."
+              ]
+            },
+            {
+              "name": "fields",
+              "type": "Document List",
+              "description": [
+                "Parameters that support recursive execution of bindings. Each fields list defines bindings for one level of the output with the top level being the pipeline and the first level down being contents of a document or document list in the pipeline."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If pub.xml:queryXMLNode fails, it throws a server exception. Common reasons for pub.xml:queryXMLNode to fail include: - A variable that has no query string assigned to it. - A syntax error in a query string. - A query fails the “Allows Nulls” test. - The node variable does not exist or it is null."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xml:xmlNodeToDocument",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_xmlNodeToDoc__title__1",
+      "description": [
+        "WmPublic. Converts an XML node to a document (an IData object). If you want to convert an XML node to an XMLData document, use pub.xmldata.domNodetoXMLData. This service transforms each element and attribute in the XML node to an element in an IData object. For example:"
+      ],
+      "input_parameters": [
+        {
+          "name": "node",
+          "type": "com.wm.lang.xml.Node",
+          "description": [
+            "XML node that is to be converted to a document (IData object). This parameter supports the following types of input: - com.wm.lang.xml.Node - org.w3c.dom.Node"
+          ]
+        },
+        {
+          "name": "attrPrefix",
+          "type": "String",
+          "description": [
+            "Optional. Prefix that is to be used to designate keys containing attribute values. The default is \"@\". For example, if you set attrPrefix to ATT_ and node contained the following element: <tx currency=dollars> <acct>cash</acct> <amt>120.00</amt> </tx> xmlNodeToDocument would convert the currency attribute as follows:"
+          ]
+        },
+        {
+          "name": "arrays",
+          "type": "String List",
+          "description": [
+            "Optional. Names of elements that are to be generated as arrays, regardless of whether they appear multiple times in node . For example, if arrays contained the following values for the XML document shown in the example in the description for this service: rep address xmlNodeToDocument would generate element rep as a String List and element address as a Document List. Important: If you include namespace prefixes in the element names that you specify in arrays, you must define the namespaces associated with those prefixes in nsDecls."
+          ]
+        },
+        {
+          "name": "makeArrays",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether you want xmlNodeToDocument to automatically create an array for every element that appears in node more than once. Set to: - true to automatically create arrays for every element that appears more than once in node. This is the default. - false to create arrays for only those elements specified in arrays or defined as arrays in the document type specified in documentTypeName. Important: You must set makeArrays to false when using documentTypeName to define the structure of an element. Otherwise, an exception will be thrown at run time."
+          ]
+        },
+        {
+          "name": "collect",
+          "type": "Document",
+          "description": [
+            "Optional. Elements that are to be placed into a new, named array (that is, a \"collection\"). Within collect , use key names to specify the names of the elements that are to be included in the collection. Then set the value of each key to specify the name of the collection in which you want that element placed. For example, if you wanted to place the <name> and <rep> elements in an array called originator , you would set collect as follows:"
+          ]
+        },
+        {
+          "name": "nsDecls",
+          "type": "Document",
+          "description": [
+            "Optional. Namespace prefixes to use for the conversion. This parameter specifies the prefixes that will be used when namespace-qualified elements are converted to key names in the resulting IData object. For example, if you want elements belonging to a particular namespace to have the prefix GSX in the resulting IData (for example, GSX:acctNum ), you would associate the prefix GSX with that namespace in nsDecls . (This is important because incoming XML documents can use any prefix for a given namespace, but the key names expected by a target service or MAP step on the Integration Server will have a fixed prefix.) Namespace prefixes in nsDecls also define the prefixes used by the arrays, documents, documentTypeName, and collect parameters. Each entry in nsDecls represents a namespace prefix/URI pair, where a key name represents a prefix and the value of the key specifies the namespace URI. For example, to define the URIs associated with two prefixes called GSX and TxMon, you would set nsDecls as follows:"
+          ]
+        },
+        {
+          "name": "documents",
+          "type": "String List",
+          "description": [
+            "Optional. Names of any simple elements that are to be generated as documents (IData objects) instead of Strings. The document produced for each element specified in documents will have the same name as the source element from which it is derived. It will contain a String element named *body that holds the element's value. For example, if documents contained the Strings name and rep and the source document contained the following: . . . <name>Midwest Extreme Sports</name> <rep>Laura M. Sanchez</rep> . . . xmlNodeToDocument would produce the following: Note: If you include namespace prefixes in the element names that you specify, you must define the namespaces associated with those prefixes in nsDecls."
+          ]
+        },
+        {
+          "name": "documentTypeName",
+          "type": "String",
+          "description": [
+            "Optional. Fully qualified name of the document type that specifies the structure that is to be imposed on the resulting document. You can use this parameter to explicitly specify the order and dimensionality of elements. It is an alternative to using makeArrays and arrays to specify which elements are to be generated as arrays. For example, if you had the XML document shown in the example in this service's description, and you wanted the <name> and <rep> elements to be generated as String lists, you would define them as String Lists fields in a document type and then specify that document type in documentTypeName. Note: The document type specified in documentTypeName does not need to specify every element that will appear in the resulting document. It only needs to specify the elements whose structure you want to explicitly set. However, if you include namespace prefixes in the element names that you specify, you must define the namespaces associated with those prefixes in nsDecls. This service always converts XML nodes to String or Document object fields. It does not generate constrained objects (for example, Floats or Integers), even if the fields in the specified document are defined as constrained objects. If you are using derived type processing, you must provide this parameter. Important: When you use documentTypeName, set makeArrays to false and do not set arrays and documents. Otherwise, xmlNodeToDocument will throw an exception at run time."
+          ]
+        },
+        {
+          "name": "mixedModel",
+          "type": "String",
+          "description": [
+            "Optional. Flag specifying how mixed-content elements (elements containing both text values and child elements) are to be converted. The following is an example of a mixed-content element: <comment> This job is <status>pending</status>. Estimated completion date is <edc>Feb 14, 2000</edc>. </comment> Set to: - true to place top-level text in an element named *body. This setting would produce the following IData for the <comment> element shown above: Important: When you set mixedModel to true, you must also use documentTypeName to specify a document type that describes the structure of the IData that you want xmlNodeToDocument to produce. Within the document type, mixed-content elements must be defined as documents that include a String field named *body. - false to omit top-level text and include only the child elements from mixed-content elements. This setting would produce the following IData for the <comment> element shown above:"
+          ]
+        },
+        {
+          "name": "preserveUndeclaredNS",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether or not Integration Server keeps undeclared namespaces in the resulting document (IData). An undeclared namespace is one that is not specified as part of the nsDecls input parameter. Set to: - True to preserve undeclared namespaces in the resulting document. For each namespace declaration in the XML document that is not specified in the nsDecls parameter, Integration Server adds the xmlns attribute as a String variable to the document (IData). Integration Server gives the variable a name that begins with \"@xmlns\" and assigns the variable the namespace value specified in the XML document. Integration Server preserves the position of the undeclared namespace in the resulting document. - False to ignore namespace declarations in the XML document that are not specified in the nsDecls parameter. This is the default."
+          ]
+        },
+        {
+          "name": "preserveNSPositions",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether or not Integration Server maintains the position of namespaces declared in the nsDecls parameter in the resulting document. Set to: - True to preserve the position of namespaces declared in nsDecls in the resulting document. For each namespace specified in the nsDecls parameter, Integration Server adds the xmlns attribute to the document (IData) as a String variable named \"@xmlns:NSprefix\" where \"NSprefix\" is the prefix name specified in nsDecls. Integration Server assigns the variable the namespace value specified in the XML document. This variable maintains the position of the xmlns attribute declaration within the XML document. - False to not maintain the position of the namespace declarations specified in nsDecls in the resulting document. This is the default."
+          ]
+        },
+        {
+          "name": "useNamespacesOfDocumentType",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether or not Integration Server uses the namespaces defined in the document type specified for the documentTypeName input parameter when creating a document from an XML string. Set to: - True to use the namespaces defined in the document type specified in documentTypeName and those in nsDecls when creating elements in the output document. - False to use the namespaces defined in the nsDecls parameter only. This is the default."
+          ]
+        },
+        {
+          "name": "treatXsiNilAsNull",
+          "type": "Boolean",
+          "description": [
+            "Optional. Flag indicating whether Integration Server should consider the xsi:nilattribute of an empty XML tag as null in the resulting XML string. Set to: - true to treat the xsi:nil attribute for an empty XML tag as null. - false to treat the xsi:nil attribute as a blank string. By default, the treatXsiNilAsNull parameter value is blank."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) representation of the nodes and attributes in node."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "this_service_would_convert_this_xml_document": [
+            "<?xml version=\"1.0\" ?> <tns:AcctInfo> xmlns:tns=\"http://localhost/DerivedAddress/schema.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" > <name>Midwest Extreme Sports</name> <rep>Laura M. Sanchez</rep> <acctNum type=platinum>G97041A</acctNum> <phoneNum cc=011>216-741-7566</phoneNum> <address country=USA> <street1>10211 Brook Road</street1> <city>Cleveland</city> <state>OH</state> <postalCode>22130</postalCode> </address> <address country=USA xsi:type=\"tns:DerivedAddress\"> <street1>10211 Brook Road</street1> <city>Cleveland</city> <state>OH</state> <postalCode>22130</postalCode> <landMark>Besides Ohio River-Bank Square</landMark> <telNo>001222555</telNo> </address> <serialNum>19970523A</serialNum> <serialNum>20001106G</serialNum> <serialNum>20010404K</serialNum> </tns:AcctInfo>"
+          ]
+        },
+        {
+          "to_an_idata_that_looks_like_this": []
+        },
+        {
+          "usage_notes": [
+            "If the IS document type in documentTypeName accurately represents the content model for the complex type from which it was created (the Model type property value is not “Unordered”), when Integration Server converts an XML node to a document (IData), Integration Server matches up the contents of an element in the XML node with the content model of the IS document type. If a mismatch occurs and Integration Server is unable to map the XML node contents to the IS document type, Integration Server appends the remaining data to the resulting document (IData). Integration Server stops attempting to map the XML node content to a field in the IS document type. This mismatch does not result in an error at the time the document is created. However, the document would fail validation by the pub.schema:validate service. The watt.server.soap.decodeElementWithPrefix server configuration parameter determines whether or not the pub.xml.xmlNodeToDocument service considers namespace and/or prefix declarations when decoding namespace qualified elements to corresponding fields in an IS document type. - When watt.server.soap.decodeElementWithPrefix is set to true, the pub.xml:xmlNodeToDocument service does not consider namespace and/or prefix declarations. The service will map namespace qualified elements in the XML string to fields in an IS document type even if the field names do not include a prefix. - When watt.server.soap.decodeElementWithPrefix is set to false, the pub.xml:xmlNodeToDocument service considers namespace and/or prefix declarations. The service does not map namespace qualified elements in the XML input to fields in an IS document type if the field names do not include a prefix. The pub.xml:xmlNodeToDocument service does not populate non-prefixed fields. Instead the service adds new fields that use the prefix:name structure and populates those fields with values from the XML instance. The xsi:nil attribute in an element does not convert properly when generating an IS document from an XML document. If an XML document has an element containing only xsi:nil as an attribute and an IS document is generated from that XML document using the pub.xml.xmlNodeToDocument service, the xsi:nil attribute is generated as an @xsi:nil field for the element in the resulting IS document. This occurs even if the element with the xsi:nil attribute has a simple type string; however, the document type that is created from the XML schema (which is used by the XML document) has a string field for the xsi:nil element instead of the IS document. There is a type difference between the generated document and the document type. To work around this issue, manually edit the generated IS document to remove the @xsi:nil attribute and then convert the IS document to a string field. Following are examples of XML documents and the documents (IData objects) that xmlNodeToDocument would produce.",
+            {
+              "table": [
+                [
+                  "XML Document",
+                  "Output from xmlNodeToDocument"
+                ],
+                [
+                  "<myDoc> <e1>e1Value</e1> </myDoc>",
+                  ""
+                ],
+                [
+                  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?> <myDoc> <e1>e1Value</e1> </myDoc>",
+                  ""
+                ],
+                [
+                  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?> <myDoc> <e1 e1Attr=\"attrValue\">e1Value</e1> </myDoc>",
+                  ""
+                ],
+                [
+                  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?> <myDoc> <e1>e1Value</e1> <e2>e2Value</e2> </myDoc>",
+                  ""
+                ],
+                [
+                  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?> <myDoc> <e1>e1Value1</e1> <e2>e2Value</e2> <e1>e1Value2</e1> </myDoc>",
+                  ""
+                ],
+                [
+                  "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <myDoc> <e1 e1Attr=\"attrValue1\">e1Value1</e1> <e2>e2Value</e2> <e1 e1Attr=\"attrValue2\">e1Value2</e1> </myDoc>",
+                  "Note: This example assumes that makeArrays is set to true. Note that e1 was created as a document list, which holds both <e1> elements from the XML document."
+                ],
+                [
+                  "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <myDoc> <e1 e1Attr=\"attrValue1\">e1Value1</e1> <e2>e2Value</e2> <e1 e1Attr=\"attrValue2\">e1Value2</e1> </myDoc>",
+                  "Note: This example assumes that makeArrays is set to false and that watt.server.xml.xmlNodeToDocument. keepDuplicates is set to true (the default). Note that both<e1> elements from the source XML are retained."
+                ],
+                [
+                  "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <myDoc> <e1 e1Attr=\"attrValue1\">e1Value1</e1> <e2>e2Value</e2> <e1 e1Attr=\"attrValue2\">e1Value2</e1> </myDoc>",
+                  "Note: This example assumes that makeArrays is set to false and that watt.server.xml.xmlNodeToDocument. keepDuplicates is set to false. Note that only the last <e1> element in the source XML was retained in the resulting document."
+                ],
+                [
+                  "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <myDoc> <e1 e1Attr=\"attrValue1\">e1Value1</e1> <e2> <e3>e3Value</e3> <e4 e4Attr=\"attrValue4\" e4Attrb=\"attrValue4b\">e4Value </e4> </e2> </myDoc>",
+                  ""
+                ],
+                [
+                  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?> <tns:AcctInfo> xmlns:tns=\"http://localhost/Derived Address/schema.xsd\" xmlns:xsi=\"http://www.w3.org/2001/ XMLSchema-instance\" > <myDoc> <e1>e1Value</e1> </myDoc> <myDoc xsi:type=\"tns:DerivedDoc\"> <e1>e1Value</e1> <e2>e1Value</e2> </myDoc> </tns:AcctInfo>",
+                  ""
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xml:xmlStringToEnhancedXMLNode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#CEHJAFHA__title__1",
+      "description": [
+        "WmPublic. Converts an XML document (represented as a String, byte[ ], or InputStream) to an org.w3c.dom.Node object using the enhanced XML parser. An DOM node is a special representation of an XML document that can be consumed by any program that uses standard DOM APIs. The pub.xml:xmlNodeToDocument service accepts a DOM object as input."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmldata",
+          "type": "String",
+          "description": [
+            "Optional. String containing the XML document to convert to an XML node. Note: If you specify xmldata, do not specify $filedata or $filestream."
+          ]
+        },
+        {
+          "name": "$filedata",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. byte[ ] containing the XML document to convert to an XML node. Note: If you specify $filedata, do not specify xmldata or $filestream."
+          ]
+        },
+        {
+          "name": "$filestream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Optional. InputStream containing the XML document to convert to an XML node. Note: If you specify $filestream, do not specify xmldata or $filedata."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Character encoding in which text is represented. Specify UTF-8 for XML files and ISO-8859-1 for HTML files. To have the parser attempt to detect the type of encoding, specify autoDetect (the default, if encoding is not specified)."
+          ]
+        },
+        {
+          "name": "inputProcessing",
+          "type": "Document",
+          "description": [
+            "Optional. Contains a set of input parameters that instruct Integration Server how to read the XML document. The fields are comparable to options in the javax.xml.stream.XMLInputFactory class."
+          ],
+          "children": [
+            {
+              "name": "isValidating",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server performs DTD validation. Set to: - true to perform DTD validation. - false to disable DTD validation. This is the default."
+              ]
+            },
+            {
+              "name": "isNamespaceAware",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server provides namespace processing for XML 1.0 support while parsing the XML document. Set to: - true to enable namespace processing. This is the default. - false to disable namespace processing."
+              ]
+            },
+            {
+              "name": "isCoalescing",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server coalesces adjacent character data while parsing the XML document. Set to: - true to coalesce adjacent character data. - false to indicate that Integration Server does not coalesce adjacent character data. This is the default."
+              ]
+            },
+            {
+              "name": "isReplacingEntityReferences",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether, while parsing the XML document, Integration Server replaces internal entity references with replacement text and treats them as characters. Set to: - true to replace entity references. - false to indicate entity references will not be replaced. This is the default."
+              ]
+            },
+            {
+              "name": "isSupportingExternalEntities",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server resolves external parsed entities while parsing the XML document. Set to: - true to resolve external parsed entities. - false to indicate Integration Server does not support external parsed entities. The JVM in which Integration Server runs determines the default."
+              ]
+            },
+            {
+              "name": "supportDTD",
+              "type": "String",
+              "description": [
+                "Optional. Determines whether Integration Server supports DTDs while parsing the XML document. Set to: - true to support DTDs while parsing the XML document. - false to disable support of DTDs while parsing the XML document. This is the default."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "partitionSize",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the size, measured in bytes, of the partitions on the heap where the enhanced XML parser stores parsed document information. Specify a suffix of “k” to indicate kilobytes or “m” to indicate megabytes. For example, 10k or 10m. If you do not specify a value, Integration Server uses the default partition size value specified on the Settings > Enhanced XML parsing page in Integration Server Administrator."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "node",
+          "type": "org.w3c.dom.Node",
+          "description": [
+            "XML node representing the returned XML document. This object can be used as input to webMethods services that consume XML nodes in the form of a DOM object."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The input parameters xmldata, $filedata, and $filestream are mutually exclusive. Specify only one of the preceding parameters. Integration Server checks the parameters in the following order, using the value of the first parameter that has a specified value: $filedata, $filestream, and xmldata. Use the pub.xml:xmlStringToXMLNode service to convert an XML document to an XML node using the legacy XML parser. For more information about the legacy XML parser and the enhanced XML parser, see IBM webMethods Integration Server Administrator’s Guide . Keep the following information in mind when specifying a partitionSize - The partitionSize is a hint for the enhanced XML parser so that it can estimate the amount of heap space needed to parse the document. Often, it not possible to determine the size of an inbound XML document before parsing. - As a general rule, IBM recommends a partitionSize that is 1/2 the size of the unparsed XML document. A partitionSize that is considerably larger than 1/2 the size of the unparsed XML document causes the enhanced XML parser to consume more heap space than necessary but might also improve throughput. However, this can impact the overall performance of Integration Server. A partitionSize that is considerably smaller than 1/2 the size of the unparsed XML document causes the enhanced XML parser to create a large number of partitions to parse the document. While this might use less heap space, it may reduce the throughput of the parser. A partitionSize that is three times smaller or three times larger than 1/2 the size of the unparsed XML document will likely have little impact on the performance. - At run time, the enhanced XML parser overrides a partitionSize that consumes all of the available heap space. - At run time, if the partitionSize results in an initial heap allocation that exceeds the single document limit set in the Maximum heap allocation for any single document field the limit for all documents set in the Maximum heap allocation for all documents combined field, the enhanced XML parser reduces the partition size automatically. For more information about heap allocation limits for the enhanced XML parser, see IBM webMethods Integration Server Administrator’s Guide . - If you do not specify partitionSize, the enhanced XML parser uses the default specified in the Default partition size field on the Settings > Enhanced XML parsing page in Integration Server Administrator."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xml:xmlStringToXMLNode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xml-folder#Apub_xml_xmlStringToXMLNode__title__1",
+      "description": [
+        "WmPublic. Converts an XML document (represented as a String, byte[ ], or InputStream) to an XML node. An XML node is a special representation of an XML document that can be consumed by the Integration Server. Most webMethods services that operate on XML documents require an XML node as input."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmldata",
+          "type": "String",
+          "description": [
+            "Optional. String containing the XML document to convert to an XML node. Note: If you specify xmldata, do not specify $filedata or $filestream."
+          ]
+        },
+        {
+          "name": "$filedata",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. byte[ ] containing the XML document to convert to an XML node. Note: If you specify $filedata, do not specify xmldata or $filestream."
+          ]
+        },
+        {
+          "name": "$filestream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Optional. InputStream containing the XML document to convert to an XML node. Note: If you specify $filestream, do not specify xmldata or $filedata."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Character encoding in which text is represented. Specify UTF-8 for XML files and ISO-8859-1 for HTML files. To have the parser attempt to detect the type of encoding, specify autoDetect (the default, if encoding is not specified)."
+          ]
+        },
+        {
+          "name": "expandDTD",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether references to parameter entities in the XML document's DTD are to be processed. Set to: - true to expand references to parameter entities to their full definition. - false to ignore references to parameter entities. This is the default."
+          ]
+        },
+        {
+          "name": "isXML",
+          "type": "String",
+          "description": [
+            "Optional. Flag specifying whether the input document is XML or HTML. ( xmlStringToXMLNode must know this so that it can parse the document correctly.) Set to: - autoDetect to parse the document based on its type. When you use this option, xmlStringToXMLNode detects the document's type based on its <!DOCTYPE...\\> or <?XML...\\> tag. If it cannot determine a document's type, it parses it as HTML. This is the default. - true to parse the document as XML. - false to parse the document as HTML."
+          ]
+        },
+        {
+          "name": "expandGeneralEntities",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether pub.xml:xmlStringToXMLNode should expand references to general entities in the XML document’s DTD. Set to: - true to expand references to general entities to their full definition. This is the default. - false to ignore references to general entities."
+          ]
+        },
+        {
+          "name": "validateXML",
+          "description": [
+            "String. Optional. Flag indicating whether Integration Server validates the incoming XML document to determine whether it is well-formed XML before converting the XML document. Set to: - true to validate the incoming XML. If validation fails, the service ends with a ServiceException. - false to skip validation. This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "node",
+          "type": "com.wm.lang.xml.Node",
+          "description": [
+            "XML node representation of the XML document in xmlData . This object can be used as input to webMethods services that consume XML nodes."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The input parameters xmldata, $filedata, and $filestream are mutually exclusive. Specify only one of the preceding parameters. Integration Server checks the parameters in the following order, using the value of the first parameter with a specified value: $filedata, $filestream, and xmldata. If expandGeneralEntities is not specified, Integration Server uses the value in watt.core.xml.expandGeneralEntities. If watt.core.xml.expandGeneralEntities is not set, the references to general entities are always expanded. Use the pub.xml:xmlStringToEnhancedXMLNode service to convert an XML document to an XML node using the enhanced XML parser. For more information about the legacy XML parser and the enhanced XML parser, see IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    }
+  ]
+}

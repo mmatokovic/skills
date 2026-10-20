@@ -1,0 +1,838 @@
+{
+  "folder": "MIME",
+  "description": [
+    "Use the elements in the mime folder to create MIME messages and extract information from MIME messages."
+  ],
+  "total_services": 13,
+  "services": [
+    {
+      "name": "pub.mime:addBodyPart",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_addBodyPart__title__1",
+      "description": [
+        "WmPublic. Adds a body part (header fields and content) to a specified MIME object."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object to which you want to add a body part. (This IData object is produced by pub.mime:createMimeData .)"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        },
+        {
+          "name": "content",
+          "type": "java.io.InputStream or Object",
+          "description": [
+            "Content that you want to add to the MIME object. content can be an InputStream or another MIME object. Use an InputStream to add an ordinary payload. Use a MIME object to add a payload that is itself a MIME message."
+          ]
+        },
+        {
+          "name": "isEnvStream",
+          "type": "String",
+          "description": [
+            "Flag that specifies whether content is to be treated as a MIME entity. Important: This parameter is only used if content is an InputStream. Set this parameter to one of the following values: - yes to treat content as a MIME entity. addBodyPart will strip out the header fields from the top of content and add them to mimeData as part headers. The remaining data will be treated as the payload. Note: addBodyPart assumes that all data up to the first blank line represents the entity's header fields. - no to treat content as an ordinary payload."
+          ]
+        },
+        {
+          "name": "mimeHeader",
+          "type": "Document",
+          "description": [
+            "Specifies the part headers that you want to add with this body part. Key names represent the names of the header fields. The values of the keys represent the values of the header fields. For example, if you wanted to add the following header fields: X-Doctype: RFQ X-Severity: 10 You would set mimeHeader as follows:"
+          ]
+        },
+        {
+          "name": "contenttype",
+          "type": "String",
+          "description": [
+            "Optional. The value of the Content-Type header for this body part. For single-part messages, this value overrides the Content-Type value in mimeHeader , if one is present. Defaults to text/plain. See usage notes."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Specifies how the body part is to be encoded for transport and sets the value of the Content-Transfer-Encoding header. For single-part messages, this value overrides the Content-Transfer-Encoding value in mimeHeader , if one is present. Defaults to 7bit. See usage notes. Note: This parameter determines how the payload is to be encoded for transport. When you add a payload to mimeData, it should be in its original format. The pub.mime:getEnvelopeStream service will perform the encoding (as specified by encoding) when it generates the final MIME message. Set to: - 7bit to specify that content is 7-bit, line-oriented text that needs no encoding. This is the default. - 8bit to specify that content is 8-bit, line-oriented text that needs no encoding. Note: This encoding value is not recommended for messages that will be transported via SMTP over the Internet, because the data can be altered by intervening mail servers that can't accommodate 8-bit text. To safely transport 8-bit text, use quoted-printable encoding instead. - binary to specify that content contains binary information that needs no encoding. Note: This encoding value is not recommended for messages that will be transported via SMTP over the Internet, because the data can be altered by intervening mail servers that can't accommodate binary data. To safely transport binary data, use base64 encoding instead. - quoted-printable to specify that content contains 7 or 8-bit, line-oriented text that you want to encode using the quoted-printable encoding scheme. - base64 to specify that content contains an arbitrary sequence of octets that you want to encode using the base64 encoding scheme. - uuencode to specify that content contains an arbitrary sequence of octets that you want to encode using the uuencode encoding scheme."
+          ],
+          "references": [
+            {
+              "title": "pub.mime:getEnvelopeStream",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_getEnvelopeStream"
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the value of the Content-Description header for this body part."
+          ]
+        },
+        {
+          "name": "multipart",
+          "type": "String",
+          "description": [
+            "Optional. Flag that determines how addBodyPart behaves if mimeData already contains one or more body parts. By default, addBodyPart simply appends a new body part to mimeData if it already contains a payload. (This allows you to construct multi-part messages.) However, you can override this behavior if you want to either replace the existing payload with the new body part or throw an exception under these circumstances (see replace parameter, below). Set to: - yes to append a new body part to mimeData. This is the default. - no to replace the existing payload with the new body part. (Depending on the value of replace, this setting may cause addBodyPart to throw an exception.)"
+          ]
+        },
+        {
+          "name": "replace",
+          "type": "String",
+          "description": [
+            "Optional. Flag that specifies whether addBodyPart replaces the existing payload or throws an exception when it receives a mimeData that already contains a payload. This parameter is only used when multipart is set to no . Set to: - yes to replace the existing payload with the new body part. This is the default. - no to throw an exception."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object to which the body part was added."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by pub.mime:createMimeData. The way in which the contenttype and encoding parameters are applied depends on whether the finished message is single-part or multipart. For single-part messages: - contenttype specifies the Content-Type for the entire MIME message. It overrides any value assigned to the Content-Type header in mimeHeader. If Content-Type is not specified or blank in contenttype or mimeHeader, the value of the Content-Type header defaults to text/plain. - encoding specifies the Content-Transfer-Encoding for the entire MIME message. It overrides any value assigned to the Content-Transfer-Encoding header in mimeHeader. If Content-Transfer-Encoding is not specified or blank in encoding or mimeHeader, the value of the Content-Transfer-Encoding header defaults to 7bit. For multipart messages: - contenttype specifies the Content-Type for an individual body part. The Content-Type for the entire MIME message is automatically set to multipart/mixed, or to multipart/subType if a subtype was specified when the MIME object was created. See pub.mime:createMimeData. - encoding specifies the Content-Transfer-Encoding for an individual body part. The Content-Transfer-Encoding header in mimeHeader, if present, specifies the encoding for the entire MIME message. If Content-Transfer-Encoding is not specified or blank in mimeHeader, or if the specified value is not valid for a multipart message, the value of the Content-Transfer-Encoding header defaults to 7bit. (7bit, 8bit, and binary are the only encoding values valid for multipart messages.) Note: This service utilizes a temporary location on the disk (Tspace) instead of the memory (RAM) if data is larger than the watt.server.mime.largeDataThreshold property. For more information on this server configuration property, see IBM webMethods Integration Server Administrator’s Guide . For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:getBodyPartContent - pub.mime:addMimeHeader"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:addMimeHeader",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_addMimeHeader__title__1",
+      "description": [
+        "WmPublic. Adds one or more header fields to a specified MIME object."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object to which you want the header fields added. (This IData object is produced by pub.mime:createMimeData .)"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        },
+        {
+          "name": "mimeHeader",
+          "type": "Document",
+          "description": [
+            "Header fields that you want to add to the MIME object. Key names represent the names of the header fields. The values of the keys represent the values of the header fields. For example, to add the following header fields: X-Doctype: RFQ X-Severity: 10 You would set mimeHeader as follows:"
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object to which the header fields were added."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by pub.mime:createMimeData. If you add MIME headers before you add multiple body parts, the header fields will be added to each of the body parts. If you do not want this behavior, either drop mimeHeader from the pipeline immediately after you execute addMimeHeader, or invoke addMimeHeader after you've added all body parts to the MIME object. Be aware that the contenttype and encoding parameters used by the pub.mime:addBodyPart service will override any Content-Type or Content-Transfer-Encoding settings in mimeData. Moreover, in certain cases, the pub.mime:getEnvelopeStream will override these settings when it generates a multipart message. For information about how the Content-Type or Content-Transfer-Encoding headers are derived at run time, see the Usage Notes under pub.mime:addBodyPart. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:getMimeHeader - pub.mime:addBodyPart"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:createMimeData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData__title__1",
+      "description": [
+        "WmPublic. Creates a MIME object. If no input parameter is passed to this service, the service creates an empty MIME object. Otherwise, the service creates a MIME object containing the elements (header fields and content) from the MIME message in input. - If you are building a MIME message, you use this service to create an empty MIME object. You populate the empty MIME object with header fields and content, and then pass it to pub.mime:getEnvelopeStream, which produces the finished MIME message. - If you are extracting data from a MIME message, you use this service to parse the original MIME message into a MIME object so that you can extract its header fields and content using other webMethods services."
+      ],
+      "input_parameters": [
+        {
+          "name": "input",
+          "type": "java.io.InputStream",
+          "description": [
+            "or javax.mail.internet.MimeMessage . Optional. MIME entity you want to parse. If input is not provided, createMimeData creates an empty MIME object."
+          ]
+        },
+        {
+          "name": "mimeHeader",
+          "type": "Document",
+          "description": [
+            "Optional. Specifies header fields that you want to add to the MIME object. Key names represent the names of the header fields. The values of the keys represent the values of the header fields. Note: This parameter is ignored when input is passed to this service. For example, if you wanted to add the following header fields: X-Doctype: RFQ X-Severity: 10 You would set mimeHeader as follows:"
+          ]
+        },
+        {
+          "name": "subType",
+          "type": "String",
+          "description": [
+            "Optional. String that specifies the subtype portion of the Content Type header, when the message is a multipart message and \\you want something other than the default value of mixed . For example, if you want the Content Type header to be multipart/related in the resulting message, set subType to related . subType is ignored if the resulting message is not a multipart message."
+          ]
+        },
+        {
+          "name": "decodeHeaders",
+          "type": "String",
+          "description": [
+            "Optional. Specifies how the MIME header is to be decoded. Set to: - \" \"(empty String) to decode headers based on the value of the global watt property watt.server.mime.decodeHeaders. This is the default. - NONE to specify that the MIME header or body part headers do not need decoding. - ONLY_MIME_HEADER to decode the MIME header only. - ONLY_BODY_PART_HEADERS to decode the body part headers only. - BOTH to decode the MIME header and the body part headers."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object. If input was passed to createMimeData , mimeData will contain the parsed MIME message. If input was not passed to createMimeData , mimeData will be empty."
+          ]
+        },
+        {
+          "name": "encrypted",
+          "type": "String",
+          "description": [
+            "Conditional. Indicates whether input was an encrypted message. This parameter is not present when the service creates a new, empty MIME object. A value of: - true indicates that the message is encrypted (the original message stream is in stream). - false indicates that the message is not encrypted."
+          ]
+        },
+        {
+          "name": "signed",
+          "type": "String",
+          "description": [
+            "Conditional. Flag whose value indicates whether input was a signed message. This parameter is not present when the service creates a new, empty MIME object. A value of: - true indicates that the message is signed (the original message stream is in stream). - false indicates that the message is not signed."
+          ]
+        },
+        {
+          "name": "certsOnly",
+          "type": "String",
+          "description": [
+            "Conditional. Flag whose value indicates whether input contained only digital certificates. (This type of message can be produced by the pub.smime:createCertsOnlyData service and allows digital certificates to be transported via the network as a MIME message.) This parameter is not present when the service creates a new, empty MIME object. A value of: - true indicates that the message contains only certificates. - false indicates that the message contains a regular payload."
+          ],
+          "references": [
+            {
+              "title": "pub.smime:createCertsOnlyData",
+              "url": "to-smime_folder.html#Apub_smime_CreatCertsOnlyMessage"
+            }
+          ]
+        },
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Conditional. InputStream containing the original MIME message from input . This parameter is present only when input is an S/MIME message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "All of the other MIME services operate on the mimeData IData object produced by this service. They do not operate directly on MIME message streams. Important: You can examine the contents of mimeData during testing and debugging. However, because the internal structure of mimeData is subject to change without notice, do not explicitly set or map data to/from these elements in your service. To manipulate or access the contents of mimeData, use only the MIME services that Integration Server provides. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:addMimeHeader - pub.mime:addBodyPart - pub.mime:getMimeHeader - pub.mime:getBodyPartContent - pub.mime:getEnvelopeStream"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:getBodyPartContent",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_getBodyPartContent__title__1",
+      "description": [
+        "WmPublic. Retrieves the content (payload) from the specified MIME object. You use this service for both single-part and multi-part messages. To retrieve content from a multi-part message, you set the index (to select the part by index number) or contentID (to select the part by contentID value) parameter to specify the body part whose content you want to retrieve. To get the content from a single-part message, you omit the index and contentID parameters or set index to 0."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object whose content you want to retrieve. (This IData object is produced by pub.mime:createMimeData .)"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": [
+            "Optional. Index number of the body part whose content you want to retrieve (if you want to retrieve the content from a specific body part). The first body part is index number zero. Note: If contentID is specified, index is ignored."
+          ]
+        },
+        {
+          "name": "contentID",
+          "type": "String",
+          "description": [
+            "Optional. Value of the Content-ID header field of the body part whose content you want to retrieve (if you want to retrieve the payload from a specific body part)."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "content",
+          "type": "IData",
+          "description": [
+            "The payload of the specified body part."
+          ]
+        },
+        {
+          "name": "encrypted",
+          "type": "String",
+          "description": [
+            "Flag whose value indicates whether content is an encrypted MIME message. A value of: - true indicates that content is an encrypted message. - false indicates that content is not an encrypted message."
+          ]
+        },
+        {
+          "name": "signed",
+          "type": "String",
+          "description": [
+            "Flag indicating whether content is a signed MIME message. A value of: - true indicates that content is a signed MIME message. - false indicates that content is not a signed MIME message."
+          ]
+        },
+        {
+          "name": "certsOnly",
+          "type": "String",
+          "description": [
+            "Flag whose value indicates whether content is a certs-only MIME message. A value of: - true indicates that content is a certs-only message. - false indicates that content is not a certs-only message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by pub.mime:createMimeData. If you omit index or contentID when retrieving content from a multi-part message, getBodyPartContent returns the payload from the first body part. If you use index or contentID to select a body part that does not exist in mimeData, content will be null. When the pub.mime:getBodyPartContent service receives MIME data without the boundary marker in the header, the service does not remove the MIME boundary marker when extracting the body part. As a workaround, use the pub.flow:getTransportInfo service to get the transport headers with the boundary marker information and merge that with the MIME data using the pub.mime:mergeHeaderAndBody service. You can then call the pub.mime:createMimeData service with the output of the pub.mime:mergeHeaderAndBody service, followed by the pub.mime:getBodyPartContent service to get the correct content. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:addBodyPart - pub.mime:getBodyPartHeader"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:getBodyPartHeader",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_getBodyPartHeader__title__1",
+      "description": [
+        "WmPublic. Returns the list of header fields for the specified body part."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object whose message headers you want to retrieve. (This IData object is produced by pub.mime:createMimeData )"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": [
+            "Optional. Index number of the body part whose header fields you want to retrieve. The first body part is index zero. Note: If contentID is specified, index is ignored."
+          ]
+        },
+        {
+          "name": "contentID",
+          "type": "String",
+          "description": [
+            "Optional. Value of the Content-ID header field of the body part whose header fields you want to retrieve."
+          ]
+        },
+        {
+          "name": "decodeHeaders",
+          "type": "String",
+          "description": [
+            "Conditional. Flag whose value indicates whether to decode encoded headers in the MIME object. Set to: - true to indicate that the headers should be decoded. - false to indicate that the headers should not be decoded. This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "mimeHeader",
+          "type": "Document",
+          "description": [
+            "IData object containing the message headers. Key names represent the names of the header fields. The value of a key represents the value of that header field. For example, if the original message contained the following message header fields: Content-Type: text/xml X-Doctype: RFQ X-Severity: 0 get Body Part Header would return the following IData object:"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by pub.mime:createMimeData. If you omit index or contentID, getBodyPartHeader returns the message headers from the first body part. If you use index or contentID to select a body part that does not exist in mimeData, content will be null. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:addBodyPart - pub.mime:getMimeHeader"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:getContentType",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_getContentType__title__1",
+      "description": [
+        "WmPublic. Returns the value of the Content-Type message header from the specified MIME object."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object whose Content-Type you want to discover. (This IData object is produced by pub.mime:createMimeData ."
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "contentType",
+          "type": "String",
+          "description": [
+            "Value of the MIME object's Content-Type header field. Note that this service returns only the media type and subtype portion of this header field's value. It does not return any parameters the value may include. For example, if the message's Content-Type header were: Content-Type: text/plain;charset=UTF8 contentType would contain: text/plain"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by pub.mime:createMimeData. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:getSubContentType - pub.mime:getPrimaryContentType - pub.mime:getMimeHeader - pub.mime:getBodyPartHeader"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:getEnvelopeStream",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_getEnvelopeStream__title__1",
+      "description": [
+        "WmPublic. Generates an InputStream or a MimeMessage representation of a MIME message from a specified MIME object."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object from which you want to generate the MIME message. (This IData object is produced by pub.mime:createMimeData .)"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": [
+            "Optional. Index number of the body part for which you want to generate the MIME message (if you want to generate the message from a specific body part). The first body part is index number zero."
+          ]
+        },
+        {
+          "name": "contentID",
+          "type": "String",
+          "description": [
+            "Optional. Value of the Content-ID header field of the body part from which you want to generate the MIME message (if you want to generate the message from a specific body part). Note: If index is specified, contentID is ignored."
+          ]
+        },
+        {
+          "name": "suppressHeaders",
+          "type": "String List",
+          "description": [
+            "Optional. Names of header fields that are to be omitted from message. You can use this option to exclude header fields that getEnvelopeStream generates by default, such as Content-Type and content-encoding ."
+          ]
+        },
+        {
+          "name": "createMultipart",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether a multipart message is to be created, even if mimeData contains only one body part. Set to: - yes to create a multipart message (Content-Type message header is set to \"multipart/mixed\"). - no to create a message based on the number of body parts in mimeData. This is the default. If the message contains only one body part, Content-Type is set according to the contenttype setting specified when that body part was added to mimeData. If the message contains multiple body parts, Content-Type is automatically set to \"multipart/mixed.\""
+          ]
+        },
+        {
+          "name": "returnMimeMessage",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether the MIME message is returned as a javax.mail.internet.MimeMessage object when any of the body parts in the message exceed the large data threshold set by the watt.server.mime.largeDataThreshold . Set to: - yes to return the MIME message in the mimeMessage output parameter as a MimeMessage when the watt.server.mime.largeDataThreshold is exceeded. This is the default. - no to return the MIME message as an InputStream in the envStream output parameter when the watt.server.mime.largeDataThreshold is exceeded."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "envStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Conditional. The MIME message as an InputStream."
+          ]
+        },
+        {
+          "name": "mimeMessage",
+          "type": "javax.mail.internet.MimeMessage",
+          "description": [
+            "Conditional. This service returns a mimeMessage instead of an envStream if any of the body parts have data greater than the threshold specified by the watt.server.mime.largeDataThreshold parameter (default 25MB) and returnMimeMessage is set to yes ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by pub.mime:createMimeData. If you omit index or contentID, getEnvelopeStream generates the MIME message from the entire contents of the mimeData. If you use index or contentID to select a body part that does not exist in mimeData, content will be null. getEnvelopeStream automatically inserts the MIME-Version and Message-ID message headers into the MIME message it puts into envStream. The pub.mime:getEnvelopeStream service could generate an out of memory error when adding a large number of files. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:addBodyPart - pub.mime:addMimeHeader"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:getMimeHeader",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_getMimeHeader__title__1",
+      "description": [
+        "WmPublic. Returns the list of message headers from a specified MIME object."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object whose message headers you want to retrieve. (This IData object is produced by pub.mime:createMimeData .)"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "mimeHeader",
+          "type": "Document",
+          "description": [
+            "Conditional. An IData object containing the message headers. Key names represent the names of the header fields. The value of a key represents the value of the header fields. For example, if the original message contained the following message header fields: Message-ID: <002e01c0f150$6f33010a@sgx.com> From: \"Purch01@GSX.com\" <Purch01@GSX.com>To: <EXPEst@exprint.com> MIME-Version: 1.0 Content-Type: text/xml X-Doctype: RFQ X-Severity: 0 getMimeHeader would return the following:"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by pub.mime:createMimeData. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:addMimeHeader - pub.mime:getBodyPartHeader"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:getNumParts",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_getNumParts__title__1",
+      "description": [
+        "WmPublic. Returns the number of body parts in the specified MIME object."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object whose parts you want to count. (This IData object is produced by pub.mime:createMimeData .)"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "numParts",
+          "type": "String",
+          "description": [
+            "The number of body parts in the MIME object."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by createMimeData. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:getBodyPartContent - pub.mime:addBodyPart"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:getPrimaryContentType",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_getPrimaryContentType__title__1",
+      "description": [
+        "WmPublic. Returns the top-level portion of a MIME object's Content-Type value."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object whose Content-Type you want to discover. (This IData object is produced by pub.mime:createMimeData .)"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "primContentType",
+          "type": "String",
+          "description": [
+            "Message's top-level Content-Type. For example, if the message's Content-Type header were: Content-Type: multipart/mixed primContentType would contain: multipart"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by pub.mime:createMimeData. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:getContentType - pub.mime:addMimeHeader - pub.mime:getBodyPartHeader"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:getSubContentType",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_getSubContentType__title__1",
+      "description": [
+        "WmPublic. Returns the sub-type portion of a MIME object's Content-Type value."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object whose sub-type you want to discover. (This IData object is produced by pub.mime:createMimeData .)"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "subContentType",
+          "type": "String",
+          "description": [
+            "Message's sub-type. For example, if the message's Content-Type header were: Content-Type: multipart/mixed subContentType would contain: mixed"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service operates on the MIME object (mimeData) produced by pub.mime:createMimeData. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.mime:createMimeData - pub.mime:getContentType - pub.mime:addMimeHeader - pub.mime:getBodyPartHeader"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:mergeHeaderAndBody",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_mergeHeaderAndBody__title__1",
+      "description": [
+        "WmPublic. Concatenates the contents of the header and body returned by the pub.client:http service. You can use this service to reassemble the message into its original form so that it can be used as input to the pub.mime:createMimeData service (or any other service that requires the entire http response as an InputStream)."
+      ],
+      "input_parameters": [
+        {
+          "name": "headerLines",
+          "type": "Document",
+          "description": [
+            "IData object containing the message headers returned by pub.client:http . (The message headers are returned in the lines document inside the header output parameter that is produced by pub.client:http .)"
+          ],
+          "references": [
+            {
+              "title": "pub.client:http",
+              "url": "to-client_folder.html#Apub_client_http"
+            },
+            {
+              "title": "pub.client:http",
+              "url": "to-client_folder.html#Apub_client_http"
+            }
+          ]
+        },
+        {
+          "name": "body",
+          "type": "Document",
+          "description": [
+            "IData object containing the body of the message returned by pub.client:http . This document must contain the body of the message in one of the following keys:"
+          ],
+          "references": [
+            {
+              "title": "pub.client:http",
+              "url": "to-client_folder.html#Apub_client_http"
+            }
+          ],
+          "children": [
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. Body of the message (if pub.client:http returned the body as a byte[ ])."
+              ],
+              "references": [
+                {
+                  "title": "pub.client:http",
+                  "url": "to-client_folder.html#Apub_client_http"
+                }
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. The body of the message (if pub.client:http returned the body as an InputStream)."
+              ],
+              "references": [
+                {
+                  "title": "pub.client:http",
+                  "url": "to-client_folder.html#Apub_client_http"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "InputStream containing the reassembled tap message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use this service to merge the results produced by pub.client:http to get the original MIME message."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.client:http - pub.mime:createMimeData"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mime:releaseBodyPartReferenceInTSpace",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#reference_402E22D3342644CA9499C7C544BC8170__title__1",
+      "description": [
+        "WmPublic. This service enables you to free up space in the Tspace by releasing body parts stored in it by the pub.mime:addBodyPart service. You need to provide a reference to the body part to be released."
+      ],
+      "input_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object whose reference you want to release from the Tspace. (This IData object is produced by pub.mime:createMimeData .)"
+          ],
+          "references": [
+            {
+              "title": "pub.mime:createMimeData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mime-folder#Apub_mime_createMimeData"
+            }
+          ]
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": [
+            "Optional. Index number of the body part whose content you want to release (if you want to release the content from a specific body part). The first body part is index number zero. Note: If contentID is specified, index is ignored."
+          ]
+        },
+        {
+          "name": "contentID",
+          "type": "String",
+          "description": [
+            "Optional. Value of the Content-ID header field of the body part that you want to release (if you want to release the payload from a specific body part)."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "releasedReferenceInTSpace",
+          "type": "Boolean",
+          "description": [
+            "Returns true if the reference was released and false if not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Before invoking this service, ensure that the body part has a reference in the Tspace."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,646 @@
+{
+  "folder": "REPLICATOR",
+  "description": [
+    "You use the elements in the replicator folder to replicate packages across IBM webMethods Integration Servers. This folder contains services that you can use to push packages from your IBM webMethods Integration Servers to a subscriber's server. It also contains services that you can use to pull packages from a publisher's server to your IBM webMethods Integration Server."
+  ],
+  "total_services": 10,
+  "services": [
+    {
+      "name": "pub.replicator:addReleaseRegistryEntry",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#A16086__title__1",
+      "description": [
+        "WmPublic. Adds an entry to the IBM webMethods Integration Server's Package Release Registry."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Name of the package. The service confirms that this package exists on the server before adding an entry to the Package Release Registry."
+          ]
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Name of the release. This name could be different from the name of the package."
+          ]
+        },
+        {
+          "name": "version",
+          "type": "String",
+          "description": [
+            "Version number of the release, in the format #.# or #.#.# (for example, 1.2 or 1.2.1 )."
+          ]
+        },
+        {
+          "name": "build",
+          "type": "String",
+          "description": [
+            "Build number of the release (for example, 12, 530 )."
+          ]
+        },
+        {
+          "name": "patchNums",
+          "type": "String",
+          "description": [
+            "One or more comma-separated patch numbers included in this release."
+          ]
+        },
+        {
+          "name": "JVMVersion",
+          "type": "String",
+          "description": [
+            "Minimum JVM version number that this release requires."
+          ]
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "description": [
+            "Brief description of this release. You may want to use this parameter to summarize the nature and purpose of the release."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "packages",
+          "type": "Document List",
+          "description": [
+            "Entries in the server's Package Release Registry."
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name of the release."
+              ]
+            },
+            {
+              "name": "version",
+              "type": "String",
+              "description": [
+                "Version number of the release, in the format #.# or #.#.# (for example, 1.2 or 1.2.1 )."
+              ]
+            },
+            {
+              "name": "build",
+              "type": "String",
+              "description": [
+                "Conditional. Build number of the release (for example, 12, 530 )."
+              ]
+            },
+            {
+              "name": "patch_nums",
+              "type": "String",
+              "description": [
+                "Conditional. Comma-separated list of patch numbers included in this release."
+              ]
+            },
+            {
+              "name": "time",
+              "type": "String",
+              "description": [
+                "Time when the package was released."
+              ]
+            },
+            {
+              "name": "jvm_version",
+              "type": "String",
+              "description": [
+                "Minimum JVM version number that the release requires."
+              ]
+            },
+            {
+              "name": "description",
+              "type": "String",
+              "description": [
+                "Conditional. Brief description of this release."
+              ]
+            },
+            {
+              "name": "source_server_version",
+              "type": "String",
+              "description": [
+                "Version number of Integration Server that released the package."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Before using this service, use pub.replicator:packageCreation to create a package zip file in the server's outbound directory. When you use addReleaseRegistryEntry to add an entry to the Package Release Registry, the package name you specify in package should match the package name you specified in pub.replicator:packageCreation."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.replicator:deleteReleaseRegistryEntry",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#Apub_replicator_delRelRegEntry__title__1",
+      "description": [
+        "WmPublic. Deletes an entry from the IBM webMethods Integration Server's Package Release Registry."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the release that you want to delete."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "packages",
+          "type": "Document List",
+          "description": [
+            "Entries that remain in the server's Package Release Registry."
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name of the release."
+              ]
+            },
+            {
+              "name": "version",
+              "type": "String",
+              "description": [
+                "Version number of the release, in the format #.# or #.#.# (for example, 1.2 or 1.2.1 )."
+              ]
+            },
+            {
+              "name": "build",
+              "type": "String",
+              "description": [
+                "Conditional. Build number of the release (for example, 12 , 530 )."
+              ]
+            },
+            {
+              "name": "patch_nums",
+              "type": "String",
+              "description": [
+                "Conditional. Comma-separated list of patch numbers included in this release."
+              ]
+            },
+            {
+              "name": "time",
+              "type": "String",
+              "description": [
+                "Time when the package was released."
+              ]
+            },
+            {
+              "name": "jvm_version",
+              "type": "String",
+              "description": [
+                "Minimum JVM version number that the release requires."
+              ]
+            },
+            {
+              "name": "description",
+              "type": "String",
+              "description": [
+                "Conditional. Brief description of the release."
+              ]
+            },
+            {
+              "name": "source_server_version",
+              "type": "String",
+              "description": [
+                "Version number of Integration Server that released the package."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.replicator:distributeViaFTP",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#Apub_replicator_distribViaFTP__title__1",
+      "description": [
+        "WmPublic. Allows a publisher to send a package to a subscriber via FTP or allows a subscriber to retrieve a package from a publisher via FTP."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the released package."
+          ]
+        },
+        {
+          "name": "action",
+          "type": "String",
+          "description": [
+            "Flag that specifies whether you want to send (put) a package to another Integration Server or whether you want to retrieve (get) a package from another Integration Server . Set to: - get to retrieve a package from the publisher's server. This is the default. - put to send a package to a subscriber's server."
+          ]
+        },
+        {
+          "name": "serverhost",
+          "type": "String",
+          "description": [
+            "Host name or IP address of the remote Integration Server ."
+          ]
+        },
+        {
+          "name": "serverport",
+          "type": "String",
+          "description": [
+            "Number of the FTP port on the remote Integration Server ."
+          ]
+        },
+        {
+          "name": "username",
+          "type": "String",
+          "description": [
+            "User name that your server will use to log on to the remote Integration Server ."
+          ]
+        },
+        {
+          "name": "password",
+          "type": "String",
+          "description": [
+            "Password that your server will use to log on to the remote Integration Server ."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.replicator:distributeViaSvcPull",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#Apub_replicator_distribViaSvcPull__title__1",
+      "description": [
+        "WmPublic. Pulls a specified package release from a publisher's server."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the release."
+          ]
+        },
+        {
+          "name": "publisher",
+          "type": "String",
+          "description": [
+            "Alias of the publisher's server."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.replicator:distributeViaSvcPush",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#Apub_replicator_distribViaSvcPush__title__1",
+      "description": [
+        "WmPublic. Pushes a package from your server to a list of subscribers (other IBM webMethods Integration Servers)."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "The name of the release."
+          ]
+        },
+        {
+          "name": "subscriber",
+          "type": "String List",
+          "description": [
+            "List of the subscriber's host names or IP addresses."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.replicator:generateReplicationEvent",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#Apub_replicator_generateReplicationEvent__title__1",
+      "description": [
+        "WmPublic. Generates a replication event. You might invoke this service in conjunction with other services to make the package replication process generate an event. The replication event handler would listen for this event and perform some prescribed action that you have specified."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the package."
+          ]
+        },
+        {
+          "name": "action",
+          "type": "String",
+          "description": [
+            "User-defined string that describes the replication event, such as “pulled” or “pushed.”"
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.replicator:getLocalReleasedList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#Apub_replicator_getLocalRelList__title__1",
+      "description": [
+        "WmPublic. Returns all entries in your IBM webMethods Integration Server's Package Release Registry."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "packages",
+          "type": "Document List",
+          "description": [
+            "Entries in the server's Package Release Registry."
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name of the release."
+              ]
+            },
+            {
+              "name": "version",
+              "type": "String",
+              "description": [
+                "Version number of the release, in the format #.# or #.#.# (for example, 1.2 or 1.2.1 )."
+              ]
+            },
+            {
+              "name": "build",
+              "type": "String",
+              "description": [
+                "Conditional. Build number of the release (for example, 12 , 530 )."
+              ]
+            },
+            {
+              "name": "patch_nums",
+              "type": "String",
+              "description": [
+                "Conditional. Comma-separated list of the patch numbers included in this release."
+              ]
+            },
+            {
+              "name": "time",
+              "type": "String",
+              "description": [
+                "Time when the package was released."
+              ]
+            },
+            {
+              "name": "jvm_version",
+              "type": "String",
+              "description": [
+                "Minimum JVM version number that the release requires."
+              ]
+            },
+            {
+              "name": "description",
+              "type": "String",
+              "description": [
+                "Conditional. Brief description of the release."
+              ]
+            },
+            {
+              "name": "source_server_version",
+              "type": "String",
+              "description": [
+                "Version number of IBM webMethods Integration Server that released the package."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.replicator:getRemoteReleasedList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#Apub_replicator_getRemoteRelList__title__1",
+      "description": [
+        "WmPublic. Queries the publisher for released packages. This service gets a list of released packages to which your server subscribes. You can use the list to find out if any new packages, or newer versions of existing packages, have been released."
+      ],
+      "input_parameters": [
+        {
+          "name": "publisher",
+          "type": "String",
+          "description": [
+            "Alias of the publishing server."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "packages",
+          "type": "Document List",
+          "description": [
+            "List of released packages on the publishing server to which you subscribe."
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name of the release."
+              ]
+            },
+            {
+              "name": "version",
+              "type": "String",
+              "description": [
+                "Version number of the release, in the format #.# or #.#.# (for example, 1.2 or 1.2.1 )."
+              ]
+            },
+            {
+              "name": "build",
+              "type": "String",
+              "description": [
+                "Conditional. Build number of the release (for example, 12 , 530 )."
+              ]
+            },
+            {
+              "name": "patch_nums",
+              "type": "String",
+              "description": [
+                "Conditional. Comma-separated list of the patch numbers included in this release."
+              ]
+            },
+            {
+              "name": "time",
+              "type": "String",
+              "description": [
+                "Time when the package was released."
+              ]
+            },
+            {
+              "name": "jvm_version",
+              "type": "String",
+              "description": [
+                "Minimum JVM version number that the release requires."
+              ]
+            },
+            {
+              "name": "description",
+              "type": "String",
+              "description": [
+                "Conditional. Brief description of the release."
+              ]
+            },
+            {
+              "name": "source_server_version",
+              "type": "String",
+              "description": [
+                "Version number of IBM webMethods Integration Server that released the package."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.replicator:notifyPackageRelease",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#Apub_replicator_notifyPkgRelease__title__1",
+      "description": [
+        "WmPublic. Sends an e-mail message to subscribers who have said that they want to be notified when a new release becomes available."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the release."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.replicator:packageCreation",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-replicator-folder#Apub_replicator_packageCreation__title__1",
+      "description": [
+        "WmPublic. Creates a distribution file (a zip file) for the package."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Name of the package."
+          ]
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Name of the release."
+          ]
+        },
+        {
+          "name": "version",
+          "type": "String",
+          "description": [
+            "Version number of the release, in the format #.# or #.#.# (for example, 1.2 or 1.2.1 )."
+          ]
+        },
+        {
+          "name": "build",
+          "type": "String",
+          "description": [
+            "Build number of the release (for example, 12 , 530 )."
+          ]
+        },
+        {
+          "name": "patchNums",
+          "type": "String",
+          "description": [
+            "Comma-separated list of patch numbers included in the release."
+          ]
+        },
+        {
+          "name": "targetPkgVersion",
+          "type": "String",
+          "description": [
+            "Version number of the target package. To prevent the installation program from overwriting an existing (higher) version of the package, this field is checked when the subscriber installs this package over an existing package."
+          ]
+        },
+        {
+          "name": "targetServerVersion",
+          "type": "String",
+          "description": [
+            "Version number of the IBM webMethods Integration Server that this release requires."
+          ]
+        },
+        {
+          "name": "JVMVersion",
+          "type": "String",
+          "description": [
+            "Minimum JVM version number that this release requires."
+          ]
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "description": [
+            "Brief description of this release. You might use this parameter to summarize the nature and purpose of the release."
+          ]
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "description": [
+            "Flag indicating the type of release. Set to: - full to indicate a full package. This is the default. - partial to indicate a patch or an update for the package."
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "String",
+          "description": [
+            "Flag that specifies whether all files are to be included in the distribution file or only selected files. If only selected files are to be included, use this parameter in conjunction with fileList to specify which files to include. Set to: - includeall to include all the files in the distribution file. This is the default. - include to include selected files in the distribution file. - exclude to include all except selected files in the distribution file."
+          ]
+        },
+        {
+          "name": "fileList",
+          "type": "String List",
+          "description": [
+            "Names of files to include or exclude from the distribution file, depending on the value of filter ."
+          ]
+        },
+        {
+          "name": "fileNamePattern",
+          "type": "String",
+          "description": [
+            "Pattern string that specifies the names of files to be included in the distribution file. The asterisk ( * ) is the only wildcard character allowed in a pattern string. All other characters are treated literally (for example, *.java , *.dsp )."
+          ]
+        },
+        {
+          "name": "filesToDeleteList",
+          "type": "String List",
+          "description": [
+            "Optional. The names of files that will be deleted from the target package when the subscribing server installs the package created by this service."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "$result",
+          "type": "String",
+          "description": [
+            "Conditional. If the distribution file is created successfully, this parameter contains the value OK . If the distribution file was not created successfully, this parameter is not present in the output signature and the service throws an exception."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "After you use packageCreation to create the package, use pub.replicator:addReleaseRegistryEntry to add an entry to the Package Release Registry. The package name you specify in packageCreation should match the package name you specify in pub.replicator:addReleaseRegistryEntry."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,299 @@
+{
+  "folder": "STREAMING",
+  "description": [
+    "Use the elements in the WmStreaming package to send messages to a streaming provider or combine calculations from multiple windows."
+  ],
+  "total_services": 2,
+  "services": [
+    {
+      "name": "pub.streaming:send",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-streaming-folder#idb2553113-4b71-4741-b585-d32871defffc__title__1",
+      "description": [
+        "WmStreaming. Deprecated. Sends events to a streaming provider using an event specification that defines both a connection alias and destination. Use pub.eda:send instead."
+      ],
+      "input_parameters": [
+        {
+          "name": "connectionAliasName",
+          "type": "String",
+          "description": [
+            "Name of the streaming connection alias to use to send events. The streaming connection alias identifies the streaming provider to which the service sends events. The specified connectionAliasName must match the connection alias defined in the specified eventSpecificationName ."
+          ]
+        },
+        {
+          "name": "eventSpecificationName",
+          "type": "String",
+          "description": [
+            "Name of the event specification that defines the structure of the event, identifies the destination to which events are sent, and indicates how to encode and decode event data. The event specification must define both a connection alias and a destination for this deprecated service to function. For information about creating event specifications, see Event Specifications ."
+          ],
+          "references": [
+            {
+              "title": "Event Specifications",
+              "url": "../is_administrators_guide/z_streaming-config/co-event_specification_about.html"
+            }
+          ]
+        },
+        {
+          "name": "events",
+          "type": "Document List",
+          "description": [
+            "Document (IData object) A document list of the events to send to the streaming provider."
+          ],
+          "children": [
+            {
+              "name": "header",
+              "type": "Document",
+              "description": [
+                "Optional. Metadata about the event."
+              ],
+              "children": [
+                {
+                  "name": "timestamp",
+                  "type": "String",
+                  "description": [
+                    "Optional. Timestamp to assign to the event. If timestamp value is not specified, at execution time, the streaming provider populates timestamp with the current clock time."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "key",
+              "type": "Object",
+              "description": [
+                "Optional. The event key. The provided key must match the key data type set in the event specification."
+              ]
+            },
+            {
+              "name": "value",
+              "type": "Object",
+              "description": [
+                "Optional. The event value. The provided value must match the key data type set in the event specification."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.streamProcessing:combineCalculations",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-streaming-folder#id68b2db2b-4eab-491d-b07f-2ba4bfc9a344__title__1",
+      "description": [
+        "WmStreaming. Note: This service has been moved to pub.streamProcessing:combineCalculations in the WmPublic package. Combines calculations made for an event trigger that uses a CALCULATE step as part of window processing. Use this service to combine the calculations from the current window with running calculations from earlier windows."
+      ],
+      "input_parameters": [
+        {
+          "name": "fromCalculations",
+          "type": "Document",
+          "description": [
+            "A document (IData object) containing the values to combine with toCalculations ."
+          ],
+          "children": [
+            {
+              "name": "count",
+              "type": "String",
+              "description": [
+                "Optional. Number of entries in the result set for the window. The supplied value must be a number that is represented as a String."
+              ]
+            },
+            {
+              "name": "max",
+              "type": "String",
+              "description": [
+                "Optional. Maximum value for the parameter in the window to which the CALCULATE step was applied. The supplied value must be a number that is represented as a String."
+              ]
+            },
+            {
+              "name": "min",
+              "type": "String",
+              "description": [
+                "Optional. Minimum value for the parameter in the window to which the CALCULATE step was applied. The supplied value must be a number that is represented as a String."
+              ]
+            },
+            {
+              "name": "sum",
+              "type": "String",
+              "description": [
+                "Optional. Sum of the values for the parameter in the window to which the CALCULATE step was applied. The supplied value must be a number that is represented as a String."
+              ]
+            },
+            {
+              "name": "first",
+              "type": "Object",
+              "description": [
+                "Optional. The first value for the parameter in the window to which the CALCULATE step was applied."
+              ]
+            },
+            {
+              "name": "last",
+              "type": "Object",
+              "description": [
+                "Optional. The last value for the parameter in the window to which the CALCULATE step was applied."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "toCalculations",
+          "type": "Document",
+          "description": [
+            "A document (IData object) containing the calculations to combine with fromCalculations ."
+          ],
+          "children": [
+            {
+              "name": "count",
+              "type": "String",
+              "description": [
+                "Optional. Number of entries in the result set for the window. The supplied value must be a number that is represented as a String."
+              ]
+            },
+            {
+              "name": "max",
+              "type": "String",
+              "description": [
+                "Optional. Maximum value for the parameter in the window to which the CALCULATE step was applied. The supplied value must be a number that is represented as a String."
+              ]
+            },
+            {
+              "name": "min",
+              "type": "String",
+              "description": [
+                "Optional. Minimum value for the parameter in the window to which the CALCULATE step was applied. The supplied value must be a number that is represented as a String."
+              ]
+            },
+            {
+              "name": "sum",
+              "type": "String",
+              "description": [
+                "Optional. Sum of the values for the parameter in the window to which the CALCULATE step was applied. The supplied value must be a number that is represented as a String."
+              ]
+            },
+            {
+              "name": "first",
+              "type": "Object",
+              "description": [
+                "Optional. The first value for the parameter in the window to which the CALCULATE step was applied."
+              ]
+            },
+            {
+              "name": "last",
+              "type": "Object",
+              "description": [
+                "Optional. The last value for the parameter in the window to which the CALCULATE step was applied."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "toCalculations",
+          "type": "Document",
+          "description": [
+            "The toCalculations document (IData object) combined with the values in fromCalculations ."
+          ],
+          "children": [
+            {
+              "name": "count",
+              "type": "String",
+              "description": [
+                "Conditional. Combined count from the calculations. Sum of the input toCalculations/count and the input fromCalculations/count . This value is returned only if count was included in fromCalculations and/or toCalculations."
+              ]
+            },
+            {
+              "name": "max",
+              "type": "String",
+              "description": [
+                "Conditional. Maximum value in the combined result calculations for the parameter to which the CALCULATE step was applied. This value is returned only if max was included in fromCalculations and/or toCalculations."
+              ]
+            },
+            {
+              "name": "min",
+              "type": "String",
+              "description": [
+                "Conditional. Minimum value in the combined result calculations for the parameter to which the CALCULATE step was applied. This value is returned only if min was included in fromCalculations and/or toCalculations."
+              ]
+            },
+            {
+              "name": "sum",
+              "type": "String",
+              "description": [
+                "Conditional. Sum of the sum values in the combined results sets for the parameter to which the CALCULATE step was applied. This value is returned only if count was include in fromCalculations and/or toCalculations."
+              ]
+            },
+            {
+              "name": "first",
+              "type": "Object",
+              "description": [
+                "Conditional. The first value in the combined results for the parameter to which the CALCULATE step was applied. This value is returned only if first was included in fromCalculations and/or toCalculations."
+              ]
+            },
+            {
+              "name": "last",
+              "type": "Object",
+              "description": [
+                "Conditional. The last value in the combined results for the parameter to which the CALCULATE step was applied. This value is returned only if last was included in fromCalculations and/or toCalculations."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The CALCULATE step in event processing applies to a specific parameter. The pub.streamProcessing:combineCalculations service combines calculations performed on the same parameter in multiple windows. The service could combine two windows or add the current window with running calculations. For example, if the fromCalculations specifies:",
+            {
+              "table": [
+                [
+                  "count=10",
+                  "max=5",
+                  "sum=30"
+                ]
+              ]
+            },
+            "And toCalculations specifies:",
+            {
+              "table": [
+                [
+                  "count=10",
+                  "max=3",
+                  "sum=20"
+                ]
+              ]
+            },
+            "The result of pub.streamProcessing:combineCalculations has toCalculations with:",
+            {
+              "table": [
+                [
+                  "count=20",
+                  "max=5",
+                  "sum=50"
+                ]
+              ]
+            },
+            "If you next execute pub.streamProcessing:combineCalculations to combine the running toCalculations with the following fromCalculations from the current window:",
+            {
+              "table": [
+                [
+                  "count=5",
+                  "max=6",
+                  "sum=10"
+                ]
+              ]
+            },
+            "The resulting running calculations are:",
+            {
+              "table": [
+                [
+                  "count=25",
+                  "max=6",
+                  "sum=60"
+                ]
+              ]
+            },
+            "A common use case for the pub.streamProcessing:combineCalculations service is to maintain running calculations that span multiple windows. For example, if you had an event trigger that produced calculations for each minute of the day, you could use this service to cache the results for the entire day. This can be done in the event trigger target service using the following steps: 1. Fetch the running calculations from the cache. 2. Combine the current window's calculations with the running calculations using the pub.streamProcessing:combineCalculations service. 3. Write the new calculations back to the cache."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "folder": "PDF",
+  "total_services": 2,
+  "services": [
+    {
+      "name": "pub.pdf:htmlToPdf",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-pdf-folder#reference_rh5_q5w_lgc__title__1",
+      "description": [
+        "WmPublic. Converts HTML to a PDF."
+      ],
+      "input_parameters": [
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "HTML that you want to convert to PDF. Specify string or stream ."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. HTML to convert to PDF."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. HTML to convert to PDF."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "xslStyleSheet",
+          "type": "Document",
+          "description": [
+            "Optional. The XSLT stylesheet that the service uses to convert the HTML to PDF. By default, the pub.pdf:htmlToPdf service uses the following style sheet: Integration Server_directory \\instances\\ instanceName \\packages\\WmPublic\\resources\\html2fso.xml . To use a different stylesheet for the conversion, specify either bytes or stream."
+          ],
+          "children": [
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The XSLT style sheet that the service uses to convert the HTML."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. The XSLT style sheet that the service uses to conver the HTML."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional. Form in which you want the pub.pdf:htmlToPdf service to store the returned PDF. Set loadAs to one of the following values: - bytes to return the PDF as a byte[ ]. Select this option to use the resulting PDF as input to a service that operates on whole documents. This is the default. - stream to return the PDF as a java.io.InputStream. Select this option to use the resulting PDF as input to a service that can process a document incrementally."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "pdfData",
+          "type": "Document",
+          "description": [
+            "A document (IData object) containing the PDF converted from HTML."
+          ],
+          "children": [
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Conditional. PDF data as a byte[ ]. bytes is returned only when the loadAs input parameter is set to bytes ."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Conditional. PDF data as an InputStream. Returned when the loadAs input parameter is set to stream ."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.pdf:htmlToPdf service cleans up malformed HTML such as tags that are not closed, missing quotation marks, and improperly structured elements. Then, the service parses the resulting HTML and creates a PDF. However, if the HTML is still malformed after the service cleans it up and the HTML cannot be parsed, the service ends with an exception. The default XSLT stylesheet provided with pub.pdf:htmlToPdf is a general-purpose stylesheet. The stylesheet does not cover every possible HTML structure or formatting requirement. Different types of documents, such as invoices, reports, letters, or legal documents, might require their own custom stylesheet to ensure proper layout, styling, and formatting in the generated PDF."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.pdf:signPdf",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-pdf-folder#reference_gjg_3vw_lgc__title__1",
+      "description": [
+        "WmPublic. Applies a digital signature to a PDF. The pub.pdf:signPdf service generates a detached Cryptographic message Syntax (CMS) signature to help ensure authenticity and integrity."
+      ],
+      "input_parameters": [
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "PDF that you want to sign. Specify bytes or stream ."
+          ],
+          "children": [
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. PDF data as a byte[ ]."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. PDF data as an InputStream."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Optional. Name of the person or authority who is signing the document. The pub.pdf:signPdf service embeds the name in the signature."
+          ]
+        },
+        {
+          "name": "contactInfo",
+          "type": "String",
+          "description": [
+            "Optional. Contact information for the signer. Recipients can use the contact information to contact the signer to verify the signature. The pub.pdf:signPdf service embeds the contact information in the signature."
+          ]
+        },
+        {
+          "name": "reason",
+          "type": "String",
+          "description": [
+            "Optional. Reason for signing. The pub.pdf:signPdf service embeds the reason in the signature."
+          ]
+        },
+        {
+          "name": "keystoreAlias",
+          "type": "String",
+          "description": [
+            "Alias for the keystore that contains the private key to use to sign the PDF."
+          ]
+        },
+        {
+          "name": "keyAlias",
+          "type": "String",
+          "description": [
+            "Alias for the private key to use to sign the PDF."
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional. Form in which you want the pub.pdf:signPdf service to store the signed PDF. Set loadAs to one of the following values: - bytes to return the PDF as a byte[ ]. Select this option to use the resulting PDF as input to a service that operates on whole documents. This is the default. - stream to return the PDF as a java.io.InputStream. Select this option to use the resulting PDF as input to a service that can process a document incrementally."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "signedPDF",
+          "type": "Document",
+          "description": [
+            "A document (IData object) containing the signed PDF."
+          ],
+          "children": [
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Conditional. Signed PDF as a byte[ ]. bytes is returned only when the loadAs input parameter is set to bytes ."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Conditional. Signed PDF as an InputStream. Returned when the loadAs input parameter is set to stream ."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

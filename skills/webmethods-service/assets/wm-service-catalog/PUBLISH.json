@@ -1,0 +1,995 @@
+{
+  "folder": "PUBLISH",
+  "description": [
+    "You use the elements in the publish folder to publish messages to IBM webMethods Universal Messaging or IBM webMethods Broker. Other Integration Servers subscribe to and receive these messages using IBM webMethods messaging triggers.",
+    "Note: IBM webMethods Broker is deprecated."
+  ],
+  "total_elements": 12,
+  "elements": [
+    {
+      "name": "pub.publish:deliver",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_deliver__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Delivers a document to a specific destination."
+      ],
+      "input_parameters": [
+        {
+          "name": "documentTypeName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the publishable document type being delivered. The publishable document type must be in sync with the associated provider definition. The provider definition is a representation of the publishable document type and its properties on the provider. In the case of Universal Messaging, this is a channel. For Broker, it is a Broker document type. If the document type and provider definition are not synchronized, publication might fail. A publishable document type that uses the IS_LOCAL_CONNECTION alias cannot be delivered because delivery can only occur with a messaging provider (Broker or Universal Messaging)."
+          ]
+        },
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) conforming to the publishable document type in documentTypeName ."
+          ]
+        },
+        {
+          "name": "destId",
+          "type": "String",
+          "description": [
+            "The destination to which the document will be delivered. You can specify the ID for an individual trigger or the default client of an Integration Server as the destination. When you deliver a document to the default client of Integration Server , Integration Server routes the delivered document to any subscribers on that Integration Server . When working with Universal Messaging, the destination ID is a subject. When working with Broker, the destination ID is the client ID. For details about the destination IDs, see the Usage Notes for this service. If you specify an invalid client ID, the Integration Server delivers the document to the messaging provider, but the messaging provider never delivers the document to the intended recipient and no error is produced."
+          ]
+        },
+        {
+          "name": "delayUntilServiceSuccess",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether the Integration Server should publish the document when the pub.publish:deliver service executes or after the top-level service successfully completes. If the top-level service fails, the Integration Server will not publish the document. Set to: - true to delay publishing until after the top-level service executes successfully. - false to publish the document when the pub.publish:deliver service executes. This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use the pub.publish:deliver service to deliver a document to a destination where the destination can be IBM webMethods messaging trigger or the default client of an Integration Server . - The destination ID for a trigger that receives documents from Broker uses the following naming convention: clientPrefix _folderName_subfolderName_triggerName Where clientPrefix is the client prefix for the messaging connection alias used by the trigger, folderName is the folder in which the trigger is located, subfolderName is the subfolder in which the trigger is located, and triggerName is the local name of the trigger. For example, for a trigger with the fully qualified name myFolder.mySubFolder:myTrigger that uses a messaging connection alias with the client prefix “myAlias”, the destination ID of the trigger is: myAlias_myFolder_mySubfolder_myTrigger. - The destination ID for a trigger that receives documents from Universal Messaging uses the following naming convention: clientPrefix##triggerName Where clientPrefix is the Universal Messaging connection alias used by the trigger and triggerName is the fully qualified name of the trigger where periods and colons are replaced by double underscores. For example, a trigger that uses a Universal Messaging connection alias with a client prefix of myPrefix and a trigger name of myFolder.mySubfolder:myTrigger the trigger client ID, and therefore the destination ID, would be: myPrefix##myFolder__mySubFolder__myTrigger - The destination ID for the default client of an Integration Server uses the following naming convention: clientPrefix_DefaultClient Where clientPrefix is the client prefix for the messaging connection alias used by subscribers to the publishable document type on the Integration Server. As of version 10.3, Universal Messaging has implemented subscriber name filtering for its durable subscriptions which is what Integration Server uses to ensure that delivered documents were routed by Universal Messaging to the intended destination. In subscriber name filtering, when a publisher designates a message for a specific subscriber, Universal Messaging routes the message to a consumer whose durable subscription name matches the designated subscriber name in the message. For I Integration Server , the subscription name filtering requires some modifications, specifically: - Enable the subscription name filtering feature on Universal Messaging. To enable the feature through Universal Messaging Enterprise Manager, navigate to the realm and select the Config tab. In the realm server configuration panel, click Show Advanced Config. Expand Advanced Configuration - Durable Config, and set Durable Name Filtering to true. - Change the destID input parameter value in invocations of pub.publish:deliver and pub.publish:deliverAndWait, if necessary. This may only be necessary when the trigger to which the message is to be delivered contains an underscore in its name. For more information about client IDs for triggers and how this change may impact existing services that invoke pub.publish:deliver*, see Impact of Universal Messaging Changes to Shared Durables on Document Delivery . To view the subjects for a trigger used with Universal Messaging, use Integration Server Administrator to open the Messaging > webMethods triggers page. In the Individual IBM webMethods Messaging Trigger Controls list, click the name of the trigger for which you want to view the client ID. On the Messaging > webMethods triggers > Trigger name page, under Destination ID for Deliver, the Trigger Client ID field displays the client ID for the trigger. The Default Client ID field displays the client of the Integration Server. To view a list of client IDs on the Broker, use the Broker user interface within My webMethods or use Designer to test the publishable document type that you want to deliver. For a Universal Messaging connection alias the Publish Wait Time While Reconnecting value specifies the number of milliseconds that a publishing service using alias will wait for a connection to the Universal Messaging server to be re-established after the connection fails. If Integration Server re-establishes the connection before the Publish Wait Time While Reconnecting elapses, the publishing service continues executing. If the specified time elapses before a connection is re-established, the publishing service ends with an ISRuntimeException. Make sure to code your service to handle this situation. If outbound client-side queuing is disabled (the watt.server.publish.useCSQ property is set to \"never\"), Integration Server throws a ServiceException if the Broker is not available when this service executes. Make sure to code your service to handle this situation. If the pub.publish:deliver services publishes a document to Universal Messaging and use of the client side queue is disabled for the Universal Messaging connection alias, Integration Server throws an ISRuntimeException if the Universal Messaging server is not available when the service executes. Make sure to code your service to handle this situation. For more information about how the Integration Server, Universal Messaging, and Broker deliver documents and for information about building a service that delivers a document, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.publish:publish - pub.publish:deliverAndWait - pub.publish:envelope"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:deliverAndWait",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_deliverAndWait__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Requests a reply document from a specific client. The service waits for the reply or indicates that the pub.publish:waitForReply service should retrieve the reply later."
+      ],
+      "input_parameters": [
+        {
+          "name": "documentTypeName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the publishable document type being delivered. The publishable document type must be in sync with the associated provider definition. The provider definition is a representation of the publishable document type and its properties on the provider. In the case of Universal Messaging, this is a channel. For Broker, it is a Broker document type. If the document type and provider definition are not synchronized, publication might fail. A publishable document type that uses the IS_LOCAL_CONNECTION alias cannot be delivered because delivery can only occur with a messaging provider (Broker or Universal Messaging)."
+          ]
+        },
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) conforming to the publishable document type in documentTypeName ."
+          ]
+        },
+        {
+          "name": "receiveDocumentTypeName",
+          "type": "String",
+          "description": [
+            "Optional. Fully qualified name of the publishable document type expected as a reply. If no value is specified, the service uses the first reply document of any type it receives, as long as the value of tag in the envelope of the reply document matches the tag in the envelope of the published document. All other reply documents are discarded."
+          ]
+        },
+        {
+          "name": "destId",
+          "type": "String",
+          "description": [
+            "The destination to which the document will be delivered. You can specify the ID for an individual trigger or the default client of an Integration Server as the destination. When you deliver a document to the default client of Integration Server , Integration Server routes the delivered document to any subscribers on that Integration Server . When working with Universal Messaging, the destination ID is a subject. When working with Broker, the destination ID is the client ID. For details about the destination ID, see the Usage Notes for this service. If you specify an invalid client ID, the Integration Server delivers the document to the messaging provider, but the messaging provider never delivers the document to the intended recipient and no error is produced."
+          ]
+        },
+        {
+          "name": "waitTime",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the time to wait (in milliseconds) for the response to arrive. If no value is specified, the service waits indefinitely until it receives a reply."
+          ]
+        },
+        {
+          "name": "async",
+          "type": "String",
+          "description": [
+            "Optional. Flag specifying whether this is an asynchronous or synchronous request/reply. Set to: - true to indicate that this is an asynchronous request/reply. After publishing the document, the Integration Server executes the next step in the flow service immediately. Integration Server does not wait for a reply before continuing service execution. Note: To retrieve the reply to an asynchronous request, invoke the pub.publish:waitForReply service. - false to indicate that this is a synchronous request/reply. After publishing the document, Integration Server waits for a reply before executing the next step in the flow service. This is the default."
+          ],
+          "references": [
+            {
+              "title": "pub.publish:waitForReply",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#A26279"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "receivedDocument",
+          "type": "Document",
+          "description": [
+            "A Document (IData object) received as reply. Important: Integration Server treats all reply documents as volatile documents. If the Integration Server shuts down before processing the reply document, the reply document is lost."
+          ]
+        },
+        {
+          "name": "tag",
+          "type": "String",
+          "description": [
+            "Conditional. A unique identifier for a deliver request. The Integration Server uses the tag value to match the requesting document with its corresponding reply document. The service produces a tag output value only when the async field is set to true. The tag value is required input when using the pub.publish:waitForReply service to retrieve the reply. Note: The tag output value is the same value that the Integration Server places in the tag field of the request document's envelope."
+          ],
+          "references": [
+            {
+              "title": "pub.publish:waitForReply",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#A26279"
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use the pub.publish:deliverAndWait service to deliver a document to a destination where the destination can be IBM webMethods messaging trigger or the default client of an Integration Server . - The destination ID for a trigger that receives documents from Broker uses the following naming convention: clientPrefix _folderName_subfolderName_triggerName Where clientPrefix is the client prefix for the messaging connection alias used by the trigger, folderName is the folder in which the trigger is located, subfolderName is the subfolder in which the trigger is located, and triggerName is the local name of the trigger. For example, for a trigger with the fully qualified name myFolder.mySubFolder:myTrigger that uses a messaging connection alias with the client prefix “myAlias”, the destination ID of the trigger is: myAlias_myFolder_mySubfolder_myTrigger. - The destination ID for a trigger that receives documents from Universal Messaging uses the following naming convention: clientPrefix##triggerName Where clientPrefix is the Universal Messaging connection alias used by the trigger and triggerName is the fully qualified name of the trigger where periods and colons are replaced by double underscores. For example, a trigger that uses a Universal Messaging connection alias with a client prefix of myPrefix and a trigger name of myFolder.mySubfolder:myTrigger the trigger client ID, and therefore the destination ID, would be: myPrefix##myFolder__mySubFolder__myTrigger - The destination ID for the default client of an Integration Server uses the following naming convention: clientPrefix_DefaultClient Where clientPrefix is the client prefix for the messaging connection alias used by subscribers to the publishable document type on the Integration Server. As of version 10.3, Universal Messaging has implemented subscriber name filtering for its durable subscriptions which is what Integration Server uses to ensure that delivered documents were routed by Universal Messaging to the intended destination. In subscriber name filtering, when a publisher designates a message for a specific subscriber, Universal Messaging routes the message to a consumer whose durable subscription name matches the designated subscriber name in the message. For I Integration Server , the subscription name filtering requires some modifications, specifically: - Enable the subscription name filtering feature on Universal Messaging. To enable the feature through Universal Messaging Enterprise Manager, navigate to the realm and select the Config tab. In the realm server configuration panel, click Show Advanced Config. Expand Advanced Configuration - Durable Config, and set Durable Name Filtering to true. - Change the destID input parameter value in invocations of pub.publish:deliver and pub.publish:deliverAndWait, if necessary. This may only be necessary when the trigger to which the message is to be delivered contains an underscore in its name. For more information about client IDs for triggers and how this change may impact existing services that invoke pub.publish:deliver*, see Impact of Universal Messaging Changes to Shared Durables on Document Delivery . To view the subjects for a trigger used with Universal Messaging, use Integration Server Administrator to open the Messaging > webMethods triggers page. In the Individual IBM webMethods Messaging Trigger list, click the name of the trigger for which you want to view the client ID. On the Messaging > webMethods triggers > Trigger name page, under Destination ID for Deliver, the Trigger Client ID field displays the client ID for the trigger. The Default Client ID field displays the client of the Integration Server. To view a list of client IDs on the Broker, use the Broker user interface within My webMethods or use Designer to test the publishable document type that you want to deliver. For a Universal Messaging connection alias the Publish Wait Time While Reconnecting value specifies the number of milliseconds that a publishing service using alias will wait for a connection to the Universal Messaging server to be re-established after the connection fails. If Integration Server re-establishes the connection before the Publish Wait Time While Reconnecting elapses, the publishing service continues executing. If the specified time elapses before a connection is re-established, the publishing service ends with an ISRuntimeException. Make sure to code your service to handle this situation. You can use the pub.publish:deliverAndWait service to initiate and continue a private conversation between two clients. This is a variation of the request/reply model. One client executes a service that delivers a document to a specific client. This document requests information from the receiving client. - In a synchronous request/reply, the delivering service stops executing while it waits for a response. When the service receives a reply document from the specified client, the servers resumes executing. If the waitTime elapses before the service receives a reply, Integration Server ends the request, and the service returns a null document indicating that the request timed out. Integration Server then executes the next step in the flow service. If a reply document arrives after the flow service resumes execution, Integration Server rejects the document and creates a journal log message stating that the document was rejected because there is no service thread waiting for the document. - In an asynchronous request/reply, the delivering service continues executing the steps in the service after publishing the document. To retrieve the reply, the delivering service must invoke the pub.publish:waitForReply service. If the wait time elapses before the pub.publish:waitForReply service receives a document, the pub.publish:waitForReply service returns a null document indicating that the request timed out. A service that contains multiple asynchronous deliver requests allows the service to deliver all the requests before collecting the replies. This approach can be more efficient than delivering a request, waiting for a reply, and then delivering the next request. If you create a service that contains multiple asynchronous requests, make sure to link the tag output to another field in the pipeline. Each asynchronous delivery produces a tag field in the pipeline. If the tag field is not linked to another field, the next asynchronous delivery request (that is, the next execution of the pub.publish:deliverAndWait service) will overwrite the first tag value. Use pub.publish:deliverAndWait if you need to know that a specific client successfully received and processed the request document. If the publishable document type in documentTypeName is associated with a Universal Messaging connection alias, the Enable Request/Reply Channel and Listener check box must be selected for the alias. When this check box is selected, Integration Server ensures that a request/reply channel exists for the Universal Messaging connection alias on the Universal Messaging server and that Integration Server has a listener that subscribes to the alias-specific request/reply channel. If the check box is cleared, there will be no channel in which Universal Messaging can collect replies and no listener with which Integration Server can retrieve replies. The pub.publish:deliverAndWait service will end with a ServiceException if the Enable Request/Reply Channel and Listener check box is not selected for the Universal Messaging connection alias. If outbound client-side queuing is disabled (the watt.server.publish.useCSQ property is set to \"never\"), Integration Server throws a ServiceException if the IBM webMethods Broker is not available when this service executes. Make sure to code your service to handle this situation. If the pub.publish:deliverAndWait services publishes a document to Universal Messaging and use of the client side queue is disabled for the Universal Messaging connection alias, Integration Server throws an ISRuntimeException if the Universal Messaging server is not available when the service executes. Make sure to code your service to handle this situation. For more information about how to build a services that initiate synchronous or asynchronous request/reply scenarios, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.publish:waitForReply - pub.publish:publishAndWait - pub.publish:reply - pub.publish:envelope"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:documentResolverSpec",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#A78507__title__1",
+      "element_type": "specification",
+      "description": [
+        "WmPublic. Specification for the signature of a service that determines whether a document's status is New, Duplicate, or In Doubt."
+      ],
+      "input_parameters": [
+        {
+          "name": "documentTypeName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the document whose status is In Doubt."
+          ]
+        },
+        {
+          "name": "redeliveryCount",
+          "type": "String",
+          "description": [
+            "Number of times the document has been redelivered to the trigger queue on the Integration Server ."
+          ]
+        },
+        {
+          "name": "uuid",
+          "type": "String",
+          "description": [
+            "Universally unique identifier for the document. The publishing application assigns the uuid to a document."
+          ]
+        },
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "The document (IData object) whose status needs to be resolved. This document must conform to the publishable document type specified in documentTypeName ."
+          ]
+        },
+        {
+          "name": "transport",
+          "type": "String",
+          "description": [
+            "The transport (such as LOCAL, BROKER, or UM) used to send the document to the Integration Server ."
+          ]
+        },
+        {
+          "name": "triggerName",
+          "type": "String",
+          "description": [
+            "The name of the IBM webMethods messaging trigger that received the document whose status needs to be resolved."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates the status of the document. The value of this field determines whether the Integration Server processes the document, discards the document, or sends the document to the audit log. The status field must have one of the following values. - NEW indicates that the document is new and has not been processed by the trigger. Integration Server instructs the trigger to process the document. - DUPLICATE indicates that the document is a duplicate of one already processed by the trigger. Integration Server discards the document and generates a journal log message. - IN_DOUBT indicates that the status of the document is still in doubt. The document resolver service could not conclusively determine whether the trigger already processed the document. If the audit log is a database, the audit subsystem logs the document and the Integration Server generates a journal log message."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Conditional. A user-specified string that indicates why the document status is DUPLICATE or IN_DOUBT . Integration Server writes the message to the journal log when the server discards the document or routes it to the audit log."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.publish:documentResolverSpec must be used as the signature for any service used to resolve the processing status of a document. For information about building a document resolver service and enabling exactly once processing for IBM webMethods messaging trigger, see the Publish-Subscribe Developer’s Guide . Use the pub.jms:documentResolverSpec as the signature for a document resolver service used to determine the status of a JMS message received by a JMS trigger."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.jms:documentResolverSpec"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:envelope",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_envelope__title__1",
+      "element_type": "document_type",
+      "description": [
+        "WmPublic. Document type that defines the content and structure of the envelope that accompanies a published document. The envelope records information such as the sender's address, the time the document was sent, password and certificate information, and other useful information for routing and control. Every publishable document type contains a document reference to this document type."
+      ],
+      "fields": [
+        {
+          "name": "activation",
+          "type": "String",
+          "description": [
+            "Optional. A unique identifier that any messaging client (including the Integration Server ) assigns to all documents published as a result of the one-time execution of the integration solution. If a document does not have an activation ID, the Integration Server assigns one when the document is published. If you are using a trigger to join documents published by different services, you must explicitly set the activation ID of the documents. The services that publish the documents must assign the same activation ID to the documents."
+          ]
+        },
+        {
+          "name": "appLastSeqn",
+          "type": "java.lang.Integer",
+          "description": [
+            "Optional. This field is provided for backward compatibility."
+          ]
+        },
+        {
+          "name": "appPassword",
+          "type": "String",
+          "description": [
+            "Optional. The password of the user specified in appUserName . If the resource that processes the document requires authentication before it begins processing, specify the password in this field."
+          ]
+        },
+        {
+          "name": "appSeqn",
+          "type": "java.lang.Integer",
+          "description": [
+            "Optional. This field is provided for backward compatibility."
+          ]
+        },
+        {
+          "name": "appUserName",
+          "type": "String",
+          "description": [
+            "Optional. The user name for logging into the application that processes the document. Use the appPassword field to specify the password for this user name."
+          ]
+        },
+        {
+          "name": "businessContext",
+          "type": "String",
+          "description": [
+            "Optional. Used by the Integration Server to track business process context and audit context across multiple Integration Server s. Important: The businessContext field is reserved for internal use by the Integration Server. Do not set or overwrite the value of the businessContext field."
+          ]
+        },
+        {
+          "name": "controlLabel",
+          "type": "java.lang.Short[ ]",
+          "description": [
+            "Optional. This field is provided for backward compatibility."
+          ]
+        },
+        {
+          "name": "errorsTo",
+          "type": "String",
+          "description": [
+            "Optional. The client ID to which the Integration Server sends an error notification document if errors occur during document processing by subscribers. If this parameter is not set, error notifications will be sent to the document publisher. The errors document is an instance of pub.publish.notification:error ."
+          ],
+          "references": [
+            {
+              "title": "pub.publish.notification:error",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_notification_error"
+            }
+          ]
+        },
+        {
+          "name": "errorRequestsTo",
+          "type": "String",
+          "description": [
+            "Optional. This field is provided for backward compatibility."
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. Locale of the publishing client expressed as a URN (Uniform Resource Name). Trigger services examine the locale value to determine the locale to use when processing the document. If the locale field is empty, the locale of the current Integration Server is used instead."
+          ]
+        },
+        {
+          "name": "maxResults",
+          "type": "java.lang.Integer",
+          "description": [
+            "Optional. This field is provided for backward compatibility."
+          ]
+        },
+        {
+          "name": "priority",
+          "type": "java.lang.Integer",
+          "description": [
+            "Optional. Indicates how quickly the document should be published and processed. A value of 0 is the lowest processing priority; a value of 9 indicates expedited processing. Set a message priority in the document envelope when publishing the document. The default priority is 4."
+          ]
+        },
+        {
+          "name": "replyTo",
+          "type": "String",
+          "description": [
+            "Optional. The client ID to which the replies to the published document should be sent. If this parameter is not set, replies will be sent to the document publisher as specified in pubId ."
+          ]
+        },
+        {
+          "name": "runLevel",
+          "type": "java.lang.Integer",
+          "description": [
+            "Optional. This field is provided for backward compatibility."
+          ]
+        },
+        {
+          "name": "signature",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. A byte sequence that holds a digital signature. Specify a digital signature if clients receiving this document requires one."
+          ]
+        },
+        {
+          "name": "signatureType",
+          "type": "String",
+          "description": [
+            "Optional. The type of digital signature being used."
+          ]
+        },
+        {
+          "name": "startResult",
+          "type": "java.lang.Integer",
+          "description": [
+            "Optional. This field is provided for backward compatibility."
+          ]
+        },
+        {
+          "name": "tag",
+          "type": "java.lang.Integer",
+          "description": [
+            "Optional. Used with pub.publish:publishAndWait and pub.publish:deliverAndWait to match a request document with its corresponding reply document. Important: The tag field is reserved for internal use by the Integration Server. Do not set or overwrite the value of the tag field in the envelope."
+          ],
+          "references": [
+            {
+              "title": "pub.publish:publishAndWait",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_publishAndWait"
+            },
+            {
+              "title": "pub.publish:deliverAndWait",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_deliverAndWait"
+            }
+          ]
+        },
+        {
+          "name": "trackId",
+          "type": "String",
+          "description": [
+            "Optional. A unique identifier assigned to a published document by the publishing client application. If no value is specified, Integration Server populates this field with the value of the uuid field."
+          ]
+        },
+        {
+          "name": "transactionId",
+          "type": "String",
+          "description": [
+            "Optional. This field is provided for backwards compatibility."
+          ]
+        },
+        {
+          "name": "transformState",
+          "type": "String",
+          "description": [
+            "Optional. An indication of a document's current state, set by a publishing client application that transforms data. For example, a client could publish a document with a transformState value of \"USEnglish\" and a receiving client could translate the document into French and publish it with a transformState value of \"French.\""
+          ]
+        },
+        {
+          "name": "uuid",
+          "type": "String",
+          "description": [
+            "Optional. Universally unique identifier for the document. Integration Server assigns the UUID when it publishes the document. The receiving Integration Server uses the UUID to detect duplicate documents. If a service uses the pub.publish:publish service to publish a document toUniversal Messaging, you can specify a value for uuid. The uuid value that you assign must meet the following criteria: - Must be a minimum of 1 character in length. - Must be a maximum of 96 characters in length. - Must begin with the sequence \"wm:\" in any case combination. The \"wm:\" prefix is reserved for UUIDs generated by Integration Server. Integration Server accepts a user-defined UUID only for invocations of pub.publish:publish that publish a document to Universal Messaging. That is, the document being published must be an instance of a publishable document type to which a Universal Messaging connection alias is assigned. For any other publishing service in pub.publish or invocations of pub.publish:publish that publish a document locally or to IBM webMethods Broker, Integration Server ignores any assigned uuid value."
+          ]
+        },
+        {
+          "name": "age",
+          "type": "java.lang.Integer",
+          "description": [
+            "Optional. The cumulative time, in seconds, that the document spends on all IBM webMethods Broker s. The IBM webMethods Broker starts tracking the document age when it receives the document from the publishing client. The IBM webMethods Broker stops tracking the document age when the subscribing client removes the document from the client queue. If the document is routed to successive IBM webMethods Broker s, age also includes the length of time the document spends on the other IBM webMethods Broker s."
+          ]
+        },
+        {
+          "name": "connectionIntegrity",
+          "type": "String",
+          "description": [
+            "Optional. An indication of whether the received document passed over a link that is not secure. This field can have one of the following values: - < empty > indicates that at some point, the document passed through a connection that was not encrypted. - U.S Export indicates that all the connections used to transport the event had an encryption strength of ENCRYPT_LEVEL_US_EXPORT or greater. - U.S. Domestic indicates that the event traveled exclusively over connections with an encryption strength of ENCRYPT_LEVEL_US_DOMESTIC."
+          ]
+        },
+        {
+          "name": "destId",
+          "type": "String",
+          "description": [
+            "Optional. The ID of the destination to which the document is being delivered. The publisher sets the destID when it publishes the document. For example, the Integration Server uses the destID value specified in the pub.publish:deliver service or the pub.publish:deliverAndWait service to populate the destID value in the document envelope."
+          ],
+          "references": [
+            {
+              "title": "pub.publish:deliver",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_deliver"
+            },
+            {
+              "title": "pub.publish:deliverAndWait",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_deliverAndWait"
+            }
+          ]
+        },
+        {
+          "name": "enqueueTime",
+          "type": "java.util.Date",
+          "description": [
+            "Optional. The date and time that the IBM webMethods Broker placed the document into the client queue."
+          ]
+        },
+        {
+          "name": "logBroker",
+          "type": "String",
+          "description": [
+            "Optional. The name of the IBM webMethods Broker that contains the document in its document log. The IBM webMethods Broker sets this parameter when IBM webMethods Broker -based document logging and the logging utility are enabled."
+          ]
+        },
+        {
+          "name": "logHost",
+          "type": "String",
+          "description": [
+            "Optional. The host name and port number of the IBM webMethods Broker that contains the document in its document log. The IBM webMethods Broker sets this parameter when IBM webMethods Broker -based document logging and the logging utility are enabled."
+          ]
+        },
+        {
+          "name": "pubDistinguishedName",
+          "type": "String",
+          "description": [
+            "Optional. The distinguished name of the publisher's SSL certificate. The IBM webMethods Broker sets this parameter when the publisher has an SSL connection to the IBM webMethods Broker and clears this parameter when the publisher has a non-SSL connection."
+          ]
+        },
+        {
+          "name": "pubId",
+          "type": "String",
+          "description": [
+            "Optional. An identifier for the document publisher assigned by the messaging provider."
+          ]
+        },
+        {
+          "name": "pubNetAddr",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. The IP address and port number of the document's publisher."
+          ]
+        },
+        {
+          "name": "pubSeqn",
+          "type": "java.lang.Long",
+          "description": [
+            "Optional. This field is provided for backwards compatibility."
+          ]
+        },
+        {
+          "name": "pubLabel",
+          "type": "java.lang.Short[ ]",
+          "description": [
+            "Optional. This field is provided for backwards compatibility."
+          ]
+        },
+        {
+          "name": "recvTime",
+          "type": "java.util.Date",
+          "description": [
+            "Optional. The date and time the document was received by the messaging provider."
+          ]
+        },
+        {
+          "name": "route",
+          "type": "Document List",
+          "description": [
+            "Optional. Information about the IBM webMethods Broker s through which a document passed. When IBM webMethods Broker receives a document, IBM webMethods Broker sets the broker and recvTime keys. When IBM webMethods Broker places the document in the queue for the next IBM webMethods Broker , the first IBM webMethods Broker sets enqueueTime . IBM webMethods Broker only sets these fields when document is forwarded from one IBM webMethods Broker to another. IBM webMethods Broker does not set these fields when the publishing and receiving clients are connected to the same IBM webMethods Broker ."
+          ],
+          "children": [
+            {
+              "name": "broker",
+              "type": "String",
+              "description": [
+                "Optional. The name of the IBM webMethods Broker ."
+              ]
+            },
+            {
+              "name": "recvTime",
+              "type": "java.util.Date",
+              "description": [
+                "Optional. The time the IBM webMethods Broker received the document from the publishing client or another IBM webMethods Broker ."
+              ]
+            },
+            {
+              "name": "enqueueTime",
+              "type": "java.util.Date",
+              "description": [
+                "Optional. The time the IBM webMethods Broker placed the document in the queue for the next IBM webMethods Broker ."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For more information about setting and using a document's envelope parameters, see IBM webMethods Broker Java Client API Reference , IBM webMethods Broker Client C API Programmer’s Guide , and Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.publish:deliver - pub.publish:deliverAndWait - pub.publish:publish - pub.publish:publishAndWait - pub.publish.notification:error"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:getRedeliveryCount",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#A97140__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Retrieves the redelivery count for a document. The redelivery count indicates the number of times the document has been redelivered to the trigger queue on the Integration Server. A document is redelivered to a trigger queue if the Integration Server shuts down before processing and acknowledging the document."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "redeliveryCount",
+          "type": "String",
+          "description": [
+            "Specifies the number of times the trigger on Integration Server has received the document. The redelivery count can be one of the following:",
+            "A value of -1 indicates that The transport used to send the document does not maintain a document redelivery count. Integration Server may or may not have received the document before.",
+            "A value of 0 indicates that The document has been received only once.",
+            "A value of > 0 indicates that The number of times document has been redelivered."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If you do not want to use the exactly once processing capabilities, you can invoke the pub.publish:getRedeliveryCount service within your trigger service. The redelivery count for a document can provide an initial indication of whether the trigger has already processed the document. Integration Server retrieves the redelivery count for the document currently maintained in the invoke state. That is, Integration Server retrieves the redelivery count for the document that caused the trigger service to execute. When a trigger service satisfied by an All (AND) join condition invokes pub.publish:getRedliveryCount, the pub.publish:getRedeliveryCount service returns the redelivery count for the last document received by the join. For example, suppose that documents A and B satisfied an All (AND) join condition. If the Integration Server receives document A first and document B second, when pub.publish:getRedliveryCount executes, it retrieves the redelivery count for document B."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:publish",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_publish__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Publishes a document locally or to the messaging provider. This service broadcasts the document (that is, distributes the document to all clients that subscribe to it)."
+      ],
+      "input_parameters": [
+        {
+          "name": "documentTypeName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the publishable document type of which you are publishing an instance. If you intend to publish the document to a messaging provider (Broker or Universal Messaging), the publishable document type must be in sync with the associated provider definition. The provider definition is a representation of the publishable document type and its properties on the provider. In the case of Universal Messaging, this is a channel. For Broker, it is a Broker document type. If the document type and provider definition are not synchronized, publication might fail."
+          ]
+        },
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) conforming to the document type in documentTypeName ."
+          ]
+        },
+        {
+          "name": "local",
+          "type": "String",
+          "description": [
+            "Optional. Flag specifying whether the document is to be published locally or to the messaging provider. Set to: - true to publish locally (to this Integration Server only). - false to publish to the messaging provider using the messaging connection alias specified in the document type of which you are publishing an instance. This is the default. The local parameter is applicable only when the publishable document type uses Broker as the messaging provider. If the publishable document type specifies the IS_LOCAL_CONNECTION alias, the document can be published locally only. Integration Server ignores the value of local. A publishable document type that specifies Universal Messaging as the messaging provider cannot be published locally. If the document type in documentTypeName is associated with a Universal Messaging connection alias, Integration Server ignores the value of local."
+          ]
+        },
+        {
+          "name": "delayUntilServiceSuccess",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether the publish should happen when the pub.publish:publish service executes or after the top-level service successfully completes. If the top-level service fails, Integration Server will not publish the document. Set to: - true to delay publishing until after the top-level service executes successfully. Note: Integration Server does not return the status output parameter when delayUntilServiceSuccess is set to true. - false to publish the document when the publish service executes. This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Status indicating whether the service was successful. Integration Server reports status only for locally published documents. A value of: - success indicates that the service executed successfully. Note: If at least one subscribing trigger has room in its queue, the status is set to success. - noSubscriber indicates that Integration Server does not contain any triggers that subscribe to the document. - capacityExceeded indicates that the document could not be placed in the queue of the subscribing trigger because the trigger queue is currently at its maximum capacity. Note: Integration Server reports this status only when the watt.server.publish.local.rejectOOS property is set to true."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use pub.publish:publish to publish documents to Universal Messaging, Broker, or locally within Integration Server. The messaging connection alias assigned to a publishable document type determines the message provider to which the Integration Server publishes the document. Only subscribers to the document type on that messaging provider will receive the published document. The Connection alias name property for the document type specifies the message provider. If there is no specified message provider alias, Integration Server publishes the document to the provider in the default messaging connection alias. If the messaging connection alias specified for the document type does in documentTypeName does not exist when the pub.publish:publish service executes, Integration Server issues a ServiceException. Make sure to code your service to handle this situation. Integration Server writes a message to the journal log whenever it rejects or discards a document. For a Universal Messaging connection alias the Publish Wait Time While Reconnecting value specifies the number of milliseconds that a publishing service using alias will wait for a connection to the Universal Messaging server to be re-established after the connection fails. If Integration Server re-establishes the connection before the Publish Wait Time While Reconnecting elapses, the publishing service continues executing. If the specified time elapses before a connection is re-established, the publishing service ends with an ISRuntimeException. Make sure to code your service to handle this situation. If the pub.publish:publish services publishes a document to Broker and outbound client-side queuing is disabled (the watt.server.publish.useCSQ property is set to \"never\"), Integration Server issues a ServiceException if the Broker is not available when the service executes. Make sure to code your service to handle this situation. If the pub.publish:publish services publishes a document to Universal Messaging and use of the client side queue is disabled for the Universal Messaging connection alias, Integration Server throws an ISRuntimeException if the Universal Messaging server is not available when the service executes. Make sure to code your service to handle this situation. Integration Server issues a ServiceException when the dispatcher is shut down during the execution of this service. In this situation, Integration Server does not save the data in the outbound document store (client side queue), and the document will not appear in the outbound document store. Make sure to code your service to handle this situation. For more information about building a service that publishes a document locally or to a messaging provider, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.publish:deliver - pub.publish:publishAndWait - pub.publish:envelope"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:publishAndWait",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_publishAndWait__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Broadcasts a request for a document from any client subscribed to a specific document type. The service waits for the reply or indicates that the pub.publish:waitForReply service should retrieve the reply later."
+      ],
+      "input_parameters": [
+        {
+          "name": "documentTypeName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the publishable document type being published. If you intend to publish the document to a messaging provider (Broker or Universal Messaging), the publishable document type must be in sync with the associated provider definition. The provider definition is a representation of the publishable document type and its properties on the provider. In the case of Universal Messaging, this is a channel. For Broker, it is a Broker document type. If the document type and provider definition are not synchronized, publication might fail."
+          ]
+        },
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) conforming to the document type in documentTypeName ."
+          ]
+        },
+        {
+          "name": "receiveDocumentTypeName",
+          "type": "String",
+          "description": [
+            "Optional. Fully qualified name of the document type expected as a reply. If no value is specified, the service uses the first reply document of any type it receives, as long as the value of tag in the reply document envelope matches the tag in the envelope of the published document. All other reply documents are discarded."
+          ]
+        },
+        {
+          "name": "local",
+          "type": "String",
+          "description": [
+            "Optional. Flag specifying whether the document is to be published locally or to the IBM webMethods Broker . Set to: - true to publish locally (to this Integration Server only). - false to publish to the IBM webMethods Broker. This is the default. The local parameter is applicable only when the publishable document type uses Broker as the messaging provider. If the publishable document type specifies the IS_LOCAL_CONNECTION alias, the document can be published locally only. Integration Server ignores the value of local. A publishable document type that specifies Universal Messaging as the messaging provider cannot be published locally. If the document type in documentTypeName is associated with a Universal Messaging connection alias, Integration Server ignores the value of local."
+          ]
+        },
+        {
+          "name": "waitTime",
+          "type": "String",
+          "description": [
+            "Optional. Time to wait (in milliseconds) for the response to arrive. If no value is specified, the service waits indefinitely for a reply."
+          ]
+        },
+        {
+          "name": "async",
+          "type": "String",
+          "description": [
+            "Optional. Flag specifying whether this is an asynchronous or synchronous publish. Set to: - true to indicate that this is an asynchronous request/reply. After publishing the document, the Integration Server executes the next step in the flow service immediately. The Integration Server does not wait for a reply before continuing service execution. Note: To retrieve the reply to an asynchronous publish, invoke the pub.publish:waitForReply service. - false to indicate that this is a synchronous request/reply. After publishing the document, the Integration Server waits for a reply before executing the next step in the flow service. This is the default."
+          ],
+          "references": [
+            {
+              "title": "pub.publish:waitForReply",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#A26279"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "receivedDocument",
+          "type": "Document",
+          "description": [
+            "(IData object) received as response. If no matching document is received within the wait time, this will be null. Important: Integration Server treats all reply documents as volatile documents. If Integration Server shuts down before processing the reply document, the reply document is lost."
+          ]
+        },
+        {
+          "name": "tag",
+          "type": "String",
+          "description": [
+            "Conditional. A unique identifier for a publish request. Integration Server uses the tag value to match the request document with its corresponding reply document. The service produces a tag output value only when the async field is set to true. The tag value is required input when using the pub.publish:waitForReply service to retrieve the reply. Note: The tag output value is the same value that Integration Server places in the tag field of the request document's envelope."
+          ],
+          "references": [
+            {
+              "title": "pub.publish:waitForReply",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#A26279"
+            }
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Conditional. Status indicating whether the service was successful. Integration Server reports status only for locally published documents. A value of: - success indicates that the service executed successfully. Note: If at least one subscribing trigger has room in its queue, the status is set to success. - requestTimedOut indicates that the service timed out (that is, the waitTime specified in the service elapsed before Integration Server received a reply). - noSubscriber indicates that Integration Server does not contain any triggers that subscribe to the document. - capacityExceeded indicates that the document could not be placed in the queue of the subscribing trigger because the trigger queue is currently at its maximum capacity. Note: Integration Server reports the capacityExceeded status only when the watt.server.publish.local.rejectOOS property is set to true."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use the pub.publish:publishAndWait service to publish a document to Universal Messaging, Broker, or locally within Integration Server. Integration Server writes a message to the journal log whenever it rejects or discards a document. You can use the pub.publish:publishAndWait service to initiate a request/reply. The publishing client broadcasts a request for information. Subscribers to the broadcast document compose and send a reply document that contains the information the publisher requested. A single publish and wait request might receive many response documents. The Integration Server that made the publish and wait request uses only the first reply document it receives from the IBM webMethods Broker. The Integration Server discards all other replies. First is arbitrarily defined. There is no guarantee provided for the order in which the messaging provider processes incoming replies. If you need a reply document from a specific client, use the pub.publish:deliverAndWait service instead. The pub.publish:publishAndWait service can be useful in situations where multiple sources contain the response data. For example, suppose that an enterprise uses one application for managing customer data, another for storing master customer records, and a mainframe system for saving customer lists. Each of these applications could answer a published request for customer data. The publishing service will use the first reply document it receives. A service can issue a publish and wait request in a synchronous or asynchronous manner. - In a synchronous request/reply, the publishing flow service stops executing while it waits for a response. One of the following occurs: If the service receives a reply before the waitTime elapses, the service resumes execution. If the waitTime elapses before the service receives a reply, Integration Server ends the request, and the service returns a null document that indicates that the request timed out. Integration Server then executes the next step in the flow service. If a reply document arrives after the flow service resumes execution, Integration Server rejects the document and creates a journal log message stating that the document was rejected because there was no thread waiting for the document. - In an asynchronous request/reply, the publishing flow service continues executing the steps in the service after publishing the document. To retrieve the reply, the publishing flow service must invoke the pub.publish:waitForReply service. If the wait time elapses before the pub.publish:waitForReply service receives a document, the pub.publish:waitForReply service returns a null document indicating that the request timed out. If a service contains multiple asynchronous publish and wait invocations, you can build the service such that the service publishes all the requests before collecting the replies. This approach can be more efficient than publishing a request, waiting for a reply, and then publishing the next request. If you create a service that contains multiple asynchronous requests, make sure to link the tag output to another field in the pipeline. Each asynchronously published request produces a tag field in the pipeline. If the tag field is not linked to another field, the next asynchronously published request (that is, the next execution of the pub.publish:publishAndWait service) will overwrite the first tag value. If the client side queue is disabled for the messaging connection alias and the document type has a storage type of guaranteed, the pub.publish:waitForReply service ends with a ServiceException if the messaging provider is not available. Make sure to code your publishing service to handle this situation. The messaging connection alias assigned to a publishable document type determines the message provider to which the Integration Server publishes the document. Only subscribers to the document type on that messaging provider will receive the published document. The Connection alias name property for the document type specifies the message provider. If there is no specified message provider alias, Integration Server publishes the document to the provider in the default messaging connection alias. If the publishable document type in documentTypeName is associated with a Universal Messaging connection alias, the Enable Request/Reply Channel and Listener check box must be selected for the alias. When this check box is selected, Integration Server ensures that a request/reply channel exists for the Universal Messaging connection alias on the Universal Messaging server and that Integration Server has a listener that subscribes to the alias-specific request/reply channel. If the check box is cleared, there will be no channel in which Universal Messaging can collect replies and no listener with which Integration Server can retrieve replies. The pub.publish:publishAndWait service will end with a ServiceException if the Enable Request/Reply Channel and Listener check box is not selected for the Universal Messaging connection alias. For more information about building a service that follows the request/reply model, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.publish:waitForReply - pub.publish:reply - pub.publish:envelope"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:reply",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_reply__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Delivers a reply document to the requesting client."
+      ],
+      "input_parameters": [
+        {
+          "name": "receivedDocumentEnvelope",
+          "type": "Document",
+          "description": [
+            "Optional. The envelope of the document to which you are replying. By default receivedDocumentEnvelope specifies the envelope of the document that triggered this service. In case of a join, receivedDocumentEnvelope will specify the last document that satisfied the join condition. However, you may specify the envelope of any published document to which you want to reply."
+          ]
+        },
+        {
+          "name": "documentTypeName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the publishable document type for the document that you are sending as a reply. Keep in mind that the publisher of the requesting document might be expecting a reply document that conforms to specific publishable document type."
+          ]
+        },
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "The reply IData object. This document must conform to the publishable document type specified in documentTypeName ."
+          ]
+        },
+        {
+          "name": "delayUntilServiceSuccess",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether Integration Server should publish the document when the pub.publish:reply service executes or after the top-level service successfully completes. If the top-level service fails, Integration Server will not publish the document. Set to: - true to delay publishing until after the top-level service executes successfully. - false to publish the document when the publish service executes. This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use the pub.publish:reply service to publish a document to Universal Messaging, Broker, or locally within Integration Server. All reply documents are volatile documents. If the requesting Integration Server shuts down before processing the reply document, the reply document is lost. Integration Server always encodes reply messages as IData. If the replyTo envelope parameter is set in the request document, the reply document is delivered to that destination; otherwise, the reply document is sent to the publisher specified in the pubId parameter in the envelope of the request document. This service correctly maps the required fields from the request document to the reply document. A reply document can be a simple acknowledgment, or it can contain information asked for by the publisher of the request document. Integration Server sends the reply document using the same connection that the trigger used to retrieve the request document. Integration Server ignores the messaging connection alias assigned to the publishable document type in documentTypeName. Because Integration Server sends the reply document using the same connection that the trigger used to retrieve the request document, when Universal Messaging is the messaging provider, the publishable document types to which the trigger subscribes must be associated with a Universal Messaging connection alias for which the Enable Request/Reply Channel and Listener check box is selected. If you are building a service to reply to documents that meet join conditions, keep the following in mind: - All (AND) join conditions. If the replying service executes because two or more documents satisfied an All (AND) join condition, Integration Server uses the envelope of the last document that satisfied the join condition to determine where to send the reply document. If you want Integration Server to use the envelope of a different document, link the envelope of that document to receivedDocumentEnvelope. If you want to reply to all documents received as part of an All (AND) join, invoke pub.publish:reply once for each document received and map the envelope from the received document to receivedDocumentEnvelope for each call. - Any (OR) or Only one (XOR) join conditions. If the replying service executes because a document satisfied an Any (OR) or Only one (XOR) join condition, do not map or assign a value to receivedDocumentEnvelope. It is impossible to know which document in the Any (OR) or Only one (XOR) join will be received first. For example, suppose that an Only one (XOR) join condition specified document types A and B. Integration Server uses the envelope of the document it received first as the receivedDocumentEnvelope value. If you map the envelope of document A to receivedDocumentEnvelope, but Integration Server receives document B first, your replying service will fail. Services that publish or deliver a document and wait for a reply can specify a publishable document type to which reply documents must conform. If the reply document is not of the type specified in the receiveDocumentTypeName parameter of the pub.publish:publishAndWait or pub.publish:deliverAndWait service, the publishing service will wait forever for a reply. Work closely with the developer of the publishing service to make sure that your reply document is an instance of the correct publishable document type. For more information about building a reply service, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.publish:deliverAndWait - pub.publish:publishAndWait - pub.publish:envelope"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:syncToBroker",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#A94936__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.publish:syncToProvider. Synchronizes one or more publishable document types with the corresponding Broker document types by pushing the publishable document types toIBM webMethods Broker. Note: This service can be used to synchronize publishable document types for which the Connection alias name property is a Broker connection alias only."
+      ],
+      "input_parameters": [
+        {
+          "name": "documentTypes",
+          "type": "String List",
+          "description": [
+            "Fully qualified names of the publishable document types to synchronize with their associated provider definition."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "successfulPDTs",
+          "type": "String List",
+          "description": [
+            "Conditional. Fully qualified names of the publishable document types that Integration Server updated successfully on the provider. The service only produces this output parameter if one or more publishable document types updated successfully."
+          ]
+        },
+        {
+          "name": "unsuccessfulPDTs",
+          "type": "String List",
+          "description": [
+            "Conditional. Fully qualified names of the publishable document types that Integration Server did not update successfully on the provider. The service only produces this output parameter if one or more publishable document types did not update successfully."
+          ]
+        },
+        {
+          "name": "errors",
+          "type": "Document List",
+          "description": [
+            "Conditional. Lists any errors that occurred during document type synchronization."
+          ]
+        },
+        {
+          "name": "warnings",
+          "type": "Document List",
+          "description": [
+            "Conditional. Lists any warnings that occurred during document type synchronization."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use pub.publish:syncToBroker as a start up service for a package to avoid using IBM webMethods Designer to synchronize document types. You can use the pub.publish:syncToBroker service with Broker only. The use of pub.publish:syncToBroker with Universal Messaging is not supported. Use pub.publish:syncToProvider or Designer to synchronize publishable document types with corresponding provider definitions (channels) on Universal Messaging. The Connection alias name property for a document type specifies the messaging connection alias assigned to the document type which indicates the provider to which a document type will be pushed. If the documentTypes parameter contains document types that are not publishable or do not exist, Integration Server lists the errors in the errors parameter."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:syncToProvider",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#CEHHBAEG__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Synchronizes one or more publishable document types with their associated provider definition by pushing the publishable document types to the associated message provider."
+      ],
+      "input_parameters": [
+        {
+          "name": "documentTypes",
+          "type": "String List",
+          "description": [
+            "Fully qualified names of the publishable document types to synchronize with their associated provider definition."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "successfulPDTs",
+          "type": "String List",
+          "description": [
+            "Conditional. Fully qualified names of the publishable document types that Integration Server updated successfully on the provider. The service only produces this output parameter if one or more publishable document types updated successfully."
+          ]
+        },
+        {
+          "name": "unsuccessfulPDTs",
+          "type": "String List",
+          "description": [
+            "Conditional. Fully qualified names of the publishable document types that Integration Server did not update successfully on the provider. The service only produces this output parameter if one or more publishable document types did not update successfully."
+          ]
+        },
+        {
+          "name": "errors",
+          "type": "Document List",
+          "description": [
+            "Conditional. Lists any errors that occurred during document type synchronization."
+          ]
+        },
+        {
+          "name": "warnings",
+          "type": "Document List",
+          "description": [
+            "Conditional. Lists any warnings that occurred during document type synchronization."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use pub.publish:syncToProvider as a start up service for a package to avoid using IBM webMethods Designer to synchronize document types. The Connection alias name property for a document type specifies the messaging connection alias assigned to the document type which indicates the provider to which a document type will be pushed. If the documentTypes parameter contains document types that are not publishable or do not exist, Integration Server lists the errors in the errors parameter. The pub.publish:syncToProvider service replaces pub.publish:syncToBroker, which has been deprecated. For a publishable document type that uses protocol buffers as the encoding type, the pub.publish:syncToProvider synchronizes the existing protocol buffer descriptor with Universal Messaging. If you want Integration Server to create an updated protocol buffer definition for the document type, compile the updated definition into an updated protocol buffer descriptor, and synchronize the updated descriptor with Universal Messaging, use the pub.utils.messaging:syncDocTypesToUM service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish:waitForReply",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#A26279__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Retrieves the reply for an asynchronous request. If a reply is not available, Integration Server continues to wait for the document until the time specified in the waitTime parameter of the pub.publish:deliverAndWait service or pub.publish:publishAndWait service elapses."
+      ],
+      "input_parameters": [
+        {
+          "name": "tag",
+          "type": "String",
+          "description": [
+            "A unique identifier for the publish request for which you are retrieving a reply. Integration Server uses the tag value to match the request document with its corresponding reply document."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "receivedDocument",
+          "type": "Document",
+          "description": [
+            "(IData object) received as the reply to the request. If the request expires (that is, the waitTime elapses) before Integration Server receives the reply document, the receivedDocument field contains a null document. Important: Integration Server treats all reply documents as volatile documents. If Integration Server shuts down before processing the reply document, the reply document is lost."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The waitTime value of the publishing service specifies how long Integration Server will keep the request open while waiting for a reply. When building an asynchronous request/reply service, keep the following information about the waitTime in mind: - The waiting interval for the reply document starts when Integration Server executes the request service (pub.publish:deliverAndWait or pub.publish:publishAndWait). The execution of the pub.publish:waitForReply service does not affect the waitTime interval. - If the waitTime interval elapses before the pub.publish:waitForReply service executes, the service immediately returns a null document which indicates that the wait time has expired. - If Integration Server has not received the reply when the pub.publish:waitForReply service executes, the service waits the remainder of the waitTime interval. If Integration Server does not receive a reply by the time the waitTime interval elapses, the request completes. The service returns a null document which indicates that the wait time has expired. - If the reply document arrives after the waitTime interval elapses, Integration Server rejects the document because the request is closed. A single publish and wait request might receive many response documents. The Integration Server that made the publish and wait request uses only the first reply document it receives. Integration Server discards all other replies. First is arbitrarily defined. There is no guarantee provided for the order in which the messaging provider processes incoming replies. If you need a reply document from a specific recipient, use the pub.publish:deliverAndWait service instead. For more information about building an asynchronous request/reply service, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.publish:deliverAndWait - pub.publish:publishAndWait"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.publish.notification:error",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_notification_error__title__1",
+      "element_type": "document_type",
+      "description": [
+        "WmPublic. Publishable document type that defines the document that Integration Server generates and delivers when a trigger encounters an error or exception condition during processing. Note: Integration Server does not generate and return and error message when the trigger received a document from Universal Messaging. Integration Server generates an error document if the trigger service cannot successfully process a document for one of the following reasons: - The trigger service encounters an exception condition (that is not an ISRuntimeException) during execution. - Integration Server makes the maximum number of attempts to re-execute the trigger service and the service still fails because of a transient error condition. - Some other system exception occurred. Note: Integration Server does not generate an error document if the subscribing trigger is part of a disabled process model version because the trigger service associated with a disabled process model version never executes. Integration Server delivers the error document to the client ID specified in the errorsTo field contained in the received document's envelope. If the errorsTo field is empty, the Integration Server delivers the error document to the original document's publisher (as specified in the pubId envelope field). The error document notifies the publisher or other designated recipient that the subscriber cannot process the document successfully. Note: If a trigger service cannot process a locally published document successfully, Integration Server produces and delivers an error document only if the Integration Server is connected to IBM webMethods Broker."
+      ],
+      "fields": [
+        {
+          "name": "adapterType",
+          "type": "String",
+          "description": [
+            "Optional. The resource producing the error. Integration Server sets the value of this field to Integration Server ."
+          ]
+        },
+        {
+          "name": "errorCategory",
+          "type": "String",
+          "description": [
+            "Optional. Type of exception. Integration Server sets the value of this field to Application ."
+          ]
+        },
+        {
+          "name": "errorText",
+          "type": "String",
+          "description": [
+            "Optional. Exception text message. At Dispatcher debug level 9, a stack trace of the exception will also be returned."
+          ]
+        },
+        {
+          "name": "eventID",
+          "type": "java.lang.Long",
+          "description": [
+            "Optional. The event ID of the document that caused this exception. If the trigger service executed because a document satisfied a join condition, then the eventID is the event ID of the last document that satisfied the condition."
+          ]
+        },
+        {
+          "name": "_env",
+          "type": "Document",
+          "description": [
+            "Optional. A document reference to the pub.publish:envelope document type."
+          ],
+          "references": [
+            {
+              "title": "pub.publish:envelope",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-publish-folder#Apub_publish_envelope"
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The client to which Integration Server delivers the error document needs to subscribe to the pub.publish.notification:error document type. If the client does not have a trigger that subscribes to this document type, the client will never receive or process the error document. If the client receiving the error document is an Integration Server, it generates the message [ISS.0098.0024V2] No trigger available for incoming Document pub.publish.notification:error. The watt.server.messaging.deliverNotificationErrors server configuration parameter specifies whether Integration Server generates and delivers pub.publish.notifcation.error messages. When set to true, Integration Server generates and delivers pub.publish.notification:error messages when an error or exception condition during IBM webMethods messaging triggerprocessing. The generation and delivery of notification error messages may result in the generation of Adapter:Error events. When set to false, Integration Serverdoes not generate or deliver pub.publish.notification:error messages. The notification error messages are suppressed."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.publish:envelope"
+          ]
+        }
+      ]
+    }
+  ]
+}

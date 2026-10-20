@@ -1,0 +1,739 @@
+{
+  "folder": "SMIME",
+  "description": [
+    "You use the elements in the smime folder to create digitally signed and/or encrypted MIME messages. You also use the services in this folder to process signed and encrypted MIME messages that are passed into the pipeline."
+  ],
+  "total_services": 10,
+  "services": [
+    {
+      "name": "pub.smime:createCertsOnlyData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#Apub_smime_CreatCertsOnlyMessage__title__1",
+      "description": [
+        "WmPublic. Generates a PKCS #7 certs-only S/MIME entity from an array of certificates. This service can be used to develop mechanisms for transmitting certificates and certificate chains to other parties."
+      ],
+      "input_parameters": [
+        {
+          "name": "certificates",
+          "type": "byte[ ][ ]",
+          "description": [
+            "The certificates that are to be encapsulated within the S/MIME entity. Each byte[ ] represents a single certificate."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "S/MIME entity."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.smime:createEncryptedData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#Apub_smime_createEncryptedData__title__1",
+      "description": [
+        "WmPublic. Encrypts a MIME message."
+      ],
+      "input_parameters": [
+        {
+          "name": "envStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "MIME message that you want to encrypt (for example, the output produced by pub.mime:getEnvelopeStream )."
+          ],
+          "references": [
+            {
+              "title": "pub.mime:getEnvelopeStream",
+              "url": "to-mime_folder.html#Apub_mime_getEnvelopeStream"
+            }
+          ]
+        },
+        {
+          "name": "recipientCerts",
+          "type": "byte[ ][ ]",
+          "description": [
+            "The X.509 certificates of the recipients for whom this message will be encrypted. Each element in the list represents a certificate for a single recipient in the form of a byte[ ]. Note: When you have multiple recipients, createEncryptedData creates a single message that is encrypted for all recipients. It does not create a separate message for each recipient."
+          ]
+        },
+        {
+          "name": "encryptionAlg",
+          "type": "String",
+          "description": [
+            "Optional. Code specifying the encryption algorithm to use. Must be TripleDES (default), DES , or RC2 . Note: If you have enabled the FIPS (Federal Information Processing Standards) mode , then Integration Server uses onlyTripleDES."
+          ]
+        },
+        {
+          "name": "keyLength",
+          "type": "String",
+          "description": [
+            "Optional. Length of the encryption key for RC2 encryption. Must be 40 , 64 , or 128 (default). This parameter is ignored if encryptionAlg is not RC2."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The encrypted MIME message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.smime:createSignedData - pub.smime:processEncryptedData - pub.mime:getEnvelopeStream"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.smime:createSignedAndEncryptedData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#Apub_smime_createSignedAndEncryptedData__title__1",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.smime.keystore:createSignedAndEncryptedData. Digitally signs a MIME message and then encrypts it. Important: You must use this service when you want to create a message that is both signed and encrypted. You cannot produce this type of message using the pub.smime:createSignedData and pub.smime:createEncryptedData services."
+      ],
+      "input_parameters": [
+        {
+          "name": "envStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The MIME message that you want to sign and encrypt (for example, the output produced by pub.mime:getEnvelopeStream )."
+          ],
+          "references": [
+            {
+              "title": "pub.mime:getEnvelopeStream",
+              "url": "to-mime_folder.html#Apub_mime_getEnvelopeStream"
+            }
+          ]
+        },
+        {
+          "name": "privKey",
+          "type": "byte[ ]",
+          "description": [
+            "Private key of the party signing the message."
+          ]
+        },
+        {
+          "name": "certificates",
+          "type": "byte[ ] [ ]",
+          "description": [
+            "Optional. The certificate chain of the party signing the message, where each byte[ ] represents a single certificate in the chain. Certificates must appear in hierarchical order, starting with the signer's certificate in element 0. The following list shows how the elements of a complete chain would appear for a certificate that was issued through two intermediate CAs:"
+          ]
+        },
+        {
+          "name": "signerCert",
+          "type": "byte[ ]",
+          "description": [
+            "Digital certificate of the party signing the message."
+          ]
+        },
+        {
+          "name": "explicit",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether an implicit or explicit signature is to be generated. Set to: - true to generate an explicit (detached) signature. This is the default. - false to generate an implicit signature."
+          ]
+        },
+        {
+          "name": "recipientCerts",
+          "type": "byte[ ][ ]",
+          "description": [
+            "X.509 certificates of the recipients for whom this message will be encrypted. Each element in the list contains the certificate for a single recipient in the form of a byte array."
+          ]
+        },
+        {
+          "name": "encryptionAlg",
+          "type": "String",
+          "description": [
+            "Optional. Code specifying the encryption algorithm to use. Must be TripleDES (default), DES , or RC2 . Note: If you have enabled the FIPS (Federal Information Processing Standards) mode , then Integration Server uses onlyTripleDES."
+          ]
+        },
+        {
+          "name": "keyLength",
+          "type": "String",
+          "description": [
+            "Optional. Length of the encryption key for RC2 encryption. Must be 40 , 64 , or 128 (default). This parameter is ignored if encryptionAlg is not RC2."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Signed and encrypted MIME message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is superseded by pub.smime.keystore:createSignedAndEncryptedData. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.smime:createEncryptedData - pub.smime:processEncryptedData - pub.smime:createSignedData - pub.smime:processSignedData - pub.smime.keystore:createSignedData - pub.mime:getEnvelopeStream"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.smime:createSignedData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#Apub_smime_createSignedData__title__1",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.smime.keystore:createSignedData. Digitally signs a MIME message."
+      ],
+      "input_parameters": [
+        {
+          "name": "envStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "MIME message that you want to sign (for example, the output produced by pub.mime:getEnvelopeStream )."
+          ],
+          "references": [
+            {
+              "title": "pub.mime:getEnvelopeStream",
+              "url": "to-mime_folder.html#Apub_mime_getEnvelopeStream"
+            }
+          ]
+        },
+        {
+          "name": "privKey",
+          "type": "byte[]",
+          "description": [
+            "Private key of the party signing the message."
+          ]
+        },
+        {
+          "name": "certificates",
+          "type": "byte[ ][ ]",
+          "description": [
+            "Optional. Certificate chain of the party that signed the message, where each byte[ ] represents a single certificate in the chain. Certificates must appear in hierarchical order, starting with the signer's certificate in element 0. The following shows how the elements of a complete chain would appear for a certificate that was issued through two intermediate CAs:"
+          ]
+        },
+        {
+          "name": "signerCert",
+          "type": "byte[ ]",
+          "description": [
+            "Digital certificate of the party signing the message."
+          ]
+        },
+        {
+          "name": "explicit",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether an implicit or explicit signature is generated. Set to: - true to generate an explicit (detached) signature. This is the default. - false to generate an implicit signature."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The signed MIME message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is superseded by pub.smime.keystore:createSignedData. For general information about MIME messages and using the MIME services, see the MIME-S/MIME Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.smime:createEncryptedData - pub.mime:getEnvelopeStream"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.smime:processCertsOnlyData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#Apub_smime_getContentType__title__1",
+      "description": [
+        "WmPublic. Extracts the certificates from a PKCS #7 certs-only S/MIME entity."
+      ],
+      "input_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The certs-only S/MIME entity."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "certificates",
+          "type": "byte[ ][ ]",
+          "description": [
+            "The extracted certificates. Each element in the list contains one of the extracted certificates represented as a byte[ ]."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.smime:processEncryptedData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#Apub_smime_processEncryptedData__title__1",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.smime.keystore:processEncryptedData. Decrypts an encrypted S/MIME message."
+      ],
+      "input_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The encrypted S/MIME entity (for example, the output produced by pub.smime:createEncryptedData )."
+          ],
+          "references": [
+            {
+              "title": "pub.smime:createEncryptedData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#Apub_smime_createEncryptedData"
+            }
+          ]
+        },
+        {
+          "name": "recipientCert",
+          "type": "byte[ ]",
+          "description": [
+            "Digital certificate of the party receiving the message."
+          ]
+        },
+        {
+          "name": "privKey",
+          "type": "byte[ ]",
+          "description": [
+            "Private key of the party receiving the message (that is, the party whose public key was used to encrypt the message)."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object containing the decrypted MIME message."
+          ]
+        },
+        {
+          "name": "contentDigest",
+          "type": "String",
+          "description": [
+            "Message digest of the encrypted content, base64-encoded. (Some sites return this digest to the sender to acknowledge their receipt of the message.)"
+          ]
+        },
+        {
+          "name": "encrypted",
+          "type": "String",
+          "description": [
+            "Conditional. Flag indicating whether the decrypted MIME entity is encrypted. A value of: - true indicates that the MIME entity is encrypted. - false indicates that the MIME entity is not encrypted."
+          ]
+        },
+        {
+          "name": "signed",
+          "type": "String",
+          "description": [
+            "Conditional. Flag indicating whether the decrypted MIME entity is signed. A value of: - true indicates that the MIME entity is signed. - false indicates that the MIME entity is not signed."
+          ]
+        },
+        {
+          "name": "certsOnly",
+          "type": "String",
+          "description": [
+            "Conditional. Flag indicating whether the decrypted MIME entity is a certs-only entity. A value of: - true indicates that the MIME entity is a certs-only entity. - false indicates that the MIME entity is not a certs-only entity."
+          ]
+        },
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Conditional. The decrypted MIME entity."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is superseded by pub.smime.keystore:processEncryptedData. If the decrypted message is signed or encrypted, mimeData will be empty, and the decrypted message will reside in stream. You can check the state of the signed and encrypted output variables to determine whether the decrypted message requires additional processing, and pass stream to the pub.smime:processSignedData or pub.smime:processEncryptedData service as necessary. Important: You can examine the contents of mimeData during testing and debugging. However, because the internal structure of mimeData is subject to change without notice, do not explicitly set or map data to/from these elements in your service. To manipulate or access the contents of mimeData, use only the MIME services that Integration Server provides."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.smime:processSignedData - pub.smime:createEncryptedData"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.smime:processSignedData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#Apub_smime_processSignedData__title__1",
+      "description": [
+        "WmPublic. Verifies the signature from a signed S/MIME entity and extracts the message from it."
+      ],
+      "input_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Signed MIME entity (for example, the output produced by pub.smime:createSignedData )."
+          ],
+          "references": [
+            {
+              "title": "pub.smime:createSignedData",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#Apub_smime_createSignedData"
+            }
+          ]
+        },
+        {
+          "name": "signerCertChain",
+          "type": "byte[ ][ ]",
+          "description": [
+            "Optional. Certificate chain of the party that signed the message, where each byte[ ] represents a single certificate in the chain. Certificates must appear in hierarchical order, starting with the signer's certificate in element 0. The following shows how the elements of a complete chain would appear for a certificate that was issued through two intermediate CAs:"
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "MIME object containing the extracted MIME entity."
+          ]
+        },
+        {
+          "name": "contentDigest",
+          "type": "String",
+          "description": [
+            "Message digest (base64-encoded) that was recalculated by processSignedData ."
+          ]
+        },
+        {
+          "name": "signerCert",
+          "type": "java.security.cert.X509Certificate",
+          "description": [
+            "Signer's X.509 certificate."
+          ]
+        },
+        {
+          "name": "encrypted",
+          "type": "String",
+          "description": [
+            "Conditional. Flag indicating whether the extracted MIME entity is encrypted. A value of: - true indicates that the MIME entity is encrypted. - false indicates that the MIME entity is not encrypted."
+          ]
+        },
+        {
+          "name": "signed",
+          "type": "String",
+          "description": [
+            "Conditional. Flag indicating whether the extracted MIME entity is signed. A value of: - true indicates that the MIME entity is signed. - false indicates that the MIME entity is not signed."
+          ]
+        },
+        {
+          "name": "certsOnly",
+          "type": "String",
+          "description": [
+            "Conditional. Flag indicating whether the extracted MIME entity is a certs-only entity. A value of: - true indicates that the MIME entity is a certs-only entity. - false indicates that the MIME entity is not a certs-only entity."
+          ]
+        },
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Conditional. Extracted MIME entity."
+          ]
+        },
+        {
+          "name": "verify",
+          "type": "String",
+          "description": [
+            "Flag indicating whether the signature was successfully processed. Success indicates that the signature was successfully verified with the supplied public key. A value of: - true indicates that signature processing was successful. - false indicates that signature processing failed. The signature could not be verified because an errorCode 1, 2, 3, or 4 occurred."
+          ]
+        },
+        {
+          "name": "trusted",
+          "type": "String",
+          "description": [
+            "Flag indicating whether the signer certificate is trusted or not. A value of: - true indicates that the signer certificate is trusted. - false indicates that the signer certificate is not trusted."
+          ]
+        },
+        {
+          "name": "errorCode",
+          "type": "String",
+          "description": [
+            "Conditional. Number indicating the kind of error that occurred while processing the signature. See errorMessage for possible values. If no error occurred, errorCode will not be returned."
+          ]
+        },
+        {
+          "name": "errorMessage",
+          "type": "String",
+          "description": [
+            "Conditional. Textual error message indicating what kind of error occurred while processing the signature. Error codes and messages are as follows:"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If verify is false, the errorCode and errorMessage values will indicate the error that caused the failure. Note that errorCode values 5 through 7 do not represent signature-validation failures and, therefore, do not cause the verify flag to be set to false. If the extracted entity is signed or encrypted, mimeData will be empty, and the extracted entity will reside in stream. You can check the state of the signed and encrypted output variables to determine whether the extracted entity requires additional processing, and pass stream to the pub.smime:processEncryptedData service as necessary. Important: You can examine the contents of mimeData during testing and debugging. However, because the internal structure of mimeData is subject to change without notice, do not explicitly set or map data to/from these elements in your service. To manipulate or access the contents of mimeData, use only the MIME services that Integration Server provides."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.smime:processEncryptedData - pub.smime:createSignedData"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.smime.keystore:createSignedAndEncryptedData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#A11884__title__1",
+      "description": [
+        "WmPublic. Digitally signs and encrypts a MIME message."
+      ],
+      "input_parameters": [
+        {
+          "name": "envStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The MIME message that you want to sign and encrypt (for example, the output produced by pub.mime:getEnvelopeStream )."
+          ],
+          "references": [
+            {
+              "title": "pub.mime:getEnvelopeStream",
+              "url": "to-mime_folder.html#Apub_mime_getEnvelopeStream"
+            }
+          ]
+        },
+        {
+          "name": "keyStoreAlias",
+          "type": "String",
+          "description": [
+            "Alias of the keystore containing the signing key."
+          ]
+        },
+        {
+          "name": "keyAlias",
+          "type": "String",
+          "description": [
+            "Alias of the private key to be used for signing."
+          ]
+        },
+        {
+          "name": "explicit",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether an implicit or explicit signature is to be generated. Set to: - True to generate an explicit (detached) signature. This is the default. - False to generate an implicit signature."
+          ]
+        },
+        {
+          "name": "recipientCerts",
+          "type": "Object List",
+          "description": [
+            "A list of byte[ ] for the partner certificates for whom this message will be encrypted."
+          ]
+        },
+        {
+          "name": "encryptionAlg",
+          "type": "String",
+          "description": [
+            "Optional. Code specifying the encryption algorithm to use. Must be TripleDES (default), DES, or RC2."
+          ]
+        },
+        {
+          "name": "keyLength",
+          "type": "String",
+          "description": [
+            "Optional. Length of the encryption key for RC2 encryption. Must be 40, 64, or 128 (default). This parameter is ignored if encryptionAlg is not RC2."
+          ]
+        },
+        {
+          "name": "signingAlg",
+          "type": "String",
+          "description": [
+            "Optional. The signing algorithm to use to sign the S/MIME messages. Set to: - SHA224 - SHA256 - SHA384 - SHA512 The default is SHA256 ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Signed and encrypted data as a stream."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service supersedes pub.smime:createSignedAndEncryptedData You must use this service when you want to create a message that is both signed and encrypted. For information about using aliases for keystores, truststores, and private keys, see Creating a Keystore and Truststore."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.smime.keystore:createSignedData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#A28332__title__1",
+      "description": [
+        "WmPublic. Creates signed S/MIME data."
+      ],
+      "input_parameters": [
+        {
+          "name": "envStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "MIME message that you want to sign (for example, the output produced by pub.mime:getEnvelopeStream )."
+          ],
+          "references": [
+            {
+              "title": "pub.mime:getEnvelopeStream",
+              "url": "to-mime_folder.html#Apub_mime_getEnvelopeStream"
+            }
+          ]
+        },
+        {
+          "name": "keyStoreAlias",
+          "type": "String",
+          "description": [
+            "Alias of the keystore."
+          ]
+        },
+        {
+          "name": "keyAlias",
+          "type": "String",
+          "description": [
+            "Alias of the private key of interest in the keystore."
+          ]
+        },
+        {
+          "name": "explicit",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether an implicit or explicit signature is generated. Set to: - True to generate an explicit (detached) signature. This is the default. - False to generate an implicit signature."
+          ]
+        },
+        {
+          "name": "signingAlg",
+          "type": "String",
+          "description": [
+            "Optional. The signing algorithm to use to sign the S/MIME messages. Set to: - SHA224 - SHA256 - SHA384 - SHA512 The default is SHA256 ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The signed MIME stream."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service supersedes pub.smime:createSignedData. For information about using aliases for keystores, truststores, and private keys, see Creating a Keystore and Truststore."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.smime.keystore:processEncryptedData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-smime-folder#A38797__title__1",
+      "description": [
+        "WmPublic. Decrypts an encrypted S/MIME message."
+      ],
+      "input_parameters": [
+        {
+          "name": "SMimeEnvStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The encrypted S/MIME stream."
+          ]
+        },
+        {
+          "name": "keyStoreAlias",
+          "type": "String",
+          "description": [
+            "Alias of the keystore containing the decryption key."
+          ]
+        },
+        {
+          "name": "keyAlias",
+          "type": "String",
+          "description": [
+            "Alias of the key used for decryption."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "mimeData",
+          "type": "Document",
+          "description": [
+            "The decrypted MIME message."
+          ]
+        },
+        {
+          "name": "contentDigest",
+          "type": "String",
+          "description": [
+            "Message digest of the encrypted content, base64-encoded. (Some sites return this digest to the sender to acknowledge their receipt of the message."
+          ]
+        },
+        {
+          "name": "encrypted",
+          "type": "String",
+          "description": [
+            "Flag indicating whether the MIME entity passed in to the service was encrypted. A value of: - True indicates that the MIME entity was encrypted. - False indicates that the MIME entity was not encrypted."
+          ]
+        },
+        {
+          "name": "signed",
+          "type": "String",
+          "description": [
+            "Flag indicating whether the MIME entity passed in to the service was signed. A value of: - True indicates that the MIME entity is signed. - False indicates that the MIME entity is not signed."
+          ]
+        },
+        {
+          "name": "certsOnly",
+          "type": "String",
+          "description": [
+            "Flag indicating whether the MIME entity passed in to the service contained only digital certificates. A value of: - True indicates that the MIME entity is a certs-only entity. - False indicates that the MIME entity is not a certs-only entity."
+          ]
+        },
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The decrypted MIME entity."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service supersedes pub.smime:processEncryptedData. For information about using aliases for keystores, truststores, and private keys, see Creating a Keystore and Truststore."
+          ]
+        }
+      ]
+    }
+  ]
+}

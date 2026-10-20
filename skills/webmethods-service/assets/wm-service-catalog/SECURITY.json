@@ -1,0 +1,3114 @@
+{
+  "folder": "SECURITY",
+  "description": [
+    "You use the elements in the security folder to control which client certificates are sent to other services and digitally sign data and process digital signatures. You can also use the elements to store and retrieve outbound passwords to access secure resources."
+  ],
+  "usage_notes": [
+    {
+      "title": "About the Security Elements",
+      "content": [
+        "Use the elements in the security folder to:",
+        "- Control which client certificates are sent to other services.",
+        "- Digitally sign data.",
+        "- Process digital signatures.",
+        "- Store and retrieve outbound passwords to access secure resources.",
+        "- Manage Integration Server keystores and truststores.",
+        "- Secure XML documents.",
+        "The services pub.security.keystore:setKeyAndChain, pub.security:setKeyAndChainFromBytes, and pub.security:clearKeyAndChain are used to control which client certificate the IBM webMethods Integration Server presents to remote servers. You need to use these services to switch between certificates and certificate chains if you are not using aliases for remote servers. For more information about aliases for remote servers, see Setting Up a Remote Server Alias .",
+        "The pub.security.outboundPasswords services support the use of encrypted outbound passwords to access secure resources. You may wish to have a flow service access a secure resource such as a remote Integration Server, proxy server, or database. The service would need to provide a valid password to access the resource. The pub.security.outboundPasswords services allow a flow service to store passwords in and retrieve passwords from the Integration Server's outbound password store. The outbound password store is an encrypted store of passwords managed by the Integration Server. For more information about the outbound password store, see Working with Outbound Password Settings .",
+        "The pub.security.keystore services allow you to configure Integration Server SSL through access to its keys and associated certificates. These keys and certificates are now stored securely in industry-standard keystore and truststore files. For more information about Integration Server keystores and truststores, see Creating a Keystore and Truststore .",
+        "The pub.security.xml services are based on the Apache Security APIs. These services support encryption and digital signing of outbound XML documents from Integration Server, and decryption and signature verification of inbound XML from partner applications. The services provide the most commonly-used XML security options, including:",
+        "- Signing/encrypting the entire XML document or the content of specific nodes",
+        "- Selection of the signing and encryption algorithms",
+        "- Use of enveloping and enveloped signatures",
+        "Important: IBM recommends that you drop variables containing sensitive data from the pipeline once the data is no longer needed by the flow service. Sensitive data includes, but is not limited to, passwords, private keys, and pass phrases. The pipeline stores data in clear text. Because the entire output pipeline is returned to the calling client, avoid leaving variables containing sensitive data in the pipeline. This prevents the service from returning sensitive data to the calling client.",
+        "The pub.security services provide encryption, decryption, signing, and verification using PGP and JCE."
+      ]
+    }
+  ],
+  "total_elements": 38,
+  "elements": [
+    {
+      "name": "pub.security:clearAuthenticationCache",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#clearAuthenticationCache__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Clears the authentication cache in Integration Server."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "message",
+          "description": [
+            "Specifies whether the authentication cache is cleared or not."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Integration Server caches your login credentials (username and password) for better performance. The credentials are stored until the cache expires. If a user's credential is updated and a situation demands that the authentication cache be cleared immediately, then use this service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:clearKeyAndChain",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#Apub_security_clearKeyAndChain__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Clears the set key and certificate chain and reverts back to the default key and certificate chain for the subsequent set of invoked services."
+      ],
+      "input_parameters": [],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The following scenario describes a situation in which you would use the pub.security.keystore:setKeyAndChain and pub.security:clearKeyAndChain services. Company A has IBM webMethods Integration Server with one certificate chain. Company A wants to start trading with two new companies: Company B and Company C. Due to explicit business decisions, both Company B and Company C require that secure requests to their servers use certificates issued by their company's certificate authority. Company A now has three certificate sets that it must manage: one for connections to B, one for connections to C, and one for all other requests. Below is a high-level process flow of what Company A would do if documents needed to be forwarded to companies B, C, and D (some arbitrary partner without the stringent security). Assume all network communication is done using HTTPS. Documents are sent to the companies in the following order: Company D, Company B, Company C, Company D. All data transfers make use of the pub.client:http service. 1. Invoke pub.client:http to send data to Company D. 2. Invoke pub.security.keystore:setKeyAndChain using the key and certificate chain for Company B. 3. Invoke pub.client:http to send data to Company B. 4. Invoke pub.security.keystore:setKeyAndChain using the key and certificate chain for Company C. 5. Invoke pub.client:http to send data to Company C. 6. Invoke pub.security:clearKeyAndChain to revert back to the default key and certificate chain for Company A's server. 7. Invoke pub.client:http to send data to Company D."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.security.keystore:setKeyAndChain"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:decrypt",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#reference_8E99023F3A9D42A0BADCBF986D4B1C76__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Decrypts the encrypted data and returns plain data as a stream object or byte array or string."
+      ],
+      "input_parameters": [
+        {
+          "name": "securityProvider",
+          "type": "String",
+          "description": [
+            "Optional. The type of security provider. The valid values are: - PGP (Pretty Good Privacy) - JCE-KBE (Java Cryptography Extension-Key Based Encryption) The default value is PGP."
+          ]
+        },
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "The data that you want to decrypt must be in one of the following formats. If multiple input parameters are supplied for data , the service throws an exception stating that only one parameter must be passed."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. The string that you want to decrypt."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. The stream data that you want to decrypt."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The byte array that you want to decrypt."
+              ]
+            },
+            {
+              "name": "file",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the file that you want to decrypt. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional. The format in which the service returns the output. Set to: - bytes to return the output as a byte array. This is the default. - stream to return the output as a stream object. - string to return the output as a string."
+          ]
+        },
+        {
+          "name": "secretKey",
+          "type": "Document",
+          "description": [
+            "The secret key to extract the private key required to decrypt the data. For PGP, provide secretKeyBytes, secretKeyString, or secretKeyRingFile. If you provide secretKeyRingFile, you must also provide secretKeyAlias. Otherwise, the service throws an exception. For JCE-KBE, provide secretKeyBytes, secretKeyString, or keyStoreAlias. If you provide keyStoreAlias, you must provide keyAlias. Otherwise, the service throws an exception."
+          ],
+          "children": [
+            {
+              "name": "secretKeyBytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The secret key file in bytes. Note: Secret key files have a .asc extension for PGP."
+              ]
+            },
+            {
+              "name": "secretKeyString",
+              "type": "String",
+              "description": [
+                "Optional. The secret key as a string."
+              ]
+            },
+            {
+              "name": "secret​KeyRingFile",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the secret keyring file. The secret keyring file is a collection of secret keys with a unique key ID. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. This parameter is applicable only for PGP. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory. Note: Secret keyring files have a .skr extension for PGP."
+              ]
+            },
+            {
+              "name": "secretKeyAlias",
+              "type": "String",
+              "description": [
+                "Optional. The 64 bit (16 characters) key identifier of the secret key. Note: This parameter is required only when you use secretKeyRing​File."
+              ]
+            },
+            {
+              "name": "secretKey ​Passphrase",
+              "type": "String",
+              "description": [
+                "Password required to extract the private key from the secret key. This is the password provided while generating the secret key."
+              ]
+            },
+            {
+              "name": "keyStoreAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The keystore alias that contains the private key used for decryption."
+              ]
+            },
+            {
+              "name": "keyAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The private key alias in the keystore specified by the keyStoreAlias parameter that is used for decryption. Note: This parameter is required only when you use keyStoreAlias."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "cipher",
+          "type": "String",
+          "description": [
+            "Optional. Applies only to JCE. The cipher for decryption. Select one of the following: - RSA - RSA/ECB/PKCS1Padding - RSA/ECB/OAEPWithSHA-1AndMGF1Padding - RSA/ECB/OAEPWithSHA-256AndMGF1Padding - RSA/ECB/OAEPWithSHA-512AndMGF1Padding - RSA/ECB/OAEPPadding The default value is RSA."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.OutputStream",
+          "description": [
+            "Conditional. Decrypted data as an output stream. Returned when the loadAs input parameter is set to stream ."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "Conditional. Decrypted data as bytes. Returned when the loadAs input parameter is set to bytes ."
+          ]
+        },
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Conditional. Decrypted data as a string. Returned when the loadAs input parameter is set to string ."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether the data is successfully decrypted or not. If successful, status is success . Otherwise, status contains failure along with an error message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Prerequisites to use the pub.security:decrypt service: - Generate a public-secret key pair for Integration Server. - Make sure that the external system that sends the encrypted data has access to Integration Server's public key to encrypt the data. Decryption works as follows: 1. The external system sends the data encrypted with Integration Server's public key. 2. Integration Server receives the data and passes it to the pub.security:decrypt service. 3. The pub.security:decrypt service uses the private key to decrypt the data. 4. The service returns the decrypted data. For PGP, consider the following points: - For PGP, the service supports a data file of size up to 2 GB when the memory allocated to Integration Server is 10 GB or more. - Authentication keys used in this service must be in the PGP format and generated using the RSA encryption algorithm. Note: Authentication keys in the .ecc format are not supported for PGP. For JCE, the service supports a maximum data size that depends on the key size."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:decryptAndVerify",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#reference_706D030B7C1E49D58D088A49CD1C5BE3__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Decrypts the encrypted data and verifies the associated digital signature."
+      ],
+      "input_parameters": [
+        {
+          "name": "securityProvider",
+          "type": "String",
+          "description": [
+            "Optional. The type of security provider. The valid values are: - PGP (Pretty Good Privacy) - JCE-KBE (Java Cryptography Extension-Key Based Encryption) The default value is PGP."
+          ]
+        },
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "The data that you want to decrypt and verify must be in one of the following formats. If multiple input parameters are supplied for data , the service throws an exception stating that only one parameter must be passed."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. The string that you want to decrypt and verify."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. The stream data that you want to decrypt and verify."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The byte array that you want to decrypt and verify."
+              ]
+            },
+            {
+              "name": "file",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the file that you want to decrypt and verify. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional The format in which the service returns the output. Set to: - bytes to return the output as a byte array. This is the default. - stream to return the output as a stream object. - string to return the output as a string."
+          ]
+        },
+        {
+          "name": "secretKey",
+          "type": "Document",
+          "description": [
+            "The secret key to extract the private key required to decrypt the data. For PGP, provide secretKeyBytes, secretKeyString, or secretKeyRingFile. If you provide secretKeyRingFile, you must also provide secretKeyAlias. Otherwise, the service throws an exception. For JCE-KBE, provide secretKeyBytes, secretKeyString, or keyStoreAlias. If you provide keyStoreAlias, you must provide keyAlias. Otherwise, the service throws an exception."
+          ],
+          "children": [
+            {
+              "name": "secretKeyBytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The secret key file in bytes. Note: Secret key files have a .asc extension for PGP."
+              ]
+            },
+            {
+              "name": "secretKeyString",
+              "type": "String",
+              "description": [
+                "Optional. The secret key as a string."
+              ]
+            },
+            {
+              "name": "secret​KeyRingFile",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the secret keyring file. The secret keyring file is a collection of secret keys with a unique key ID. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. This parameter is specific to PGP. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory. Note: Secret keyring files have a .skr extension for PGP."
+              ]
+            },
+            {
+              "name": "secretKeyAlias",
+              "type": "String",
+              "description": [
+                "Optional. The 64 bit (16 characters) key identifier of the secret key. Note: This parameter is required only when you use secretKeyRing​File."
+              ]
+            },
+            {
+              "name": "secretKey ​Passphrase",
+              "type": "String",
+              "description": [
+                "Password required to extract the private key from the secret key. This is the password provided while generating the secret key. This parameter is specific to PGP."
+              ]
+            },
+            {
+              "name": "keyStoreAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The keystore alias that contains the private key used for decryption."
+              ]
+            },
+            {
+              "name": "keyAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The private key alias in the keystore specified by the keyStoreAlias parameter that is used for decryption. Note: This parameter is required only when you use keyStoreAlias."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "publicKey",
+          "type": "Document",
+          "description": [
+            "The public key required to verify the digital signature associated with the data. For PGP, provide publicKeyBytes, publicKeyString, or publicKeyRingFile. If you provide publicKeyRingFile, you must also provide publicKeyAlias. Otherwise, the service throws an exception. For JCE-KBE, provide publicKeyBytes, publicKeyString, or truststoreAlias. If you provide truststoreAlias, you must also provide certAlias. Otherwise, the service throws an exception."
+          ],
+          "children": [
+            {
+              "name": "publicKeyBytes",
+              "type": "Object List",
+              "description": [
+                "Optional. One or more public key files as byte arrays for PGP. JCE supports only a single public key file. Note: Public key files have a .asc extension."
+              ]
+            },
+            {
+              "name": "publicKeyString",
+              "type": "String List",
+              "description": [
+                "Optional. One or more public keys as strings for PGP. JCE supports only a single public key string."
+              ]
+            },
+            {
+              "name": "public​KeyRingFile",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the public keyring file. The public keyring file is a collection of public keys with a unique key ID. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. This parameter is specific to PGP. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory. Note: Public keyring files have a .pkr extension."
+              ]
+            },
+            {
+              "name": "publicKeyAlias",
+              "type": "String List",
+              "description": [
+                "Optional. One or more public key aliases as strings. A public key alias is the 64-bit (16 characters) key identifier of a public key. Note: This parameter is required only when you use publicKeyRingFile."
+              ]
+            },
+            {
+              "name": "truststoreAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The alias for the truststore containing the public key and certificate. Note: This parameter is applicable only for JCE."
+              ]
+            },
+            {
+              "name": "certAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The alias identifying a particular trusted certificate within a truststore. Note: This parameter is applicable only for JCE and is required only when you use truststoreAlias."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "signingAlgorithm",
+          "type": "String",
+          "description": [
+            "The signing algorithm to use. - For PGP, select one of the following: MD5 SHA256 SHA384 SHA512 The default value is SHA256 for PGP. - For JCE, select one of the following: RSA SHA256withRSA SHA512withRSA SHA3-256withRSA SHA3-384withRSA SHA3-512withRSA Note: If the FIPS (Federal Information Processing Standards) mode is enabled, this service does not support the MD5 signing algorithm. To enable FIPS 140-3-compliant mode, set the WM_ENABLE_FIPS environment variable to true and restart Integration Server for the changes to take effect. For more information, see Enabling FIPS 140-3 Mode. This is applicable only for PGP. Note: If the secret key for signing the data is of the DSA (Digital Signature Algorithm) key type, this service does not support the MD5 signing algorithm. This is applicable only for PGP."
+          ],
+          "references": [
+            {
+              "title": "Enabling FIPS 140-3 Mode",
+              "url": "../is_administrators_guide/ta-enable_fips_140-3_mode.html"
+            }
+          ]
+        },
+        {
+          "name": "cipher",
+          "description": [
+            "String Optional. Applies only to JCE. The cipher for decryption. Select one of the following: - RSA - RSA/ECB/PKCS1Padding - RSA/ECB/OAEPWithSHA-1AndMGF1Padding - RSA/ECB/OAEPWithSHA-256AndMGF1Padding - RSA/ECB/OAEPWithSHA-512AndMGF1Padding - RSA/ECB/OAEPPadding The default value is RSA."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.OutputStream",
+          "description": [
+            "Conditional. Decrypted and verified data as an output stream. Returned when the loadAs input parameter is set to stream ."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "Conditional. Decrypted and verified data as bytes. Returned when the loadAs input parameter is set to bytes ."
+          ]
+        },
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Conditional. Decrypted and verified data as a string. Returned when the loadAs input parameter is set to string ."
+          ]
+        },
+        {
+          "name": "verified",
+          "type": "Boolean",
+          "description": [
+            "Indicates whether the signature associated with the data is verified or not. A value of: - true indicates that the signed data is verified. - false indicates that the signed data is not verified."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether the data is successfully decrypted and verified. If successful, status is success . Otherwise, status contains failure along with an error message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use the pub.security:decryptAndVerify service when an external system connected to Integration Server requires decrypted data with verified signature. Prerequisites to use the pub.security:decryptAndVerify service: - Generate a public-secret key pair for Integration Server. - Make sure that the external system has access to Integration Server's public key. - Make sure that Integration Server has access to external's system's public key. Decryption and verification work as follows: 1. The external system sends the data encrypted with Integration Server's public key and signed with its secret key. 2. Integration Server receives the data and passes it to the pub.security:decryptAndVerify service. 3. The service uses the private key extracted from the secret key to decrypt the data. 4. The service then uses the external system's public key to verify the signature of the decrypted data. 5. The service returns the decrypted and verified data. For PGP, conisder the following points: - To decrypt and verify the data signed and encrypted for multiple users, you must provide your secret key and the users' public keys to the service. You can provide the public keys to the service as a list of byte arrays, strings, or a keyring file. If you provide a keyring file, you must also provide the public key aliases. - Authentication keys used in this service must be in the PGP format and generated using the RSA encryption algorithm. Note: Authentication keys in the .ecc format are not supported. For JCE, conisder the following points: - You can decrypt and verify the data signed and encrypted for a single user only. - The service supports a maximum data size that depends on the key size."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:encrypt",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#reference_AD27FE791FB347589BD352EBD822DBF6__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Converts plain data to encrypted data."
+      ],
+      "input_parameters": [
+        {
+          "name": "securityProvider",
+          "type": "String",
+          "description": [
+            "Optional. The type of security provider. The valid values are: - PGP (Pretty Good Privacy) - JCE-KBE (Java Cryptography Extension-Key Based Encryption) The default value is PGP."
+          ]
+        },
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "Data that you want to encrypt. The data must be in one of the following formats. If multiple input parameters are supplied for data , the service throws an exception stating that only one parameter must be passed."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. The string that you want to encrypt."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. The stream data that you want to encrypt."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The byte array that you want to encrypt."
+              ]
+            },
+            {
+              "name": "file",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the file that you want to encrypt. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional. The format in which the service returns the output. Set to: - bytes to return the output as a byte array. This is the default. - stream to return the output as a stream object. - string to return the output as a string."
+          ]
+        },
+        {
+          "name": "publicKey",
+          "type": "Document",
+          "description": [
+            "The public key required to encrypt the data. For PGP, provide publicKeyBytes, publicKeyString, or publicKeyRingFile. If you provide publicKeyRingFile, you must also provide publicKeyAlias. Otherwise, the service throws an exception. For JCE-KBE, provide publicKeyBytes, publicKeyString, or truststoreAlias. If you provide truststoreAlias, you must also provide certAlias. Otherwise, the service throws an exception."
+          ],
+          "children": [
+            {
+              "name": "publicKeyBytes",
+              "type": "Object List",
+              "description": [
+                "Optional. One or more public key files as byte arrays for PGP. JCE supports only a single public key file. Note: Public key files have a .asc extension for PGP."
+              ]
+            },
+            {
+              "name": "publicKeyString",
+              "type": "String List",
+              "description": [
+                "Optional. One or more public keys as strings for PGP. JCE supports only a single public key string."
+              ]
+            },
+            {
+              "name": "public​KeyRingFile",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the public keyring file. The public keyring file is a collection of public keys with a unique key ID. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. This parameter is secific to PGP. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory. Note: Public keyring files have a .pkr extension for PGP."
+              ]
+            },
+            {
+              "name": "publicKeyAlias",
+              "type": "String List",
+              "description": [
+                "Optional. One or more public key aliases as strings. A public key alias is the 64-bit (16 characters) key identifier of a public key. Note: This parameter is required only when you use publicKeyRingFile."
+              ]
+            },
+            {
+              "name": "truststoreAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The alias for the truststore containing the public key and certificate."
+              ]
+            },
+            {
+              "name": "certAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The alias identifying a particular trusted certificate within a truststore. Note: This parameter is required only when you use truststoreAlias."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "encryption​Algorithm",
+          "type": "String",
+          "description": [
+            "The key encryption algorithm to use. - For PGP, select one of the following symmetric key encryption algorithms: AES_192 AES_256 BLOWFISH IDEA TRIPLE_DES TWOFISH The default value is AES_256. - For JCE, select RSA (asymmetric key encryption algorithm)."
+          ]
+        },
+        {
+          "name": "cipher",
+          "type": "String",
+          "description": [
+            "Optional. Applies only to JCE. The cipher for encryption. Select one of the following: - RSA - RSA/ECB/PKCS1Padding - RSA/ECB/OAEPWithSHA-1AndMGF1Padding - RSA/ECB/OAEPWithSHA-256AndMGF1Padding - RSA/ECB/OAEPWithSHA-512AndMGF1Padding - RSA/ECB/OAEPPadding The default value is RSA."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.OutputStream",
+          "description": [
+            "Conditional. Encrypted data as an output stream. Returned when the loadAs input parameter is set to stream ."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "Conditional. Encrypted data as bytes. Returned when the loadAs input parameter is set to bytes ."
+          ]
+        },
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Conditional. Encrypted data as a string in the ASCII-armored format. Returned when the loadAs input parameter is set to string ."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether the data is successfully encrypted or not. If successful, status is success . Otherwise, status contains failure along with an error message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For PGP, consider the following points: - Before encrypted data is exchanged between Integration Server and an external system, the external system must share its public key. The service accepts multiple public keys to encrypt the same data for many users. - The public key is passed to the pub.security:encrypt service, which returns the encrypted data to Integration Server. - To encrypt the data for multiple users, provide the users' public keys to the service as a list of byte arrays, strings, or a keyring file. If you provide a keyring file, you must also provide the public key aliases. - The service supports a data file of size up to 2 GB when the memory allocated to Integration Server is 10 GB or more. - Authentication keys used in this service must be in the PGP format and generated using the RSA encryption algorithm. Note: Authentication keys in the .ecc format are not supported for PGP. For JCE, consider the following points: - You can encrypt the data for a single user only. Provide the public key to the service as a list of byte array, string, or truststoreAlias. If you provide truststoreAlias, you must also provide certAlias - The service supports a maximum data size that depends on the key size."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:generateHashValue",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#reference_nw1_zkj_qpb__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Returns the hashed value for a string input."
+      ],
+      "input_parameters": [
+        {
+          "name": "inputString",
+          "type": "String",
+          "description": [
+            "The string that you want to convert to a hash value."
+          ]
+        },
+        {
+          "name": "hashAlgorithm",
+          "type": "String",
+          "description": [
+            "Optional. The algorithm to generate the hash value. Select one of the following: - MD5 - SHA256 - SHA384 - SHA512 The default value is SHA256."
+          ]
+        },
+        {
+          "name": "saltValue",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. A random value that you can prefix to the input string before hashing. Note: To use a salt value in this service, run the pub.security:generateSalt service and map the generated salt value to this parameter."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "hashedValue",
+          "type": "String",
+          "description": [
+            "Hashed value of the input string."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether the inputString is successfully hashed or not. If successful, status is success . Otherwise, status contains failure along with an error message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use the pub.security:generateHashValue service to generate a hash value for any input string. For example, you can create a secure hashedValue for a user's password. Additionally, you can run the pub.security:generateSalt service to generate a salt value, which can be passed to the pub.security:generateHashValue service to generate a unique and stronger hashedValue, each time you run the pub.security:generateHashValue service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:generateSalt",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#reference_f1b_s3j_qpb__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Creates a salt value."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "saltValue",
+          "type": "byte[ ]",
+          "description": [
+            "Salt value to be used for hashing purposes."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether a salt value is generated or not. If successful, status is success . Otherwise, status contains failure along with an error message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use the saltValue output of this service as input to the pub.security:generateHashValue service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.ports:hostNamesSpec",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#reference_818645C92DD24F6E9F75635450460DAD__title__1",
+      "element_type": "specification",
+      "description": [
+        "WmPublic. Specification for a service that returns a list of IP addresses or hostnames in the CSV format."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "hostNames",
+          "type": "String",
+          "description": [
+            "Returns a list of IP addresses or hostnames in the CSV format, which can be allowed or denied IP access."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The service that returns a list of IP addresses or hostnames must use the specification as the service signature. For more information, see IBM webMethods Service Development Help . Alternatively, you can manually replicate the specification in the service signature."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:setKeyAndChain",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#Apub_security_setKeyAndChain__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.security.keystore:setKeyAndChain. Associates a key and certificate chain with the subsequent set of invoked services. Use this service to associate a key and certificate chain that is different from the default settings, and if your key and certificate information is located in files (rather than byte arrays)."
+      ],
+      "input_parameters": [
+        {
+          "name": "privKeyFile",
+          "type": "String",
+          "description": [
+            "Absolute (for example, D:\\certs\\cert1.der) or relative path of the file containing the private key. A relative path is the path relative to the directory from which the Integration Server has been started (for example, Integration Server_directory \\instances\\ instance_name \\config\\certs\\cert1.der)."
+          ]
+        },
+        {
+          "name": "certFiles",
+          "type": "String List",
+          "description": [
+            "of file names containing the certificates that comprise the certificate chain. The list should start with the user's certificate followed by (in order) intermediate certificates and the root CA certificate. Absolute or relative paths of the files can be specified."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.security:setKeyAndChainFromBytes",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#Apub_security_setKeyAndChainFromBytes__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Associates a key and certificate chain with the subsequent set of invoked services. Use this service to associate a key and certificate chain that is different from the default settings, and if your key and certificate information is located in byte arrays (rather than files)."
+      ],
+      "input_parameters": [
+        {
+          "name": "privKey",
+          "type": "Object",
+          "description": [
+            "A byte array containing the client's private key."
+          ]
+        },
+        {
+          "name": "certs",
+          "type": "Object List",
+          "description": [
+            "List of byte arrays containing the client's certificate chain. The list should start with the user's certificate followed by (in sequence) intermediate certificates and the root CA certificate."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To enable this service to work properly if you use the FTPS protocol, you must set the secure parameter to True in the pub.client:http and pub.client.ftp:login services. You can use pub.security:clearKeyAndChain with pub.security:setKeyAndChainFromBytes. See the Usage Notes for pub.security:clearKeyAndChain for more information about using the pub.security:setKeyAndChainFromBytes service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:sign",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#reference_C6832926AD6C4B0ABBE7BF977195C06F__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Adds a digital signature to data."
+      ],
+      "input_parameters": [
+        {
+          "name": "securityProvider",
+          "type": "String",
+          "description": [
+            "Optional. The type of security provider. The valid values are: - PGP (Pretty Good Privacy) - JCE-KBE (Java Cryptography Extension-Key Based Encryption) The default value is PGP."
+          ]
+        },
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "Data that you want to sign. The data must be in one of the following formats. If multiple input parameters are supplied for data , the service throws an exception stating that only one parameter must be passed."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. The string that you want to sign."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. The stream data that you want to sign."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The byte array that you want to sign."
+              ]
+            },
+            {
+              "name": "file",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the file that you want to sign. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional. The format in which the service returns the output. Set to: - bytes to return the output as a byte array. This is the default. - stream to return the output as a stream object. - string to return the output as a string."
+          ]
+        },
+        {
+          "name": "secretKey",
+          "type": "Document",
+          "description": [
+            "The secret key required to sign the data. For PGP, provide secretKeyBytes, secretKeyString, or secretKeyRingFile. If you provide secretKeyRingFile, you must also provide secretKeyAlias. Otherwise, the service throws an exception. For JCE-KBE, provide secretKeyBytes, secretKeyString, or keyStoreAlias. If you provide keyStoreAlias, you must provide keyAlias. Otherwise, the service throws an exception."
+          ],
+          "children": [
+            {
+              "name": "secretKeyBytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The secret key file in bytes. Note: Secret key files have a .asc extension for PGP."
+              ]
+            },
+            {
+              "name": "secretKeyString",
+              "type": "String",
+              "description": [
+                "Optional. The secret key as a string."
+              ]
+            },
+            {
+              "name": "secret​KeyRingFile",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the secret keyring file. The secret keyring file is a collection of secret keys with a unique key ID. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. This parameter is applicable only for PGP. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory. Note: Secret keyring files have a .skr extension."
+              ]
+            },
+            {
+              "name": "secretKeyAlias",
+              "type": "String",
+              "description": [
+                "Optional. The 64 bit (16 characters) key identifier of the secret key. Note: This parameter is required only when you use secretKeyRing​File."
+              ]
+            },
+            {
+              "name": "secretKey ​Passphrase",
+              "type": "String",
+              "description": [
+                "Password required to extract the private key from the secret key. This is the password provided while generating the secret key."
+              ]
+            },
+            {
+              "name": "keyStoreAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The keystore alias that contains the private key."
+              ]
+            },
+            {
+              "name": "keyAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The private key alias in the keystore specified by the keyStoreAlias parameter. Note: This parameter is required only when you use keyStoreAlias."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "signingAlgorithm",
+          "type": "String",
+          "description": [
+            "The signing algorithm to use. - For PGP, select one of the following: MD5 SHA256 SHA384 SHA512 The default value is SHA256 for PGP. - For JCE, select one of the following: RSA SHA256withRSA SHA512withRSA SHA3-256withRSA SHA3-384withRSA SHA3-512withRSA Note: If the FIPS (Federal Information Processing Standards) mode is enabled, this service does not support the MD5 signing algorithm. To enable FIPS 140-3 compliant mode, set the WM_ENABLE_FIPS environment variable to true and restart Integration Server for the changes to take effect. For more information, see Enabling FIPS 140-3 Mode. This is applicable only for PGP. Note: If the secret key for signing the data is of the DSA (Digital Signature Algorithm) key type, this service does not support the MD5 signing algorithm. This is applicable only for PGP."
+          ],
+          "references": [
+            {
+              "title": "Enabling FIPS 140-3 Mode",
+              "url": "../is_administrators_guide/ta-enable_fips_140-3_mode.html"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.OutputStream",
+          "description": [
+            "Conditional. Signed data as an output stream. Returned when the loadAs input parameter is set to stream ."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "Conditional. Signed data as bytes. Returned when the loadAs input parameter is set to bytes ."
+          ]
+        },
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Conditional. Signed data as a string in the ASCII-armored format. Returned when the loadAs input parameter is set to string ."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether the data is successfully signed or not. If successful, status is success . Otherwise, status contains failure along with an error message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For PGP, consider the following points: - The pub.security:sign service does not support a detached signature. - If Integration Server runs in the FIPS mode, a secret key of the DSA (Digital Signature Algorithm) key type used for signing the data is not supported. To enable FIPS 140-3-compliant mode, set the WM_ENABLE_FIPS environment variable to true and restart Integration Server for the changes to take effect. For more information, see FIPS 140-3 Compliance and Enabling FIPS 140-3 Mode. - Authentication keys used in this service must be in the PGP format and generated using the RSA encryption algorithm. Note: Authentication keys in the .ecc format are not supported."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:signAndEncrypt",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#reference_86B3E60E23E743FFA2919E7F6B30311A__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Adds a digital signature to data and then encrypts the data."
+      ],
+      "input_parameters": [
+        {
+          "name": "securityProvider",
+          "type": "String",
+          "description": [
+            "Optional. The type of security provider. The valid values are: - PGP (Pretty Good Privacy) - JCE-KBE (Java Cryptography Extension-Key Based Encryption) The default value is PGP."
+          ]
+        },
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "Data that you want to sign and encrypt. The data must be in one of the following formats. If multiple input parameters are supplied for data , the service throws an exception stating that only one parameter must be passed."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. The string that you want to sign and encrypt."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. The stream data that you want to sign and encrypt."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The byte array that you want to sign and encrypt."
+              ]
+            },
+            {
+              "name": "file",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the file that you want to sign and encrypt. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional. The format in which the service returns the output. Set to: - bytes to return the output as a byte array. This is the default. - stream to return the output as a stream object. - string to return the output as a string."
+          ]
+        },
+        {
+          "name": "publicKey",
+          "type": "Document",
+          "description": [
+            "The public key required to encrypt the data. For PGP, provide publicKeyBytes, publicKeyString, or publicKeyRingFile. If you provide publicKeyRingFile, you must also provide publicKeyAlias. Otherwise, the service throws an exception. For JCE-KBE, provide publicKeyBytes, publicKeyString, or truststoreAlias. If you provide truststoreAlias, you must also provide certAlias. Otherwise, the service throws an exception."
+          ],
+          "children": [
+            {
+              "name": "publicKeyBytes",
+              "type": "Object List",
+              "description": [
+                "Optional. One or more public key files as byte arrays for PGP. JCE supports only a single public key file. Note: Public key files have a .asc extension for PGP."
+              ]
+            },
+            {
+              "name": "publicKeyString",
+              "type": "String List",
+              "description": [
+                "Optional. One or more public keys as strings for PGP. JCE supports only a single public key string."
+              ]
+            },
+            {
+              "name": "public​KeyRingFile",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the public keyring file. The public keyring file is a collection of public keys with a unique key ID. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. This parameter is specific to PGP. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory. Note: Public keyring files have a .pkr extension for PGP."
+              ]
+            },
+            {
+              "name": "publicKeyAlias",
+              "type": "String List",
+              "description": [
+                "Optional. One or more public key aliases as strings. A public key alias is the 64-bit (16 characters) key identifier of a public key. Note: This parameter is required only when you use publicKeyRingFile."
+              ]
+            },
+            {
+              "name": "truststoreAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The alias for the truststore containing the public key and certificate."
+              ]
+            },
+            {
+              "name": "certAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The alias identifying a particular trusted certificate within a truststore. Note: This parameter is required only when you use truststoreAlias."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "encryptionAlgorithm",
+          "type": "String",
+          "description": [
+            "The encryption algorithm to use. - For PGP, select one of the following symmetric key encryption algorithms: AES_192 AES_256 BLOWFISH IDEA TRIPLE_DES TWOFISH The default value is AES_256. - For JCE, select RSA (asymmetric key encryption algorithm)."
+          ]
+        },
+        {
+          "name": "secretKey",
+          "type": "Document",
+          "description": [
+            "The secret key required to sign the data. For PGP, provide secretKeyBytes, secretKeyString, or secretKeyRingFile. If you provide secretKeyRingFile, you must also provide secretKeyAlias. Otherwise, the service throws an exception. For JCE-KBE, provide secretKeyBytes, secretKeyString, or keyStoreAlias. If you provide keyStoreAlias, you must provide keyAlias. Otherwise, the service throws an exception."
+          ],
+          "children": [
+            {
+              "name": "secretKeyBytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The secret key file in bytes. Note: Secret key files have a .asc extension for PGP."
+              ]
+            },
+            {
+              "name": "secretKeyString",
+              "type": "String",
+              "description": [
+                "Optional. The secret key as a string."
+              ]
+            },
+            {
+              "name": "secret​KeyRingFile",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the secret keyring file. The secret keyring file is a collection of secret keys with a unique key ID. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. This parameter is specific to PGP. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory. Note: Secret keyring files have a .skr extension for PGP."
+              ]
+            },
+            {
+              "name": "secretKeyAlias",
+              "type": "String",
+              "description": [
+                "Optional. The 64 bit (16 characters) key identifier of the secret key. Note: This parameter is required only when you use secretKeyRing​File."
+              ]
+            },
+            {
+              "name": "secretKey ​Passphrase",
+              "type": "String",
+              "description": [
+                "Password required to extract the private key from the secret key. This is the password provided while generating the secret key."
+              ]
+            },
+            {
+              "name": "keyStoreAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The keystore alias that contains the private key."
+              ]
+            },
+            {
+              "name": "keyAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The private key alias in the keystore specified by the keyStoreAlias parameter. Note: This parameter is required only when you use keyStoreAlias."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "signingAlgorithm",
+          "type": "String",
+          "description": [
+            "The signing algorithm to use. - For PGP, select one of the following: MD5 SHA256 SHA384 SHA512 The default value is SHA256 for PGP. - For JCE, select one of the following: RSA SHA256withRSA SHA512withRSA SHA3-256withRSA SHA3-384withRSA SHA3-512withRSA Note: If the FIPS (Federal Information Processing Standards) mode is enabled, this service does not support the MD5 signing algorithm. To enable FIPS 140-3 compliant mode, set the WM_ENABLE_FIPS environment variable to true and restart Integration Server for the changes to take effect. For more information, see Enabling FIPS 140-3 Mode. This is applicable only for PGP. Note: If the secret key for signing the data is of the DSA (Digital Signature Algorithm) key type, this service does not support the MD5 signing algorithm. This is applicable only for PGP."
+          ],
+          "references": [
+            {
+              "title": "Enabling FIPS 140-3 Mode",
+              "url": "../is_administrators_guide/ta-enable_fips_140-3_mode.html"
+            }
+          ]
+        },
+        {
+          "name": "cipher",
+          "type": "String",
+          "description": [
+            "Optional. Applies only to JCE. The cipher for encryption. Select one of the following: - RSA - RSA/ECB/PKCS1Padding - RSA/ECB/OAEPWithSHA-1AndMGF1Padding - RSA/ECB/OAEPWithSHA-256AndMGF1Padding - RSA/ECB/OAEPWithSHA-512AndMGF1Padding - RSA/ECB/OAEPPadding The default value is RSA."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.OutputStream",
+          "description": [
+            "Conditional. Signed and encrypted data as an output stream. Returned when the loadAs input parameter is set to stream ."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "Conditional. Signed and encrypted data as bytes. Returned when the loadAs input parameter is set to bytes ."
+          ]
+        },
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Conditional. Signed and encrypted data as a string in the ASCII-armored format. Returned when the loadAs input parameter is set to string ."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether the data is successfully signed and encrypted or not. If successful, status is success . Otherwise, status contains failure along with an error message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use the pub.security:signAndEncrypt service when an external system connected to Integration Server requires signed and encrypted data. The service accepts multiple public keys to encrypt the same data for many users. Prerequisites to use the pub.security:signAndEncrypt service: - Make sure that Integration Server has access to the external system's public key to encrypt data. - Generate a secret key for Integration Server to sign the data. Signing and encryption work as follows: 1. The service uses the secret key to sign the data. 2. The service then uses the external system's public key to encrypt the data. 3. The service returns the signed and encrypted data. For PGP, consider the following point: - To sign and encrypt the data for multiple users, provide your secret key and the users' public keys to the service. You can provide the public keys to the service as a list of byte arrays, strings, or a keyring file. If you provide a keyring file, you must also provide the public key aliases. - Authentication keys used in this service must be in the PGP format and generated using the RSA encryption algorithm. Note: Authentication keys in the .ecc format are not supported. For JCE, you can sign and encrypt the data for a single user only."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:userInfoSpec",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#id8328ad36-5275-4f81-8cc8-99fc918038b3__title__1",
+      "element_type": "specification",
+      "description": [
+        "WmPublic. Specification for the signature of a UserInfo service that performs custom processing based on the personally identifiable information in the OpenID Connect UserInfo token returned from the OpenID Provider."
+      ],
+      "input_parameters": [
+        {
+          "name": "userInfoClaims",
+          "type": "Document",
+          "description": [
+            "Optional. A document (IData) containing the claims from the UserInfo token returned by the OpenID Provider’s UserInfo Endpoint."
+          ]
+        },
+        {
+          "name": "userInfoError",
+          "type": "Document",
+          "description": [
+            "Optional. A document (IData) containing the error when the OpenID Provider returns an unsuccessful response. Integration Server redirects the User Agent to the OpenID Provider’s Authorization Endpoint to authenticate the End User. If the OpenID Provider responds to that redirection with an error, Integration Server will populate error with the error information."
+          ],
+          "children": [
+            {
+              "name": "statusCode",
+              "type": "String",
+              "description": [
+                "Optional. The HTTP status code returned by the OpenID Provider’s UserInfo Endpoint."
+              ]
+            },
+            {
+              "name": "errorType",
+              "type": "String",
+              "description": [
+                "The type of error returned by the OpenID Provider’s UserInfo Endpoint. The possible values are defined in section 4.1.2.1 of the OAuth 2.0 specification."
+              ]
+            },
+            {
+              "name": "errorDescription",
+              "type": "String",
+              "description": [
+                "Optional. A description of the error returned by the OpenID Provider’s UserInfo Endpoint."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "userInfoResponse",
+          "type": "Document",
+          "description": [
+            "A document (IData) for the result of the UserInfo service."
+          ],
+          "children": [
+            {
+              "name": "rejectRequest",
+              "type": "java.lang.Boolean",
+              "description": [
+                "Whether or not to reject the request. - If Integration Server runs in the FIPS mode, ensure to use FIPS-compliant keys. - True instructs Integration Server to reject the request. Integration Server does not access the requested resource in the original request from the User Agent. Processing of the request stops and a response is sent to the User Agent. Integration Server uses the contents of rejectRequest, statusCode, statusCode and responseEntity in the response. - False instructs Integration Server to accept the request. Integration Server continues processing of the request by selecting an OpenID Provider User and setting the user for the current session. Integration Server sends the User Agent an HTTP 302 response with a session cookie, redirecting the User Agent back to the originally requested resource."
+              ]
+            },
+            {
+              "name": "statusCode",
+              "type": "java.lang.Integer",
+              "description": [
+                "Conditional. HTTP status code to be returned in the response sent to the User Agent. statusCode is required when rejectRequest is set to false. If rejectRequest is true, statusCode is not returned to the User Agent."
+              ]
+            },
+            {
+              "name": "reasonPhrase",
+              "type": "String",
+              "description": [
+                "Conditional. HTTP reason phrase to be included in the response sent to the User Agent. reasonPhrase is optional when rejectRequest is set to false. If rejectRequest is true, reasonPhrase is not returned to the User Agent."
+              ]
+            },
+            {
+              "name": "responseHeaders",
+              "type": "Document List",
+              "description": [
+                "Conditional. A document list (IData []) containing the header fields to set in the response sent to the User Agent. responseHeaders is optional when rejectRequest is set to false. If rejectRequest is true, responseHeaders is not returned to the User Agent."
+              ],
+              "children": [
+                {
+                  "name": "fieldName",
+                  "type": "String",
+                  "description": [
+                    "Name of the header field to set."
+                  ]
+                },
+                {
+                  "name": "fieldValue",
+                  "type": "String",
+                  "description": [
+                    "Value of the header field to set."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "responseEntity",
+              "type": "String",
+              "description": [
+                "Conditional. Body of the response to be sent to the User Agent. responseEntity is optional when rejectRequest is set to false. If rejectRequest is true, responseEntity is not returned to the User Agent."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "A UserInfo service performs custom processing based on the personally identifiable information in the OpenID Connect UserInfo token returned from the OpenID Provider. The logic of the UserInfo service must determine whether to accept or reject the original resource request made by the User Agent. The pub.security:userInfoSpec must be used as the signature for any service used as a UserInfo service. If the UserInfo service does not use the pub.security:userInfoSpec specification as the service signature, Integration Server ignores the results of the UserInfo service and continues to process the request as if the UserInfo service had not been invoked. Integration Server can only reject a request using a UserInfo service if the UserInfo service is invoked synchronously. When registering the UserInfo service with the OpenID Provider, make sure to register the service as synchronous if you want to be able to reject a User Agent request based on the output of th UserInfo service. Integration Server populates userInfoClaims or error depending on the response from the OpenID Provider’s UserInfo Endpoint."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security:verify",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#reference_0F15FB6F07D643DAAD5AD97160B08DFD__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Verifies signed data."
+      ],
+      "input_parameters": [
+        {
+          "name": "securityProvider",
+          "type": "String",
+          "description": [
+            "Optional. The type of security provider. The valid values are: - PGP (Pretty Good Privacy) - JCE-KBE (Java Cryptography Extension-Key Based Encryption) The default value is PGP."
+          ]
+        },
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "Signed data that you want to verify. The data must be in one of the following formats. If multiple input parameters are supplied for data , the service throws an exception stating that only one parameter must be passed."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. The signed string that you want to verify."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. The signed stream data that you want to verify."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The signed byte array that you want to verify."
+              ]
+            },
+            {
+              "name": "file",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the signed file that you want to verify. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional. The format in which the service returns the output. Set to: - bytes to return the output as a byte array. This is the default. - stream to return the output as a stream object. - string to return the output as a string."
+          ]
+        },
+        {
+          "name": "publicKey",
+          "type": "Document",
+          "description": [
+            "The signer's public key required to verify the signed data. For PGP, provide publicKeyBytes, publicKeyString, or publicKeyRingFile. If you provide publicKeyRingFile, you must also provide publicKeyAlias. Otherwise, the service throws an exception. For JCE-KBE, provide publicKeyBytes, publicKeyString, or truststoreAlias. If you provide truststoreAlias, you must also provide certAlias. Otherwise, the service throws an exception."
+          ],
+          "children": [
+            {
+              "name": "publicKeyBytes",
+              "type": "Object List",
+              "description": [
+                "Optional. One or more public key files as byte arrays for PGP. JCE supports only a single public key file. Note: Public key files have a .asc extension for PGP."
+              ]
+            },
+            {
+              "name": "publicKeyString",
+              "type": "String List",
+              "description": [
+                "Optional. One or more public keys as strings for PGP. JCE supports only a single public key string."
+              ]
+            },
+            {
+              "name": "public​KeyRingFile",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the public keyring file. The public keyring file is a collection of public keys with a unique key ID. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. This parameter is specific to PGP. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory. Note: Public keyring files have a .pkr extension for PGP."
+              ]
+            },
+            {
+              "name": "publicKeyAlias",
+              "type": "String List",
+              "description": [
+                "Optional. One or more public key aliases as strings. A public key alias is the 64-bit (16 characters) key identifier of a public key. Note: This parameter is required only when you use publicKeyRingFile."
+              ]
+            },
+            {
+              "name": "truststoreAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The alias for the truststore containing the public key and certificate."
+              ]
+            },
+            {
+              "name": "certAlias",
+              "type": "String",
+              "description": [
+                "Optional. Applies only to JCE. The alias identifying a particular trusted certificate within a truststore. Note: This parameter is required only when you use truststoreAlias."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "signingAlgorithm",
+          "type": "String",
+          "description": [
+            "The signing algorithm to use. - For PGP, select one of the following: MD5 SHA256 SHA384 SHA512 The default value is SHA256 for PGP. - For JCE, select one of the following: RSA SHA256withRSA SHA512withRSA SHA3-256withRSA SHA3-384withRSA SHA3-512withRSA Note: If the FIPS (Federal Information Processing Standards) mode is enabled, this service does not support the MD5 signing algorithm. To enable FIPS 140-3 compliant mode, set the WM_ENABLE_FIPS environment variable to true and restart Integration Server for the changes to take effect. For more information, see Enabling FIPS 140-3 Mode. This is applicable only for PGP. Note: If the secret key for signing the data is of the DSA (Digital Signature Algorithm) key type, this service does not support the MD5 signing algorithm. This is applicable only for PGP."
+          ],
+          "references": [
+            {
+              "title": "Enabling FIPS 140-3 Mode",
+              "url": "../is_administrators_guide/ta-enable_fips_140-3_mode.html"
+            }
+          ]
+        },
+        {
+          "name": "actualData",
+          "type": "Document",
+          "description": [
+            "Applies only to JCE. The original data that was signed and needs to be verified against the signature to confirm that it hasn't been tampered with. The actualData parameter must be in one of the specified formats. If multiple input parameters are provided for actualData , the service throws an exception indicating that only one parameter should be passed."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. The original string that you want to verify."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. The original stream data that you want to verify."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The original byte array that you want to verify."
+              ]
+            },
+            {
+              "name": "file",
+              "type": "String",
+              "description": [
+                "Optional. The absolute or relative path of the original file that you want to verify. If the file is outside the Integration Server or Microservices Runtime installation directory, provide the absolute path. Otherwise, place the file in your Integration Server or Microservices Runtime working directory. The About page in Integration Server Administrator and Microservices Runtime Administrator displays the working directory. The watt.server.homeDir server configuration parameter also specifies the working directory."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.OutputStream",
+          "description": [
+            "Conditional. Verified data as an output stream. Returned when the loadAs input parameter is set to stream ."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "Conditional. Verified data in bytes. Returned when the loadAs input parameter is set to bytes ."
+          ]
+        },
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Conditional. Verified data as a string. Returned when the loadAs input parameter is set to string ."
+          ]
+        },
+        {
+          "name": "verified",
+          "type": "Boolean",
+          "description": [
+            "Indicates whether the signature associated with the data is valid or not. A value of: - true indicates that the signed data is verified. - false indicates that the signed data is not verified."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether the data is successfully verified or not. If successful, status is success . Otherwise, status contains failure along with an error message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To verify signed data, Integration Server must have access to the signer's public key. For PGP, consider the following points: - To verify the data for multiple users, provide the users' public keys to the service as a list of byte arrays, strings, or a keyring file. If you provide a keyring file, you must also provide the public key aliases. - The pub.security:verify service cannot verify a detached signature. - Authentication keys used in this service must be in the PGP format and generated using the RSA encryption algorithm.Note: Authentication keys in the .ecc format are not supported. For JCE, you can verify the data for single user only."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.enterpriseGateway:alertSpec",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#id127U908045Z__title__1",
+      "element_type": "specification",
+      "description": [
+        "WmPublic. Specification for flow services used to send alerts about violations of IBM webMethods Enterprise Gateway rules. Use this specification as the signature of the flow service that Integration Server invokes when a request violates an Enterprise Gateway rule. For more information about IBM webMethods Enterprise Gateway, see IBM webMethods Integration Server Administrator’s Guide ."
+      ],
+      "input_parameters": [
+        {
+          "name": "ruleName",
+          "type": "String",
+          "description": [
+            "The Enterprise Gateway rule that the request violates."
+          ]
+        },
+        {
+          "name": "alertInfo",
+          "type": "Document List",
+          "description": [
+            "Information for Enterprise Gateway alert notification."
+          ],
+          "children": [
+            {
+              "name": "alertAction",
+              "type": "String",
+              "description": [
+                "The action that the Integration Server functioning as the Enterprise Gateway Server takes when a request violates an Enterprise Gateway rule. The action will have one of these values: - DENY if the server denies the request and issues alerts as configured. - ALERT if the server allows the request and issues alerts as configured."
+              ]
+            },
+            {
+              "name": "requestType",
+              "type": "String",
+              "description": [
+                "The specific request type to which the server applies the Enterprise Gateway rule. The values are: - ALL if the rule applies to all requests. - SOAP if the rule applies to SOAP requests only. - REST if the rule applies to REST requests only. - INVOKE if the rule applies to INVOKE requests only."
+              ]
+            },
+            {
+              "name": "filterName",
+              "type": "String",
+              "description": [
+                "The filter that the request satisfies. The values are: - DoSFilter if the request satisfies the Denial of Service settings specified for Enterprise Gateway rules. - MsgSizeLimitFilter if the request satisfies the Message Size Limit filter in the rule. - OAuthFilter if the request satisfies the OAuth filter in the rule. - mobileAppProtectionFilter if the request satisfies the Mobile Application Protection filter in the rule. - None if the request violates a rule that has no filters."
+              ]
+            },
+            {
+              "name": "message",
+              "type": "String",
+              "description": [
+                "The details about the filter condition that the request satisfies."
+              ]
+            },
+            {
+              "name": "requestUser",
+              "type": "String",
+              "description": [
+                "The user ID that sent the request that violates the Enterprise Gateway rule. This field is empty if authentication is disabled on Enterprise Gateway Server . For more information about authentication on Enterprise Gateway Server , see IBM webMethods Integration Server Administrator’s Guide ."
+              ]
+            },
+            {
+              "name": "requestHost",
+              "type": "String",
+              "description": [
+                "The host name or IP address of the client that sent the request."
+              ]
+            },
+            {
+              "name": "requestTime",
+              "type": "String",
+              "description": [
+                "Date and time at which the request reached Enterprise Gateway Server . This parameter is in the format yyyy-MM-dd HH:mm:ss z , where z indicates the time zone."
+              ]
+            },
+            {
+              "name": "resourcePath",
+              "type": "String",
+              "description": [
+                "The path of the resource to be accessed by the request."
+              ]
+            },
+            {
+              "name": "serverHost",
+              "type": "String",
+              "description": [
+                "The host name or IP address of the Enterprise Gateway Server that received the client request."
+              ]
+            },
+            {
+              "name": "serverPort",
+              "type": "String",
+              "description": [
+                "The number of the Enterprise Gateway Server port that received the client request."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.security.enterpriseGateway:customFilterSpec",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#idc91e3d2f-93c5-4e01-82d0-41affd7ee040__title__1",
+      "element_type": "specification",
+      "description": [
+        "WmPublic. Specification for services that can be invoked by the custom filter in Enterprise Gateway rules. Using the service that has the pub.security.enterpriseGateway:customFilterSpec specification as its signature, you can extract the HTTP headers and payload from a request and act on it as per your business requirements. Upon processing the headers, you can choose to forward the request to the Internal Server or deny the request and return an error message to the user. For more information about IBM webMethods Enterprise Gateway, see IBM webMethods Integration Server Administrator’s Guide ."
+      ],
+      "input_parameters": [
+        {
+          "name": "requestHeaders",
+          "type": "Document",
+          "description": [
+            "IData object containing the standard HTTP headers in the request along with any custom headers that are present in the request. The following are the standard headers that will be extracted from the request: User-Agent , Accept , Host , Authorization , Cookie , Content-Type , Accept-Language , and Content-Length ."
+          ]
+        },
+        {
+          "name": "payload",
+          "type": "Object",
+          "description": [
+            "containing the payload in the request."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "forwardRequest",
+          "type": "java.lang.Boolean",
+          "description": [
+            "Flag indicating whether Enterprise Gateway Server forwards the request to the Internal Server. A value of: - True indicates that the request will be forwarded to the Internal Server. - False indicates that the request will be denied and an error message is returned to the user."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.keystore.pkcs7:sign",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A91878__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Creates a PKCS7 signed Data object."
+      ],
+      "input_parameters": [
+        {
+          "name": "signerInfo",
+          "type": "Document List",
+          "description": [
+            "Information about a single signer of the signed data object. Each signerInfo requires either a certificate chain and a private key or a key alias that references them."
+          ],
+          "children": [
+            {
+              "name": "keyStoreAlias",
+              "type": "String",
+              "description": [
+                "Name of the keystore alias."
+              ]
+            },
+            {
+              "name": "keyAlias",
+              "type": "String",
+              "description": [
+                "Alias of the private key."
+              ]
+            },
+            {
+              "name": "hashAlgorithm",
+              "type": "String",
+              "description": [
+                "The algorithm to use when computing the digest of the provided data. Specify: - MD5 (the default) - SHA-1 - SHA-256 - SHA-384 - SHA-512"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "data",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. Data in the form of a byte array to be digitally signed. Note: If both data and dataAsStream are provided, dataAsStream takes precedence."
+          ]
+        },
+        {
+          "name": "dataAsStream",
+          "description": [
+            "java.io.InputStream Optional. Data in the form of an input stream to be digitally signed. Note: If both data and dataAsStream are provided, dataAsStream takes precedence."
+          ]
+        },
+        {
+          "name": "detachedSignature",
+          "type": "String",
+          "description": [
+            "Flag specifying whether to generate a detached signature. A detached signature does not include the data that was signed. Set to: - true to generate a detached signature. - false to generate an implicit signature (one that includes the signed data). This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "signature",
+          "type": "byte[ ]",
+          "description": [
+            "Conditional. Signature generated in the form of a byte array from the supplied data. This is a DER-encoded representation of the SignedData object as specified in PKCS#7. signature is returned when the input parameter data is provided."
+          ]
+        },
+        {
+          "name": "signatureAsStream",
+          "description": [
+            "java.io.OutputStream Conditional. Signature generated in the form of an output stream from the supplied data. signatureAsStream is returned when the input parameter dataAsStream is provided."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service supersedes pub.security.pkcs7:sign, which is deprecated. For information about using aliases for keystores, truststores, and private keys, see Creating a Keystore and Truststore ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.keystore:getCertificate",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A80613__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Returns the trusted certificate, stored in a truststore, that corresponds to the certificate's alias."
+      ],
+      "input_parameters": [
+        {
+          "name": "trustStoreAlias",
+          "type": "String",
+          "description": [
+            "Alias for the truststore containing the certificate."
+          ]
+        },
+        {
+          "name": "certAlias",
+          "type": "String",
+          "description": [
+            "Alias identifying a particular trusted certificate within a truststore."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "certificate",
+          "type": "byte[ ]",
+          "description": [
+            "A byte array containing the trusted certificate."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For information about using aliases for keystores, truststores, and private keys, see Creating a Keystore and Truststore ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.keystore:getKeyAndChain",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A89774__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Returns a private key and its associated certificate chain from a designated keystore."
+      ],
+      "input_parameters": [
+        {
+          "name": "keyStoreAlias",
+          "type": "String",
+          "description": [
+            "Alias for the keystore that contains the private key of interest and its certificate."
+          ]
+        },
+        {
+          "name": "keyAlias",
+          "type": "String",
+          "description": [
+            "Alias for the private key stored in the specified keystore."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "privateKey",
+          "type": "java.security.PrivateKey",
+          "description": [
+            "Object representing the private key."
+          ]
+        },
+        {
+          "name": "certChain",
+          "type": "byte[ ] [ ] List",
+          "description": [
+            "List of byte arrays representing the certificate chain associated with the private key."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For information about using aliases for keystores, truststores, and private keys, see Creating a Keystore and Truststore ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.keystore:getTrustedCertificates",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A95392__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Returns the trusted certificates located in a specified truststore."
+      ],
+      "input_parameters": [
+        {
+          "name": "trustStoreAlias",
+          "type": "String",
+          "description": [
+            "Name of the truststore alias."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "certificates",
+          "type": "byte[ ] [ ]",
+          "description": [
+            "Trusted certificates, as a list of byte arrays."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For information about using aliases for keystores, truststores, and private keys, see Creating a Keystore and Truststore ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.keystore:setKeyAndChain",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A49209__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Associates a key and certificate chain with the subsequent set of invoked services. Use this service to associate a key and certificate chain that is different from the default settings, and if your key and certificate information is stored in a keystore file."
+      ],
+      "input_parameters": [
+        {
+          "name": "keyStoreAlias",
+          "type": "String",
+          "description": [
+            "Name of the keystore alias."
+          ]
+        },
+        {
+          "name": "keyAlias",
+          "type": "String",
+          "description": [
+            "Alias of the private key located in the keystore."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service replaces pub.security:setKeyAndChain, which is deprecated. For information about using aliases for keystores, truststores, and private keys, see Creating a Keystore and Truststore ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.security:clearKeyAndChain"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.outboundPasswords:getPassword",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A38934__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Retrieves a password from the password store for a given key."
+      ],
+      "input_parameters": [
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Key of the password entry to be retrieved."
+          ]
+        },
+        {
+          "name": "isInternal",
+          "type": "String",
+          "description": [
+            "\"true\" if this is an internal password; \"false\" if it is public. By default, this is \"false\". If you specify incorrectly whether the password is internal or public, the retrieve operation will fail. (For more information about internal and public passwords, see Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide. .)"
+          ],
+          "references": [
+            {
+              "title": "Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide.",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A17500__A43167"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "WmSecureString",
+          "description": [
+            "Value of the retrieved password."
+          ]
+        },
+        {
+          "name": "result",
+          "type": "String",
+          "description": [
+            "\"true\" if the password value was successfully retrieved; \"false\" otherwise."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "\"successful\" or reason for failure."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This is the basic process a flow service should follow to retrieve an outbound password: 1. Call pub.security.outboundPasswords:getPassword with the key to the password to be retrieved. If the key is unknown, you can call pub.security.outboundPasswords:listKeys to retrieve a list of keys currently in the outbound password store. The pub.security.outboundPasswords:getPassword service returns a WmSecureString object containing the retrieved password. 2. Call pub.security.util:convertSecureString to convert the password to a usable format. The password can then be passed to the authenticating mechanism of the secure resource. 3. When done accessing the secure resource, call pub.security.util:destroySecureString to remove the password from memory."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.outboundPasswords:listKeys",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A70711__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Lists the keys in the password store."
+      ],
+      "input_parameters": [
+        {
+          "name": "isInternal",
+          "type": "String",
+          "description": [
+            "\"true\" if you want keys for internal passwords; \"false\" if you want keys for public passwords. By default this is \"false\". (For more information about internal and public passwords, see Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide. .)"
+          ],
+          "references": [
+            {
+              "title": "Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide.",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A17500__A43167"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "key",
+          "type": "IData List",
+          "description": [
+            "List of keys in the password store."
+          ]
+        },
+        {
+          "name": "result",
+          "type": "String",
+          "description": [
+            "\"true\" if the list of keys was successfully retrieved; \"false\" otherwise."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.outboundPasswords:setPassword",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A17500__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Stores a key and password in the password store."
+      ],
+      "input_parameters": [
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Key to be associated with the password entry."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "WmSecureString",
+          "description": [
+            "Password to be stored."
+          ]
+        },
+        {
+          "name": "isInternal",
+          "type": "String",
+          "description": [
+            "\"true\" if this should be saved as an internal password; \"false\" if it should be saved as a public password. Default is \"false\". (See Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide. for more information.)"
+          ],
+          "references": [
+            {
+              "title": "Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide.",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A17500__A43167"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "result",
+          "type": "String",
+          "description": [
+            "\"true\" if password was successfully stored; \"false\" otherwise."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "\"successful\" or reason for failure."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This is the basic process a flow service should follow to store an outbound password: 1. Call pub.security.util:createSecureString to create a WmSecureString object containing the password to be stored. For security reasons, the flow service should be run manually requiring an authorized person to type the password to be stored. This will eliminate the need to save the password on disk in an unencrypted format. 2. Call pub.security.outboundPasswords:setPassword to save the password in encrypted form in the outbound password store. The pub.security.outboundPasswords:setPassword service requires a key to be supplied which is basically a key to the password. This key must be saved in some way; any flow service wishing to use the password to access a secure resource will need to supply the key to retrieve the password from the outbound password store. 3. Once the password is successfully stored, call pub.security.util:destroySecureString to remove the password from memory."
+          ]
+        },
+        {
+          "internal_and_public_passwords": [
+            "Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.outboundPasswords:removePassword",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A59441__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Removes a password from the password store for a given key."
+      ],
+      "input_parameters": [
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Key of the password to be removed."
+          ]
+        },
+        {
+          "name": "isInternal",
+          "type": "String",
+          "description": [
+            "\"true\" if this is an internal password; \"false\" if it is public. By default, this is \"false\". If you specify incorrectly whether the password is internal or public, the remove operation will fail. (For more information about internal and public passwords, see Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide. .)"
+          ],
+          "references": [
+            {
+              "title": "Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide.",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A17500__A43167"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "result",
+          "type": "String",
+          "description": [
+            "\"true\" if the password was successfully removed; \"false\" otherwise."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "\"successful\" or reason for failure."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.outboundPasswords:updatePassword",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A54267__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Changes the password value for a key already in the password store."
+      ],
+      "input_parameters": [
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Key of the password to be updated."
+          ]
+        },
+        {
+          "name": "newPassword",
+          "type": "WmSecureString",
+          "description": [
+            "New password value for the key."
+          ]
+        },
+        {
+          "name": "isInternal",
+          "type": "String",
+          "description": [
+            "\"true\" if this is an internal password; \"false\" if it is public. By default, this is \"false\". If you specify incorrectly whether the password is internal or public, the update operation will fail. (For more information about internal and public passwords, see Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide. .)"
+          ],
+          "references": [
+            {
+              "title": "Internal and Public Passwords Internal passwords are passwords for use by the Integration Server itself to access secure resources (e.g., remote Integration Servers, JDBC connection pools, LDAP servers, etc.). Internal passwords are managed using the Integration Server Administrator and are stored in the outbound password store. Flow services are also allowed to store passwords in the outbound password store. However, by default, passwords stored by a flow service are considered \"public,\" as opposed to internal. This distinction allows flow services to use the outbound password store as a secure mechanism for storing and retrieving passwords, but protects the Integration Server's internal passwords. When calling any of the pub.security.outboundPasswords services (i.e. setPassword, getPassword, listKeys, removePassword, and updatePassword) the isInternal input parameter indicates whether the service is working with internal or public passwords. Note that even if this parameter is set to \"true\", you cannot access internal passwords if the Integration Server is configured to deny access to internal passwords. Access to internal passwords is controlled by the watt.security.ope.AllowInternalPasswordAccess configuration parameter on the Integration Server; for more information see webMethods Integration Server Administrator’s Guide.",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A17500__A43167"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "result",
+          "type": "String",
+          "description": [
+            "\"true\" if the password value was successfully changed; \"false\" otherwise."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "\"successful\" or reason for failure."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.pkcs7:sign",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#Apub_security_pkcs7_sign__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.security.keystore.pkcs7:sign. Creates a PKCS7 SignedData object. This service enables multiple entities to sign the specified data. Each signerInfo block contained in the resulting signature contains two authenticated attributes: the content type and a timestamp."
+      ],
+      "input_parameters": [
+        {
+          "name": "signerInfo",
+          "type": "Document List",
+          "description": [
+            "Information about a single signer of the signed data object. Each signerInfo requires either a certificate chain and a private key or a key alias that references them."
+          ],
+          "children": [
+            {
+              "name": "certChain",
+              "type": "java.security.cert.X509Certificate[ ] or byte[ ][ ]",
+              "description": [
+                "Certificate chain of the signer. The subject that is performing the signature should be the first certificate in this chain, while the root Certifying Authority should be the last. The key provided should correspond to the public key contained in the first certificate of the chain."
+              ]
+            },
+            {
+              "name": "key",
+              "type": "java.security.PrivateKey or byte[ ]",
+              "description": [
+                "Private key that will be used to digitally sign the data. The private key can be any asymmetric encryption key that is supported by the IBM webMethods Integration Server (for example, DSA or RSA)."
+              ]
+            },
+            {
+              "name": "keyAlias",
+              "type": "String",
+              "description": [
+                "Alias of the certificate chain and private key in the key store. This key is not currently used."
+              ]
+            },
+            {
+              "name": "hashAlgorithm",
+              "type": "String",
+              "description": [
+                "The algorithm to use when computing the digest of the provided data (SHA-1 or MD5). The default value is MD5 ."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "data",
+          "type": "byte[ ]",
+          "description": [
+            "Data to be digitally signed."
+          ]
+        },
+        {
+          "name": "detachedSignature",
+          "type": "String",
+          "description": [
+            "Flag specifying whether to generate a detached signature. A detached signature does not include the data that was signed. Set to: - true to generate a detached signature. - false to generate an implicit signature (one that includes the signed data). This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "signature",
+          "type": "byte[ ]",
+          "description": [
+            "Signature generated from the supplied data. This is a DER-encoded representation of the SignedData object as specified in PKCS#7."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is superseded by pub.security.keystore.pkcs7:sign."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.pkcs7:verify",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#Apub_security_pkcs7_verify__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Processes a digital signature to guarantee that the data associated with the signature has not been modified."
+      ],
+      "input_parameters": [
+        {
+          "name": "signature",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. Signature to use to determine whether the signed data is intact (a DER-encoded representation of the SignedData object as specified in PKCS#7) where the signature is in the form of a byte array. If you are processing a detached signature, pass the signature in signature . If you are processing an implicit signature, pass the entire signed message in signature . Note: If both signature and signatureAsStream are provided, signatureAsStream takes precedence."
+          ]
+        },
+        {
+          "name": "signatureAsStream",
+          "description": [
+            "java.io.InputStream Optional. Signature to use to determine whether the signed data is intact where the signature is in the form of an input stream. Note: If both signature and signatureAsStream are provided, signatureAsStream takes precedence."
+          ]
+        },
+        {
+          "name": "data",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. Data in the form of a byte array that was signed. If you are processing a detached signature, you must supply data . If you are only processing an implicitly signed data as a byte array, you do not need to supply data because both the data and the signature reside in signature . If you are processing a detached signature and an implicitly signed data as a byte array, you must supply data . Note: If both data and dataAsStream are provided, dataAsStream takes precedence."
+          ]
+        },
+        {
+          "name": "dataAsStream",
+          "description": [
+            "java.io.InputStream Optional. Data in the form of an input stream that was signed. If you are processing a detached signature, you must supply dataAsStream . If you are only processing an implicitly signed data as an input stream, you do not need to supply dataAsStream because both the data and the signature reside in signatureAsStream . If you are processing a detached signature and an implicitly signed data as an input stream, you must supply dataAsStream . Note: If both data and dataAsStream are provided, dataAsStream takes precedence."
+          ]
+        },
+        {
+          "name": "detachedSignature",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether the message has a detached signature. Set to: - true when the message has a detached signature. - false when the message has an implicit signature. This is the default. Note: If detachedSignature is true and signature is provided, then data should be provided. If detachedSignature is true and signatureAsStream is provided, then dataAsStream should be provided."
+          ]
+        },
+        {
+          "name": "signerCertChain",
+          "type": "byte[ ][ ]",
+          "description": [
+            "Optional. Certificate chains of the parties that signed the message. Note: If the signers included the certificate chain with the digital signature, you do not need to supply signerCertChain."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "content",
+          "type": "byte[ ]",
+          "description": [
+            "Conditional. The data (for example, the document that was originally signed) extracted in the form of a byte array from an implicit signature. If you are verifying a detached signature, content is not returned. Note: The extracted data is returned in content even if signature verification fails. content is returned when the input parameter data is provided."
+          ]
+        },
+        {
+          "name": "contentAsStream",
+          "description": [
+            "java.io.OutputStream Conditional. The data extracted in the form of an output stream from an implicit signature. contentAsStream is returned when the input parameter dataAsStream is provided."
+          ]
+        },
+        {
+          "name": "signerInfo",
+          "type": "Document List",
+          "description": [
+            "Information about the signers. Each document in the list provides the following information about a single signer:"
+          ],
+          "children": [
+            {
+              "name": "certChain",
+              "type": "java.security.cert.X509Certificate[ ]",
+              "description": [
+                "Certificate chain of the signer. The chain will appear in hierarchical order, starting with the signer's X.509 certificate in element 0."
+              ]
+            },
+            {
+              "name": "timeStamp",
+              "type": "java.util.Date",
+              "description": [
+                "Time at which the signer signed the data."
+              ]
+            },
+            {
+              "name": "trusted",
+              "type": "String",
+              "description": [
+                "Flag indicating whether the certificate chain presented by the signer is trusted. A value of: - true indicates that the chain is trusted. - false indicates that the chain is not trusted."
+              ]
+            },
+            {
+              "name": "status",
+              "type": "String",
+              "description": [
+                "Flag indicating whether the signatures were successfully verified. If successful, status contains verified . If the signatures were not successfully verified, status contains an error message."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.util:convertSecureString",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A70559__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Returns a WmSecureString in Java String, byte array, or character array format."
+      ],
+      "input_parameters": [
+        {
+          "name": "secureString",
+          "type": "WmSecureString",
+          "description": [
+            "to be converted."
+          ]
+        },
+        {
+          "name": "returnAs",
+          "type": "String",
+          "description": [
+            "Format into which the WmSecureString is to be converted. Valid options are byte[], char[], and Java String. If a value for this parameter is not specified, the default is to convert the WmSecureString to a String."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "The WmSecureString converted to a Java String."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "The WmSecureString converted to a native Java byte array."
+          ]
+        },
+        {
+          "name": "chars",
+          "type": "char[ ]",
+          "description": [
+            "The WmSecureString converted to a native Java character array."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.util:createMessageDigest",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#Apub_security_util_createmsgDigest__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Generates a message digest for a given message."
+      ],
+      "input_parameters": [
+        {
+          "name": "algorithm",
+          "type": "String",
+          "description": [
+            "Name of the algorithm that you want to use to compute the message digest. Must be one of the following: MD5, SHA-1, SHA-256, SHA-384, or SHA-512 ."
+          ]
+        },
+        {
+          "name": "input",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. Message for which you want the digest generated where the message is in the form of a byte array. Note: If both input and inputAsStream are provided, inputAsStream takes precedence."
+          ]
+        },
+        {
+          "name": "inputAsStream",
+          "description": [
+            "java.io.InputStream Optional. Message for which you want to generate a message digest where the message is in the form of an input stream. Note: If both input and inputAsStream are provided, inputAsStream takes precedence."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "output",
+          "type": "byte[ ]",
+          "description": [
+            "Conditional. Computed digest in the form of a byte array. output is returned when the input parameter input is provided."
+          ]
+        },
+        {
+          "name": "outputAsStream",
+          "description": [
+            "OutputStream Conditional. Computed digest in the form of an output stream. outputAsStream is returned when the input parameter inputAsStream is provided."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.util:createSecureString",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A54051__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Creates a WmSecureString object from either a Java String, byte array, or character array. WmSecureString is a mutable alternative to Java String. It allows the characters in the string to be explicitly removed from memory. Any password you wish to store in the Integration Server's outbound password store must be converted to a WmSecureString."
+      ],
+      "input_parameters": [
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Java String to made into a WmSecureString."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "Byte array to be made into a WmSecureString."
+          ]
+        },
+        {
+          "name": "chars",
+          "type": "char[ ]",
+          "description": [
+            "Character array to be made into a WmSecureString."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "If a byte array is supplied as an input parameter, encoding specifies the Java encoding of the byte array. This may be any encoding supported by Java String. By default, if no encoding is specified, then the default JVM encoding is used."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "secureString",
+          "type": "WmSecureString",
+          "description": [
+            "created from the supplied input parameters."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Only one of the input parameters (i.e. string, bytes, or chars) may be specified. If more than one is specified, an exception will be thrown. An exception is also thrown if none of these is specified."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.util:destroySecureString",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A45883__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Destroys a WmSecureString such that it no longer resides in memory and is removed from the pipeline."
+      ],
+      "input_parameters": [
+        {
+          "name": "secureString",
+          "type": "WmSecureString",
+          "description": [
+            "to be destroyed."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.security.util:getCertificateInfo",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#Apub_security_util_getCertInfo__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Retrieves information such as serial number, issuer, and expiration date from a digital certificate."
+      ],
+      "input_parameters": [
+        {
+          "name": "certificate",
+          "type": "byte[]",
+          "description": [
+            "java.security.cert.X509Certificate The certificate whose information you want to retrieve."
+          ]
+        },
+        {
+          "name": "dateFormat",
+          "type": "String",
+          "description": [
+            "Optional. The date format to use for the date returned by the notBefore and notAfter fields in the validity output parameter. The value of dateFormat must be a pattern used by java.text.SimpleDateFormat , for example: MM/dd/yyyy By default, thepub.security.util:getCertificateInfo service uses a preset date format that returns only the last two digits of the certificate expiration year. This can lead can lead to ambiguity as a certificate that expires in 2109 returns an expiration year of 09, which some systems might treat as 2009."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "info",
+          "type": "Document",
+          "description": [
+            "Information from the certificate."
+          ],
+          "children": [
+            {
+              "name": "version",
+              "type": "Object",
+              "description": [
+                "X509 certificate version number."
+              ]
+            },
+            {
+              "name": "serialNumber",
+              "type": "String",
+              "description": [
+                "Serial number of the certificate."
+              ]
+            },
+            {
+              "name": "signature",
+              "type": "String",
+              "description": [
+                "Signature algorithm used by the issuer to sign this certificate."
+              ]
+            },
+            {
+              "name": "issuer",
+              "type": "Document",
+              "description": [
+                "Detailed information about the CA that signed the certificate, such as name, location, and e-mail address."
+              ]
+            },
+            {
+              "name": "validity",
+              "type": "Document",
+              "description": [
+                "The time period over which the certificate is valid."
+              ],
+              "children": [
+                {
+                  "name": "notBefore",
+                  "type": "String",
+                  "description": [
+                    "First date on which this certificate is valid (for example, 3/15/00 3:36PM)."
+                  ]
+                },
+                {
+                  "name": "notAfter",
+                  "type": "String",
+                  "description": [
+                    "Last date on which this certificate is valid (for example, 3/15/00 3:36PM)."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "subject",
+              "type": "Document",
+              "description": [
+                "Detailed information about the owner of the certificate, such as name, location, and mail address."
+              ]
+            },
+            {
+              "name": "subjectPublicKeyAlgorithm",
+              "type": "String",
+              "description": [
+                "Encryption algorithm with which the certificate's key is designed to be used (for example, RSA or DSA)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.util:loadPKCS7CertChain",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#Apub_security_util_loadCertChain__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Converts a certificate chain that is in PKCS #7 format to a list of byte arrays."
+      ],
+      "input_parameters": [
+        {
+          "name": "certificateChain",
+          "type": "byte[ ]",
+          "description": [
+            "The certificate chain in PKCS #7 format."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "certificates",
+          "type": "byte[ ] [ ] List",
+          "description": [
+            "List of byte arrays in which each byte[ ] in the list contains a certificate from certificateChain ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.xml:decryptXML",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A34643__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Decrypts the encrypted XML, and returns the XML as either a string or stream object."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmldata",
+          "type": "String",
+          "description": [
+            "Optional. Encrypted XML that needs to be decrypted as plain text."
+          ]
+        },
+        {
+          "name": "xmlStream",
+          "type": "InputStream",
+          "description": [
+            "Optional. Encrypted XML in the form of an input stream. Note: If both xmldata and xmlStream are provided, xmlStream takes precedence; Integration Server uses the xmlStream value and returns only decryptedXMLStream."
+          ]
+        },
+        {
+          "name": "keyStoreAlias",
+          "type": "String",
+          "description": [
+            "Optional. Alias of the keystore that contains the private key used for decryption."
+          ]
+        },
+        {
+          "name": "keyAlias",
+          "type": "String",
+          "description": [
+            "Optional. Alias of the private key, contained in the keystore specified by the keyStoreAlias parameter, that is used for decryption."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the encoding to use if the encoding cannot be extracted from the XML. If encoding is not specified in the XML document or in the encoding parameter, Integration Server uses UTF-8. The encoding value must be a valid IANA encoding."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "decryptedXMLData",
+          "type": "String",
+          "description": [
+            "Conditional. Decrypted XML data. decryptedXMLData is returned when the input parameter xmldata is provided."
+          ]
+        },
+        {
+          "name": "decryptedXMLStream",
+          "type": "Object",
+          "description": [
+            "Conditional. A decrypted XML OutputStream object. decryptedXMLStream is returned when the input parameter xmlStream is provided."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "There are several prerequisites to using pub.security.xml:decryptXML: - Certificates must be configured for Integration Server and the client with which it is exchanging secure XML. - The sending, encrypting client must have access to Integration Server's public key before the document exchange can occur. - Integration Server stores its certificates in keystores and truststores. You must configure a keystore and truststore for Integration Server before using the XML encryption services. You access the public and private keys for Integration Server through aliases. For information about Integration Server keystores and truststores, refer to IBM webMethods Integration Server Administrator’s Guide . The pub.security.xml:decryptXML service works as follows: 1. The external system sends the XML document encrypted with the Integration Server's public key. 2. Integration Server receives the document and passes it to the XML service. 3. Integration Server uses the private key member of the key pair to decrypt the XML. 4. The decrypted XML is returned from the service. If both xmldata and xmlStream are provided, xmlStream takes precedence; Integration Server uses the xmlStream value and returns only decryptedXMLStream. keyAlias and keyStoreAlias should either both be provided or both be absent from the input. If no value is provided for these parameters, Integration Server uses the private key/certificate specified for the Decryption Key. If no value is specified for Decryption Key, Integration Server uses the SSL Key. For information about configuring the Decryption Key and SSL Key keystore aliases, refer to IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.xml:encryptXML",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A53501__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Encrypt an XML document or node in an XML document."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmldata",
+          "type": "String",
+          "description": [
+            "Optional. The XML to be encrypted."
+          ]
+        },
+        {
+          "name": "xmlStream",
+          "type": "InputStream",
+          "description": [
+            "Optional. Input stream to the XML that needs to be encrypted. Note: If both xmldata and xmlStream are provided, xmlStream takes precedence."
+          ]
+        },
+        {
+          "name": "nodeSelectors",
+          "type": "String List",
+          "description": [
+            "XPaths to the node to be encrypted. If the value for this parameter is left empty, no XML will be encrypted."
+          ]
+        },
+        {
+          "name": "nsDecls",
+          "type": "Document",
+          "description": [
+            "Optional. Mapping of the namespace prefixes to the namespace URIs. The first column contains the prefixes and the second column contains the corresponding URIs."
+          ]
+        },
+        {
+          "name": "recipientID",
+          "type": "String",
+          "description": [
+            "Optional. Name of the client to which the XML will be sent. The user name and certificate must be configured with Integration Server certificate mapping. The client name entry is mapped to a valid X.509 certificate, and both are stored in Integration Server . For information about Integration Server certificate mapping, see IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        },
+        {
+          "name": "recipientCert",
+          "type": "Byte[]",
+          "description": [
+            "Optional. The certificate containing the public key that will be used to encrypt the XML. If the input parameters recipientCert and recipientID are both provided, recipientCert is used."
+          ]
+        },
+        {
+          "name": "contentOnly",
+          "type": "Boolean",
+          "description": [
+            "Optional. Indicates whether the XML tags surrounding the content will be encrypted along with the content. Set to: - true to encrypt only the content. - false to encrypt both the tags and the content. This is the default."
+          ]
+        },
+        {
+          "name": "algorithm",
+          "type": "String",
+          "description": [
+            "Optional. The symmetric key algorithm to use for encryption. Set to: - tripledes-cbc for the algorithm at http://www.w3.org/2001/04/xmlenc#tripledes-cbc This is the default. - aes256-cbc for the algorithm at http://www.w3.org/2001/04/xmlenc#aes256-cbc - aes192-cbc for the algorithm at http://www.w3.org/2001/04/xmlenc#aes192-cbc - aes128-cbc for the algorithm at http://www.w3.org/2001/04/xmlenc#aes128-cbc Note: If you are using aes256-cbc or aes192-cbc with JVM 1.6, make sure the unlimited policy jar files have been installed."
+          ]
+        },
+        {
+          "name": "encryptedKeyAlgorithm",
+          "type": "String",
+          "description": [
+            "Optional. The symmetric key that is randomly generated, and then encrypted with the receiver's public key. This encryption uses an asymmetric algorithm if public/private key pairs are being used. Set to: - rsa-1_5 for the algorithm at http://www.w3.org/2001/04/xmlenc#rsa-1_5 This is the default. - rsa-oaep-mgf1p for the algorithm at http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the encoding to use if the encoding cannot be extracted from the XML. If encoding is not specified in the XML document or in the encoding parameter, Integration Server uses UTF-8. The encoding value must be a valid IANA encoding."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "encryptedXMLData",
+          "type": "String",
+          "description": [
+            "Conditional. Encrypted XML data. encryptedXMLData is returned when the input parameter xmldata is provided."
+          ]
+        },
+        {
+          "name": "encryptedXMLStream",
+          "type": "OutputStream",
+          "description": [
+            "Conditional. Encrypted XML in the form of an OutputSream. encryptedXMLStream is returned when the input parameter xmlStream is provided."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If both xmldata and xmlStream are provided, xmlStream takes precedence. There are several prerequisites to using the pub.security.xml:encryptXML service: - Certificates must be configured for Integration Server and the client with which it is exchanging encrypted XML. - Before an encrypted XML document can be exchanged between Integration Server and an external system, the external system must share its public key. - Prior to use of pub.security.xml:encryptXML, Integration Server must have access to the partner's public key. Such access is possible through: An Integration Server certificate mapping (for information, refer to IBM webMethods Integration Server Administrator’s Guide ). A copy of the partner's X.509 certificate that is available to Integration Server. In pub.security.xml:encryptXML, the certificate/public key is specified through one of the following input parameters: the client's name (through recipientID), or the public key of the partner application (through recipientCert). Because encryption is a processing-intensive activity, it is recommended to only encrypt the XML nodes requiring protection."
+          ]
+        },
+        {
+          "signing_and_encrypting_the_same_xml_document": [
+            "You can use both encryption and signing in the same XML document. - If you sign and encrypt different XML elements in a document, you can run either pub.security.xml:signXML or pub.security.xml:encryptXML first. - Typically, if you sign and encrypt the same XML elements in a document, you should sign the elements before encrypting them. That is, invoke pub.security.xml:signXML before invoking pub.security.xml:encryptXML."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.xml:signXML",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A96837__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Digitally sign an outgoing XML node or document."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmldata",
+          "type": "String",
+          "description": [
+            "Optional. XML that needs to be signed."
+          ]
+        },
+        {
+          "name": "xmlStream",
+          "type": "InputStream",
+          "description": [
+            "Optional. Input stream containing the XML that needs to be signed. Note: If both xmldata and xmlStream are provided, xmlStream takes precedence."
+          ]
+        },
+        {
+          "name": "uri",
+          "type": "String",
+          "description": [
+            "Optional. URI to the element to be signed. In combination with the nodeSelectors parameter, the uri identifies the nodes to be signed."
+          ]
+        },
+        {
+          "name": "noNamespaceSchemaLocation",
+          "type": "String",
+          "description": [
+            "Optional. A URI that identifies the location of the XML schema definition that contains the ID attribute specified in uri . Provide a noNamespaceSchemaLocation when specifying an ID attribute for uri and the ID attribute resides in an XML schema with no namespaces."
+          ]
+        },
+        {
+          "name": "schemaLocations",
+          "type": "Document",
+          "description": [
+            "Optional. Document (IData) containing name-value pairs for the XML namespace and the location of the XML schema definition that contains element declarations, attribute declarations, and type definitions for that namespace. Provide a schemaLocation when specifying an ID attribute for uri and the ID attribute resides in an XML schema for a particular namespace. For example, - XML namespace = http://www.w3schools.com - XML schema definition location = file:C:/note.xsd"
+          ]
+        },
+        {
+          "name": "nodeSelectors",
+          "type": "String List",
+          "description": [
+            "XPath notation that identifies the nodes to be signed. The locations of the XPaths are not absolute, but relative, and work within the context of the node (an XPath Axes). Important: Do not use absolute location XPaths here."
+          ]
+        },
+        {
+          "name": "nsDecls",
+          "type": "Document",
+          "description": [
+            "Optional. Mapping of the namespace prefixes to the namespace URIs. The first column contains the prefixes and the second column contains the corresponding URIs."
+          ]
+        },
+        {
+          "name": "isEnveloped",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether the signature is enveloped or enveloping. Set to: - True to indicate that the generated signature will be enveloped. This is the default. - False to indicate that the generated signature will be enveloping, provided the isDetached parameter is set to False. Unlike the detached signature, which is kept apart from the original document, enveloping and enveloped signatures are tightly coupled with the original document."
+          ]
+        },
+        {
+          "name": "isDetached",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether the signature is detached or not. Integration Server uses <detached-signature> as the container for signature and the XML to be signed. Set to: - True to indicate that the generated signature will be detached. - False to indicate that the generated signature will be enveloping or enveloped, based on the isEnveloped parameter setting. This is the default. Note: Setting isDetached to True and isEnveloped to False, indicates that the signature will be detached. Setting isDetached to False and isEnveloped to True, indicates that the signature will be enveloped. Setting isDetached to False and isEnveloped to False, indicates that the signature will be enveloping. Setting isDetached to True and isEnveloped to True, results in error."
+          ]
+        },
+        {
+          "name": "signatureNodeSelector",
+          "type": "String",
+          "description": [
+            "Optional. XPath to the node where the signature is entered. Applicable only for enveloped signatures. If no value is provided, the signature is placed as a first child of the root node."
+          ]
+        },
+        {
+          "name": "signatureAlgorithm",
+          "type": "String",
+          "description": [
+            "Optional. Signature algorithm to use when signing the XML node or document. Specify one of the following or use the default value (first algorithm): - SHA1 (default) - SHA256 - SHA384 - SHA512"
+          ]
+        },
+        {
+          "name": "digestAlgorithm",
+          "type": "String",
+          "description": [
+            "Optional. Digest algorithm to use when signing the XML node or document. Specify one of the following or use the default value (first algorithm): - SHA1 (default) - SHA256 - SHA384 - SHA512"
+          ]
+        },
+        {
+          "name": "canonicalizationAlgorithm",
+          "type": "String",
+          "description": [
+            "Optional. Canonical algorithm used with the XML. Specify one of the following or use the default value (first algorithm): - http://www.w3.org/TR/2001/rec-xml-c14n-20010315 (default) - http://www.w3.org/TR/2001/rec-xml-c14n-20010315#WithComments - http://www.w3.org/2001/10/xml-exc-c14n# - http://www.w3.org/2001/10/xml-exc-c14n#WithComments"
+          ]
+        },
+        {
+          "name": "signatureId",
+          "type": "String",
+          "description": [
+            "Optional. ID attribute for the signature node."
+          ]
+        },
+        {
+          "name": "keyStoreAlias",
+          "type": "String",
+          "description": [
+            "Optional. Name (alias) of the keystore that contains the private key/certificate."
+          ]
+        },
+        {
+          "name": "keyAlias",
+          "type": "String",
+          "description": [
+            "Optional. Name (alias) of the private key, contained in the keystore specified by the keyStoreAlias parameter, that is used for signing."
+          ]
+        },
+        {
+          "name": "keyName",
+          "type": "String",
+          "description": [
+            "Optional. Name that is used by the signer to communicate a key identifier to the recipient."
+          ]
+        },
+        {
+          "name": "includeKeyValue",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether to include the key value (RSAKeyValue or DSAKeyValue), based on the certificate used for signing. The KeyValue element contains a single public key that can be used in validating the signature. Set to: - True to include the key value (RSAKeyValue or DSAKeyValue) based on the certificate used for signing. - False to exclude the key value from the signature."
+          ]
+        },
+        {
+          "name": "includeCertChain",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether the certificate chain should be included in the signature. Set to: - True to include the certificate chain in the signature. - False to leave the certificate chain out of the signature. This is the default."
+          ]
+        },
+        {
+          "name": "certData",
+          "type": "String List",
+          "description": [
+            "Optional. Select the X509 certificate data to be entered into the signature's key information. - X509_CERTIFICATE (default) - X509_SUBJECT_NAME - X509_ISSUER_SERIAL - X509_SKI - X509_CRL Note that the initials \"SKI\" and \"CRL\"in denote \"Subject Key Identifier\" and Certificate Revocation List\"."
+          ]
+        },
+        {
+          "name": "idXmlObject",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the ID for the node that holds the original XML that is signed. Applicable only for enveloping signatures."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the encoding to use if the encoding cannot be extracted from the XML. If encoding is not specified in the XML document or in the encoding parameter, Integration Server uses UTF-8. The encoding value must be a valid IANA encoding."
+          ]
+        },
+        {
+          "name": "addSignatureAsLastElement",
+          "type": "Boolean",
+          "description": [
+            "Optional. When isEnveloped is set to True , this parameter indicates the position at which Integration Server should add the signature element child to the root. Set to: - True to add the signature element as the last child of the root. - False to add the signature element as the first child of the root. This is the default."
+          ]
+        },
+        {
+          "name": "addDSPrefixToSignature",
+          "type": "Boolean",
+          "description": [
+            "Optional. Set to False to create a Signature element in the signed XML without any prefixes. By default, this input variable is set to True and the \"ds:\" prefix is added."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "signedXMLData",
+          "type": "String",
+          "description": [
+            "Conditional. Signed XML data. signedXMLData is returned when xmlData is provided."
+          ]
+        },
+        {
+          "name": "signedXMLStream",
+          "type": "OutputStream",
+          "description": [
+            "Conditional. Signed XML in the form of an OutputSream. signedXMLStream is returned when xmlStream is provided."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Before the signing/signature verification of XML can occur between Integration Server and an external system, the Integration Server must share the public key that corresponds to the private key with which the document is signed. Integration Server must share the public key with the external system that will be performing verification. keyAlias and keyStoreAlias should either both be provided or both be absent from the input. If no value is provided for these parameters, Integration Server uses the private key/certificate specified for the Signing Key. If the Signing Key is not specified, Integration Server uses the SSL Key. For information about configuring the Signing Key and SSL Key keystore aliases using the Security > Certificates page in Integration Server Administrator, refer to IBM webMethods Integration Server Administrator’s Guide . If both xmldata and xmlStream are provided, xmlStream takes precedence. The uri and nodeSelectors parameters identify the nodes to be signed. If uri is specified and nodeSelectors is not specified, Integration Server signs the entire node identified by uri. If uri and nodeSelectors are specified, Integration Server determines which nodes to sign by locating the node specified by the uri and then applying the filter from nodeSelectors. If uri is not specified and nodeSelectors is specified, Integration Server determines which nodes to sign by applying the filter in nodeSelectors to the entire XML. If neither uri nor nodeSelectors are specified, Integration Server signs the entire XML. You can use the value of an ID attribute as the uri. For example, #sampleID Where sampleID is an ID attribute that functions as a unique identifier for an element in an XML schema definition. In this example, Integration Server will locate the node with the ID attribute \"sampleID\" and then apply the filter specified by nodeSelectors to determine which nodes to sign."
+          ]
+        },
+        {
+          "signature_types": [
+            "As opposed to a detached signature, which is kept apart from the original document, enveloping and enveloped signatures are tightly coupled with the original document. An enveloping signature must be a parent node of the data being signed: <!-- Example of Enveloping Signature --> <Signature> <my_document>. . . </my_document> </Signature> The following input parameters and values are applicable only to enveloping signatures: - isEnveloped. Specify a value of \"false\" for enveloping. If isEnveloped is set to false, then: If both uri and idXmlObject are null, Integration Server creates a dynamic unique value for both uri and idXmlObject and signs the XML. If idXmlObject is provided and uri is null, Integration Server creates a uri with a value of #idXmlObject_value and signs the XML. If both and uri and idXmlObject are provided and match the XML contract (for example, uri='#idXmlObject'), Integration Server signs the XML. If the uri and idXmlObject parameters do not match the contract, Integration Server issues an exception. - idXmlObject. Specifies the ID for the node that holds the original, signed XML. An enveloped signature must be a child node of the data being signed: <!-- Example of Enveloped Signature --> <my_document> <Signature> . . . </Signature> </my_document> The following parameters and values are applicable only to enveloped signatures: - isEnveloped. The default value of \"true\" specifies that the signature is enveloped. - signatureNodeSelector. XPath to the node where the signature is entered. If no value is provided, the signature is placed as a first child of the root node."
+          ]
+        },
+        {
+          "signing_and_encrypting_the_same_xml_document": [
+            "You can use both encryption and signing in the same XML document. - If you sign and encrypt different XML elements in a document, you can run either pub.security.xml:signXML or pub.security.xml:encryptXML first. - Typically, if you sign and encrypt the same XML elements in a document, you should sign the elements before encrypting them. That is, invoke pub.security.xml:signXML before invoking pub.security.xml:encryptXML."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.security.xml:verifyXML",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-security-folder#A25218__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Verifies a signed XML document, or node in an XML document, and returns information about the success or failure of the verification."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmldata",
+          "type": "String",
+          "description": [
+            "Optional. Signed XML that needs to be verified."
+          ]
+        },
+        {
+          "name": "xmlStream",
+          "type": "InputStream",
+          "description": [
+            "Optional. Signed XML as an input stream that needs to be verified. Note: If both xmldata and xmlStream are provided, xmlStream takes precedence."
+          ]
+        },
+        {
+          "name": "signatureSelectors",
+          "type": "String Array",
+          "description": [
+            "XPaths that are used to identify the signature; can be any valid XPath. Following is an example: //*[@ID=\"Sign001\"]"
+          ]
+        },
+        {
+          "name": "nsDecls",
+          "type": "Document",
+          "description": [
+            "Optional. Mapping of the namespace prefixes to the namespace URIs. The first column contains the prefixes and the second column contains the corresponding URIs."
+          ]
+        },
+        {
+          "name": "noNamespaceSchemaLocation",
+          "type": "String",
+          "description": [
+            "Optional. Schema location for elements with no namespace. This parameter is used to locate the schema that defines elements without a namespace prefix."
+          ]
+        },
+        {
+          "name": "schemaLocations",
+          "type": "Document",
+          "description": [
+            "Optional. Holds the schema locations against the namespaces."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the encoding to use if the encoding cannot be extracted from the XML. If encoding is not specified in the XML document or in the encoding parameter, Integration Server uses UTF-8. The encoding value must be a valid IANA encoding."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "verifcationResult",
+          "type": "Boolean",
+          "description": [
+            "Indicates whether the signed XML is authentic (true) or cannot be verified or shows signs of tampering (false)."
+          ]
+        },
+        {
+          "name": "failedSignatureSelector",
+          "type": "String",
+          "description": [
+            "Conditional. In case of a verification failure (the digests do not equate), indicates which signature selector failed."
+          ]
+        },
+        {
+          "name": "failureReason",
+          "type": "String",
+          "description": [
+            "Conditional. This output parameter is populated only in the case of a verification failure. Its value indicates whether (1) the signature caused the failure, or (2) the signature is from an untrusted certificate. Possible values are: - SIGNATURE FAILED - CERTIFICATE NOT TRUSTED"
+          ]
+        },
+        {
+          "name": "certMap",
+          "type": "Document List",
+          "description": [
+            "Conditional. For each XPath in signatureSelector , certMap contains a document that identifies the XPath and the corresponding signing certificate found at that XPath. certMap is only returned if certificates were resolved for at least one the XPaths specified in signatureSelector. If Integration Server encounters a signature failure, Integration Server does not resolve any subsequent XPaths. certMap contains all of the XPaths and corresponding certificates that Integration Server could resolve up to the point of failure."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If both xmldata and xmlStream are provided, xmlStream takes precedence. Before pub.security.xml:verifyXML can verify a signature, the partner application's public key must have been made available to Integration Server, either through: - Integration Server certificate mapping. - The partner application having sent a copy of its certificate to Integration Server. For information on Integration Server certificate mapping, refer to IBM webMethods Integration Server Administrator’s Guide . The pub.security.xml:verifyXML service works as follows: 1. Integration Server receives the signed XML document. 2. Integration Server extracts the public key from the partner application's certificate. 3. Integration Server uses the public key to verify the authenticity of the XML document."
+          ]
+        }
+      ]
+    }
+  ]
+}

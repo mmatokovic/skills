@@ -1,0 +1,254 @@
+{
+  "folder": "JWT",
+  "description": [
+    "JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely exchanging information as a JSON object between parties."
+  ],
+  "total_services": 3,
+  "services": [
+    {
+      "name": "pub.jwt:extractClaimsFromJWT",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-jwt-folder#reference_491E8D0002D84E28BDDD0A7FA7298DE3__title__1",
+      "description": [
+        "WmPublic. This service returns specific claim details that you want to extract from a JWT. You can request a specific claim using the input parameter claims."
+      ],
+      "input_parameters": [
+        {
+          "name": "jwt",
+          "type": "String",
+          "description": [
+            "The token from which you want to extract claims."
+          ]
+        },
+        {
+          "name": "truststoreAlias",
+          "type": "String",
+          "description": [
+            "Optional. Alias of the truststore that contains the list of certificates, which Integration Server uses to verify the JWT before extracting the claims."
+          ]
+        },
+        {
+          "name": "certAlias",
+          "type": "String",
+          "description": [
+            "Optional. Alias that identifies a trusted certificate within a truststore."
+          ]
+        },
+        {
+          "name": "claims",
+          "type": "String[]",
+          "description": [
+            "List of claims to be extracted."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether the claims are successfully extracted or not. A success message or an error message followed by the details of claims extracted are displayed."
+          ]
+        },
+        {
+          "name": "claimsDetails",
+          "type": "Document",
+          "description": [
+            "The service returns an array or a list of name and value pairs for each claim."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If you specify the truststoreAlias and certAlias input parameters, then the JWT verification is based on these inputs. Therefore, the issuer-certificate mapping in Integration Server Administrator, if any, is ignored. If you do not specify the truststoreAlias and certAlias input parameters, then the JWT verification is based on the public key that you can get from the existing issuer-certificate mapping in Integration Server Administrator. If you do not specify the truststoreAlias and certAlias input parameters, and an issuer-certificate mapping is not available in Integration Server Administrator, then the service returns an exception. When the service parses a JWT that contains a number, the output of this service can be any of the subtypes of a number that best fits the value. For example: If the number fits an integer, then integer is returned. If the token has numbers with values greater than 1e308, then the results are unpredictable."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.jwt:generateSignedJWT",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-jwt-folder#reference_59AF7D0B816948B1B388B1B35B3D98B5__title__1",
+      "description": [
+        "WmPublic. Generates a signed JWT from Integration Server."
+      ],
+      "input_parameters": [
+        {
+          "name": "algorithm",
+          "type": "String",
+          "description": [
+            "The cryptographic algorithm used to sign a JWT. Supported algorithms are: - RS512 - RS384 - RS256"
+          ]
+        },
+        {
+          "name": "keyStoreAlias",
+          "type": "String",
+          "description": [
+            "Alias of the keystore containing private key required to sign a JWT."
+          ]
+        },
+        {
+          "name": "keyAlias",
+          "type": "String",
+          "description": [
+            "Alias of the private key used to sign a JWT."
+          ]
+        },
+        {
+          "name": "allowWeakKey",
+          "type": "Boolean",
+          "description": [
+            "Indicates whether an RSA key shorter than 2048 bits in a cryptographic algorithm is allowed or not. A value of: - true allows an RSA key shorter than 2048 bits in a cryptographic algorithm. - false does not allow an RSA key shorter than 2048 bits in a cryptographic algorithm. This is the default."
+          ]
+        },
+        {
+          "name": "subject",
+          "type": "String",
+          "description": [
+            "Optional. Identifies the principal, which is the subject of the JWT."
+          ]
+        },
+        {
+          "name": "issuer",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the name of the JWT token issuer."
+          ]
+        },
+        {
+          "name": "audience",
+          "type": "String[]",
+          "description": [
+            "Optional. Specifies the intended recipients of the token."
+          ]
+        },
+        {
+          "name": "expirationTime",
+          "type": "String",
+          "description": [
+            "Optional. Identifies the time on or after which the JWT must not be accepted for processing. The expiration date or time must be equal to or later than the current date or time. The required date format is \"dd/MM/yyyy HH:mm:ss\"."
+          ]
+        },
+        {
+          "name": "notBeforeTime",
+          "type": "String",
+          "description": [
+            "Optional. Identifies the time before which the JWT must not be accepted for processing. The not-before date or time must be equal to or earlier than the current date or time. The required date format is \"dd/MM/yyyy HH:mm:ss\"."
+          ]
+        },
+        {
+          "name": "addIssuedAtTimeClaim",
+          "type": "Boolean",
+          "description": [
+            "Indicates whether issuedAtTime (iat) claim is added to the generated signed JWT or not. A value of: - true indicates that the issuedAtTime (iat) claim is added to the generated signed JWT. - false indicates that the issuedAtTime (iat) claim is not added to the generated signed JWT. This is the default."
+          ]
+        },
+        {
+          "name": "jwtId",
+          "type": "String",
+          "description": [
+            "Optional. A unique identifier for the JWT. The value is a case-sensitive string."
+          ]
+        },
+        {
+          "name": "customClaims",
+          "type": "Document List",
+          "description": [
+            "Optional. A list of custom claims. Each claim has 3 parts: \"name\", \"value\", and \"type\"."
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name of the claim."
+              ]
+            },
+            {
+              "name": "value",
+              "type": "String[]",
+              "description": [
+                "The array to provide one or more values for a custom claim."
+              ]
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "description": [
+                "Any valid JSON data type except null . Supported valid JSON data types are: - String - Boolean - Number - JSONArray - JSONObject"
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "jwt",
+          "type": "String",
+          "description": [
+            "Signed JWT."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The customClaims parameter in this service accepts only valid JSON data types such as String, Boolean, Number, JSONArray, and JSONObject except null. If you provide duplicate claim names to the customClaims parameter, then the values corresponding to the latest duplicate claim name are used to generate the JWT. If you want to specify jwtId manually, you can use the pub.utils:generateUUID public service to generate a random Universally Unique Identifier (UUID) and map it to jwtId. If the token has numbers with values greater than 1e308, then the results are unpredictable. If you specify a custom claim with empty or a null value, then such claims will be absent in the generated JWT. You can provide one or more inputs to the \"value\" field in customClaims. The output is displayed as an array. For example, custom claim \"Address\" can have multiple values, then the output for this claim is displayed as an array. For example:"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.jwt:verifyJWT",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-jwt-folder#reference_84CA79BD42E54574B476CAC18B6FD29C__title__1",
+      "description": [
+        "WmPublic. Verifies the signature in a JWT, the token expiration time, and the not-before time. The expirationTime identifies the time, on or after which the JWT is not accepted for processing. The expiration date or time must be equal or later than to the current date or time. The notBeforeTime identifies the time before which the JWT is not accepted for processing. The not-before date or time must be equal to or earlier than the current date or time."
+      ],
+      "input_parameters": [
+        {
+          "name": "jwt",
+          "type": "String",
+          "description": [
+            "The token to be verified."
+          ]
+        },
+        {
+          "name": "truststoreAlias",
+          "type": "String",
+          "description": [
+            "Optional. Alias of the truststore that contains the list of certificates, which Integration Server uses to verify the JWT."
+          ]
+        },
+        {
+          "name": "certAlias",
+          "type": "String",
+          "description": [
+            "Optional. Alias that identifies a particular trusted certificate within a truststore."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "isJWTverified",
+          "type": "Boolean",
+          "description": [
+            "Indicates whether the JWT is verified or not. A value of: - true indicates that the JWT is verified. - false indicates that the JWT is not verified."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Success message if verified or a failed message with reason."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If you specify the truststoreAlias and certAlias input parameters, the service verifies the JWT by using the provided truststore alias and certificate alias. The service ignores any issuer-certificate mappings and any configured JSON Web Key Set (JWKS) endpoint. If you do not specify the truststoreAlias and certAlias input parameters, and a JWKS endpoint is configured for the issuer, Integration Server retrieves the public key from that endpoint for verification. If the Key ID (kid) is missing from the JWT header or if signature verification performed with the JWKS endpoint fails, Integration Server uses the issuer-certificate mapping to verify JWT. If you do not specify the truststoreAlias and certAlias input parameters, and do not configure a JWKS endpoint or an issuer-certificate mapping in Integration Server Administrator, then the service returns an exception."
+          ]
+        }
+      ]
+    }
+  ]
+}

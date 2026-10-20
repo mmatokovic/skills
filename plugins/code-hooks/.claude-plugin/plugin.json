@@ -1,0 +1,8 @@
+{
+  "name": "code-hooks",
+  "version": "1.0.0",
+  "description": "Windows toast notifications for Claude Code stop and notification hooks",
+  "author": {
+    "name": "Integration Team"
+  }
+}

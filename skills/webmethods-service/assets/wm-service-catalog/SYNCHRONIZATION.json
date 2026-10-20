@@ -1,0 +1,387 @@
+{
+  "folder": "SYNCHRONIZATION",
+  "description": [
+    "You use the elements in the synchronization folder to perform latching and cross-referencing operations in a publish-and-subscribe integration."
+  ],
+  "total_services": 9,
+  "services": [
+    {
+      "name": "pub.synchronization.latch:closeLatch",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-synchronization-folder#Apub_synchronization_latch_closeLatch__title__1",
+      "description": [
+        "WmPublic. Closes the latch for a resource. The resource cannot be acted upon while the latch is closed. By closing a latch, you can prevent a circular update between the source and target resources."
+      ],
+      "input_parameters": [
+        {
+          "name": "appId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the target resource for which you want to close a latch. Typically, the appId is the name of the adapter or the resource."
+          ]
+        },
+        {
+          "name": "canonicalKey",
+          "type": "String",
+          "description": [
+            "The canonical key. A unique identifier for the canonical document used in the synchronization."
+          ]
+        },
+        {
+          "name": "objectId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the object or process being synchronized. Typically, the objectId field is set to the name of the business process for which you are performing synchronization, such as \"order\" or \"customer.\""
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.synchronization.latch:isLatchClosed",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-synchronization-folder#Apub_synchronization_latch_isLatchclosed__title__1",
+      "description": [
+        "WmPublic. Checks a resource's latch status. By checking the latch status, you can determine whether a resource has been updated."
+      ],
+      "input_parameters": [
+        {
+          "name": "appId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource for which you want to check the latch status. Typically, the appId is the name of the adapter or the resource."
+          ]
+        },
+        {
+          "name": "canonicalKey",
+          "type": "String",
+          "description": [
+            "The canonical key. A unique identifier for the canonical document used in the synchronization."
+          ]
+        },
+        {
+          "name": "objectId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the object or process being synchronized. Typically, the objectId field is set to the name of the business process for which you are performing synchronization, such as \"order\" or \"customer.\""
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "isLatchClosed",
+          "type": "String",
+          "description": [
+            "The status of the latch. A value of: - true indicates that the latch is closed. The resource has been updated. - false indicates that the latch is open. The resource has not been updated."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use the latch status to determine whether or not to update the resource. - If the latch is closed (isLatchClosed is true), the resource is already updated. Use the pub.synchronization.latch:openLatch service to end execution of the update and open the latch in preparation for the next update to the resource. - If the latch is open (isLatchClosed is false), the resource has not yet been updated. Invoke services to locate and update the record in the target resource. Then invoke the pub.synchronization.latch:closeLatch service to close the latch and prevent circular updates. For more information about using the pub.synchronization.latch services to prevent echo suppression, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.synchronization.latch:closeLatch - pub.synchronization.latch:openLatch"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.synchronization.latch:openLatch",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-synchronization-folder#A10178__title__1",
+      "description": [
+        "WmPublic. Opens the latch for a resource. By opening the latch, you can end propagation of the update and make the resource available for future updates."
+      ],
+      "input_parameters": [
+        {
+          "name": "appId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resources for which you want to open the latch. Typically, the appId is the name of the adapter or the resource."
+          ]
+        },
+        {
+          "name": "canonicalKey",
+          "type": "String",
+          "description": [
+            "The canonical key. A unique identifier for the canonical document used in the synchronization."
+          ]
+        },
+        {
+          "name": "objectId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the object or process being synchronized. Typically, the objectId field is set to the name of the business process for which you are performing synchronization, such as \"order\" or \"customer.\""
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.synchronization.xref:createXReference",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-synchronization-folder#Apub_synchronization_xref_createXReferenc__title__1",
+      "description": [
+        "WmPublic. Creates a cross-reference between a canonical key and a native ID."
+      ],
+      "input_parameters": [
+        {
+          "name": "appId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource (application) for which you want to create a cross-reference to a canonical key."
+          ]
+        },
+        {
+          "name": "nativeId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource record for which you want to create a cross-reference to a canonical key."
+          ]
+        },
+        {
+          "name": "canonicalKey",
+          "type": "String",
+          "description": [
+            "Optional. A canonical key. If a canonical key is not provided as input, createXReference creates the canonical key and the cross-reference."
+          ]
+        },
+        {
+          "name": "objectId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the object or process being synchronized. Typically, the objectId field is set to the name of the business process for which you are performing synchronization, such as \"order\" or \"customer.\""
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "canonicalKey",
+          "type": "String",
+          "description": [
+            "The canonical key. This key correlates native IDs of records from different resources. This will be a new, unique key if canonicalKey was not provided as an input parameter. If canonicalKey was provided as input, this output parameter returns the same value."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The canonical document is the standard format that a document assumes while it travels through webMethods components. A source resource will convert or map data from its proprietary data format into the canonical format before publishing the document. A target resource (a subscriber to the canonical document) will map the canonical document to the target resource's proprietary data format before processing the document. The canonical document acts as the intermediary data format between resources. On the source side of the synchronization, use the createXReference service to create the canonical key for the canonical document and establish a cross-reference between the record in the source application and the canonical document. Before publishing the canonical document, link the generated canonicalKey to the canonical document. On the target side of synchronization, use the pub.synchronization.xref:insertXReference service to insert the cross-reference between a canonical key and the native ID for the record in the target resource. For more information about using the createXReference service to create synchronizations, see the section Built-In Services for Key Cross-Referencing in the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.synchronization.xref:insertXReference"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.synchronization.xref:deleteByObjectId",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-synchronization-folder#Apub_synchronization_xref_deleteByObjectI__title__1",
+      "description": [
+        "WmPublic. Removes all cross-reference records associated with a particular process or synchronization."
+      ],
+      "input_parameters": [
+        {
+          "name": "objectId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the object or process for which you want to delete all cross-reference records. Typically, the objectId field is set to the name of the business process for which you are performing synchronization, such as \"order\" or \"customer.\""
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use this service to purge unwanted cross-reference records from the cross-reference table. For example, if you wanted to delete all cross-reference records for the purchaseOrder synchronization, specify \"purchaseOrder\" as the objectId."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.synchronization.xref:deleteXReference",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-synchronization-folder#Apub_synchronization_xref_deleteXReferenc__title__1",
+      "description": [
+        "WmPublic. Deletes a cross-reference record from the cross-reference table. This service deletes only one cross-reference record."
+      ],
+      "input_parameters": [
+        {
+          "name": "appId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource (application) for which you want to delete a cross-reference record."
+          ]
+        },
+        {
+          "name": "canonicalKey",
+          "type": "String",
+          "description": [
+            "The canonical key. A unique identifier for the canonical document for which you want to delete a cross-reference."
+          ]
+        },
+        {
+          "name": "objectId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the object or process for which you want to delete a cross-reference. Typically, the objectId field is set to the name of the business process for which you are performing synchronization, such as \"order\" or \"customer.\""
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.synchronization.xref:getCanonicalKey",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-synchronization-folder#Apub_synchronization_xref_getCanonicalKey__title__1",
+      "description": [
+        "WmPublic. Retrieves the canonical key for a specified native ID."
+      ],
+      "input_parameters": [
+        {
+          "name": "appId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource (application) that contains the native ID for which you want to retrieve a canonical key."
+          ]
+        },
+        {
+          "name": "nativeId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource record for which you want to obtain the canonical key."
+          ]
+        },
+        {
+          "name": "objectId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the object or process being synchronized. Typically, the objectId field is set to the name of the business process for which you are performing synchronization, such as \"order\" or \"customer.\""
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "canonicalKey",
+          "type": "String",
+          "description": [
+            "The canonical key for the provided native ID. If the requested key cannot be found or does not exist in the cross-reference table, an empty string is returned."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use this service to determine whether you need to insert or update a record in the resource. - If the canonical key exists (canonicalKey contains a value), a cross-reference between the native ID and the canonical key already exists. The record with the specified nativeId is not a new record. You can then invoke the pub.synchronization.latch:isLatchClosed service to determine whether the resource needs to be updated. - If the canonical key does not exist (canonicalKey contains an empty string), then the record with the native ID is a new record. You can use the pub.synchronization.xref:createXReference service to generate the canonical key and create the cross-reference to the native ID. For more information about using the getCanonicalKey service in synchronizations, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.synchronization.latch:isLatchClosed - pub.synchronization.xref:createXReference"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.synchronization.xref:getNativeId",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-synchronization-folder#Apub_synchronization_xref_getNativeId__title__1",
+      "description": [
+        "WmPublic. Retrieves the native ID of a resource record associated with a canonical key."
+      ],
+      "input_parameters": [
+        {
+          "name": "appId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource from which you want to retrieve the native ID associated with the provided canonical key."
+          ]
+        },
+        {
+          "name": "canonicalKey",
+          "type": "String",
+          "description": [
+            "The canonical key for which you want to obtain the corresponding native ID."
+          ]
+        },
+        {
+          "name": "objectId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the object or process being synchronized. Typically, the objectId field is set to the name of the business process for which you are performing synchronization, such as \"order\" or \"customer.\""
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "nativeId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource record associated with the provided canonical key. If the requested nativeId cannot be found in the cross-reference table, an empty string is returned."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can use the getNativeId service on the target side of a synchronization to determine if the record in the target resource needs to be inserted or just updated. - If the native ID does not exist (the nativeId field contains an empty string) and you specified the correct input values, then the record does not exist in the resource. You will need to insert the record in the resource to generate the native ID. Then use the pub.synchronization.xref:insertXReference service to insert a cross-reference between the native ID and the canonical key. - If the native ID exists (the nativeId field contains a value), then a cross-reference between the canonical key and the record already exists. The record already exists in the resource and only needs to be updated. After you insert or update the record in the resource, make sure to use pub.synchronization.latch:closeLatch to close the latch for the record to prevent circular updates (echoes). For more information about using the getNativeId service in synchronizations, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.synchronization.latch:closeLatch - pub.synchronization.xref:insertXReference"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.synchronization.xref:insertXReference",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-synchronization-folder#Apub_synchronization_xref_insertXReferenc__title__1",
+      "description": [
+        "WmPublic. Inserts a cross-reference between a native ID and a canonical key."
+      ],
+      "input_parameters": [
+        {
+          "name": "appId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource for which you want to establish a cross-reference between a native ID and a canonical key."
+          ]
+        },
+        {
+          "name": "nativeId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the resource record with which you want to establish a cross-reference to canonicalKey ."
+          ]
+        },
+        {
+          "name": "canonicalKey",
+          "type": "String",
+          "description": [
+            "The canonical key with which you want to establish a cross-reference to nativeId ."
+          ]
+        },
+        {
+          "name": "objectId",
+          "type": "String",
+          "description": [
+            "A unique identifier for the object or process being synchronized. Typically, the objectId field is set to the name of the business process for which you are performing synchronization, such as \"order\" or \"customer.\""
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use this service on the target side of a synchronization to create a cross-reference between the new record in the target resource and the canonical document. Most resources generate a unique ID for a new record. Invoke the insertXReference service after you add the new record in the resource. After you insert the cross-reference between the new native ID and the canonical key, use pub.synchronization.latch:closeLatch to close the latch for the record to prevent circular updates (echoes). For more information about using the insertXReference service in synchronizations, see the Publish-Subscribe Developer’s Guide ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.synchronization.latch:closeLatch - pub.synchronization.xref:createXReference"
+          ]
+        }
+      ]
+    }
+  ]
+}

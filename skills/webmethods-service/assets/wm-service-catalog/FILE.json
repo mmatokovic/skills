@@ -1,0 +1,578 @@
+{
+  "folder": "FILE",
+  "description": [
+    "You use the elements in the file folder to perform operations on the local file system. Because these services interact directly with server directories and files, it is important to ensure that they operate only on approved locations to prevent unauthorized access or changes."
+  ],
+  "usage_notes": [
+    {
+      "title": "Securing pub.file Services",
+      "content": [
+        "To control file system access,",
+        "Integration Server",
+        "provides the following server configuration parameters:",
+        "- watt.server.file.canReadPaths",
+        "- watt.server.file.canWritePaths",
+        "- watt.server.file.canDeletePaths",
+        "These parameters restrict the directories and files that services in the",
+        "pub.file",
+        "folder can read from, write to, or delete. The same restrictions also apply to the related services",
+        "pub.flow:savePipelineToFile",
+        "and",
+        "pub.flow:restorePipelineFromFile",
+        ". For more information about these configuration parameters, see",
+        "Server Configuration Parameters"
+      ]
+    }
+  ],
+  "total_services": 11,
+  "services": [
+    {
+      "name": "pub.file:bytesToFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#A94673__title__1",
+      "description": [
+        "WmPublic. Writes the specified byte array to a file."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "The absolute path name of the file to which to write the byte array."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "Byte[]",
+          "description": [
+            "The byte array to write to the file specified in the filename parameter."
+          ]
+        },
+        {
+          "name": "append",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether to append or overwrite if the specified file already exists. The default behavior is to create a new file if file does not exist or overwrite an existing file if file already exists. Set to: - true to append to the file if the file already exists. - false to overwrite the file if the file already exists."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "length",
+          "type": "String",
+          "description": [
+            "Number of bytes written to the file."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For security reasons, the pub.file:bytesToFile service validates the input fileName against the list of allowed paths defined in the watt.server.file.canWritePaths parameter. If the specified path is not in the allowed list, Integration Server throws an exception. For more information about the server configuration parameter, see Server Configuration Parameters"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:checkFileExistence",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#A65480__title__1",
+      "description": [
+        "WmPublic. Checks if a specified file exists, and if the file exists, checks whether the file name represents a file or a directory."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "The absolute path name of the file to be checked."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "exists",
+          "type": "String",
+          "description": [
+            "Indicates whether the specified fileName exists or not. A value of: - true indicates that the specified fileName exists. - false indicates that the specified fileName does not exist."
+          ]
+        },
+        {
+          "name": "isDirectory",
+          "type": "String",
+          "description": [
+            "Indicates whether the specified fileName is a file or a directory. - true indicates that the specified fileName is a directory. - false indicates that the specified fileName is a file."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For security reasons, the pub.file:checkFileExistence service validates the input fileName against the list of allowed paths defined in the watt.server.file.canReadPaths parameter. If the specified path is not in the allowed list, Integration Server throws an exception. For more information about the server configuration parameter, see Server Configuration Parameters"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:copyFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#A46894__title__1",
+      "description": [
+        "WmPublic. Copies a file from one directory to another. If a file with the same name as the file being copied exists in the targetDirectory, the pub.file:copyFile service throws an error on execution."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "The absolute path name of the file to be copied."
+          ]
+        },
+        {
+          "name": "targetDirectory",
+          "type": "String",
+          "description": [
+            "Directory to which the file specified in the fileName parameter will be copied."
+          ]
+        },
+        {
+          "name": "appendTimestamp",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether the current timestamp will be appended to the target filename. Set to: - true to append a timestamp to the target fileName in the yyyyMMddHHmmss format. - false to omit a timestamp from the target fileName."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "targetFileName",
+          "type": "String",
+          "description": [
+            "The absolute path name of the target file to which the fileName parameter is copied."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For security reasons, the pub.file:copyFile service validates the input fileName against the list of allowed paths defined in the watt.server.file.canReadPaths parameter and the input targetDirectory against the list of allowed paths defined in the watt.server.file.canWritePaths parameter. If the specified file name or directory is not in the respective allowed lists, or if an invalid file path is specified, Integration Server throws an exception. For more information about the server configuration parameters, see Server Configuration Parameters"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:deleteFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#A48437__title__1",
+      "description": [
+        "WmPublic. Deletes the specified file."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "The absolute path name of the file to be deleted."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Specifies the status of the delete operation. A value of: - true indicates that the deletion succeeded. - false indicates that the deletion failed."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For security reasons, the pub.file:deleteFile service validates the input fileName against the list of allowed paths defined in the watt.server.file.canDeletePaths parameter. If the specified path is not in the allowed list, Integration Server throws an exception. For more information about the server configuration parameter, see Server Configuration Parameters"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:getFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#Apub_file_getFile__title__1",
+      "description": [
+        "WmPublic. Retrieves a specified file from the local file system. If the file contains an XML document, you can use the services in the XML Folder to convert it to an XML node."
+      ],
+      "input_parameters": [
+        {
+          "name": "filename",
+          "type": "String",
+          "description": [
+            "The absolute path name of the file in the local file system (for example c:\\rubicon\\document.xml)."
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Optional. Form in which you want the getFile service to make the contents of the file available to subsequent services. Set to: - bytes to return the file as a byte array. Use this option if the contents of the file will be used as input to a service that operates on whole documents (for example, pub.xml:queryXMLNode). This is the default. - stream to return the file as an input stream. Use this option if the contents of the file will be used as input to a service that can process a document incrementally (for example, pub.xml:getXMLNodeIterator). - string to return the file as a string. - reader to return the file as a reader."
+          ],
+          "references": [
+            {
+              "title": "pub.xml:queryXMLNode",
+              "url": "to-xml_folder.html#Apub_xml_queryXMLNode"
+            },
+            {
+              "title": "pub.xml:getXMLNodeIterator",
+              "url": "to-xml_folder.html#A21764"
+            }
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Character set in which the file is encoded. Specify an IANA-registered character set (for example, ISO-8859-1). This information is required to correctly convert the String object to bytes when performing a get. If no value is specified or if the value is set to autoDetect, the service uses the default operating system encoding. If you specify an unsupported encoding, the system throws an exception."
+          ]
+        },
+        {
+          "name": "bufferSize",
+          "type": "String",
+          "description": [
+            "Optional. Buffer size (in bytes) to use if you are loading an InputStream (that is, loadAs = stream ). The default is 4096 bytes."
+          ]
+        },
+        {
+          "name": "largeFile",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether the file specified in the input is a large file or not. As large files are loaded as a stream , set this parameter to true and the loadAs parameter to stream to get larger files. The default value is false . Note: Files larger than the system memory are considered as large files."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "body",
+          "type": "Document",
+          "description": [
+            "(IData object) containing the file as a byte[ ], InputStream, string, or reader. The body parameter will contain one of the following keys, depending on how the loadAs parameter was set:"
+          ],
+          "children": [
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Conditional. Returns file contents in a byte array if the loadAs parameter is set to bytes ."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Conditional. Returns file contents as an InputStream if the loadAs parameter is set to stream ."
+              ]
+            },
+            {
+              "name": "reader",
+              "type": "java.io.Reader",
+              "description": [
+                "Conditional. Returns file contents as a reader if the loadAs parameter is set to reader."
+              ]
+            },
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Conditional. Returns file contents as a string if the loadAs parameter is set to string."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The getFile service does not automatically generate an XML node from the contents of the file. To generate an XML node, the output from this service must be passed to the pub.xml:xmlStringToXMLNode service. The pub.file:getFile service first checks the value of the watt.security.pub.getFile.checkReadAllowed parameter to determine whether it must validate the requested file path against the paths listed in the watt.server.file.canReadPaths parameter. - If watt.security.pub.getFile.checkReadAllowed is set to true, the pub.file:getFile service checks whether the specified filename is in the list of allowed paths defined in the watt.server.file.canReadPaths parameter. If the filename appears in the allowed list, the service retrieves the file. If the filename is not in the list, the service throws an exception. - If watt.security.pub.getFile.checkReadAllowed is set to false, the pub.file:getFile service retrieves the specified file without checking the watt.server.file.canReadPaths parameter. For more information about the watt.server.file.canReadPaths server configuration parameter, see Server Configuration Parameters"
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.io:close"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:getFileProperties",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#reference_y42_k4k_whc__title__1",
+      "description": [
+        "WmPublic. Retrieves properties for a specified file, such as creation date, last modified date, file size, and file type."
+      ],
+      "input_parameters": [
+        {
+          "name": "filePath",
+          "type": "String",
+          "description": [
+            "The absolute path of the file for which you want to retrieve properties. For example, c:\\rubicon\\document.xml ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "createdDate",
+          "type": "String",
+          "description": [
+            "The file creation timestamp in the yyyy-MM-dd HH:mm:ss format."
+          ]
+        },
+        {
+          "name": "modifiedDate",
+          "type": "String",
+          "description": [
+            "The last modified timestamp in the yyyy-MM-dd HH:mm:ss format."
+          ]
+        },
+        {
+          "name": "fileSize",
+          "type": "String",
+          "description": [
+            "The size of the file in bytes."
+          ]
+        },
+        {
+          "name": "fileType",
+          "type": "String",
+          "description": [
+            "The type or extension of a file."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.file:getFileProperties service first checks the value of the watt.security.pub.getFile.checkReadAllowed parameter to determine whether it must validate the requested file path against the paths listed in the watt.server.file.canReadPaths parameter. - If watt.security.pub.getFile.checkReadAllowed is set to true, the pub.file:getFileProperties service checks whether the specified filePath is in the list of allowed paths defined in the watt.server.file.canReadPaths parameter. If the filePath appears in the allowed list, the service retrieves the file properties. If the filePath is not in the list, the service throws an exception. - If watt.security.pub.getFile.checkReadAllowed is set to false, the pub.file:getFileProperties service retrieves properties of the specified file without checking the watt.server.file.canReadPaths parameter. For more information about the watt.server.file.canReadPaths server configuration parameter, see Server Configuration Parameters"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:listFiles",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#A70668__title__1",
+      "description": [
+        "WmPublic. List all the files in a specified directory. The pub.file:listFiles service does not list subdirectories or recursively list subdirectory contents."
+      ],
+      "input_parameters": [
+        {
+          "name": "directory",
+          "type": "String[ ]",
+          "description": [
+            "Name of the directory that is to be queried."
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "String",
+          "description": [
+            "Optional. Filter string for the file list (for example, *.java or EDI*.tx*)."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "fileList",
+          "type": "String",
+          "description": [
+            "Names of the files in the directory specified in the directory parameter. Only the file names are returned; not the full path name. filel]List does not list subdirectories or recursively list subdirectory content."
+          ]
+        },
+        {
+          "name": "numFiles",
+          "type": "String",
+          "description": [
+            "Number of files in the specified directory."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For security reasons, the pub.file:listFiles service validates the value of the directory against the list of allowed paths defined in the watt.server.file.canReadPaths parameter. If the specified directory is not in the allowed list, Integration Server throws an exception. For more information about the server configuration parameter, see Server Configuration Parameters"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:moveFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#A44297__title__1",
+      "description": [
+        "WmPublic. Moves a file from one directory to another."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "The absolute path name of the file to be moved."
+          ]
+        },
+        {
+          "name": "targetDirectory",
+          "type": "String",
+          "description": [
+            "Name of the directory to which the file specified in the fileName parameter is to be moved."
+          ]
+        },
+        {
+          "name": "appendTimeStamp",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether the current timestamp is to be appended to the file name after the file is moved to the target directory. Set to: - false if you do not want to append a timestamp. This is the default. - true if you want to append a timestamp in the following format: yyyyMMddHHmmss."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Status of the move. A value of: - true indicates that the move was successful. - false indicates that the move failed."
+          ]
+        },
+        {
+          "name": "targetFileName",
+          "type": "String",
+          "description": [
+            "Fully qualified path of the target file."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For security reasons, the pub.file:moveFile service validates the input fileName against the list of allowed paths defined in the watt.server.file.canReadPaths parameter and the input targetDirectory against the list of allowed paths defined in the watt.server.file.canWritePaths parameter. If the specified file name or directory is not in the respective allowed lists, Integration Server throws an exception. For more information about the server configuration parameters, see Server Configuration Parameters If the service cannot move the file by using the default move operation in Java, the service copies the file from the source directory to the destination directory, and then removes the file from the source directory. If a file with the same name as the fileName parameter exists in the target directory, the pub.file:moveFile service throws an error."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:readerToFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#A14580__title__1",
+      "description": [
+        "WmPublic. Reads data from a java.io.Reader object and writes it to a file."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the file to which the data is to be written."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "The reader object from which the data is read."
+          ]
+        },
+        {
+          "name": "append",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether to append to or overwrite the file if it already exists. The default behavior is to create a new file if the file does not exist or overwrite an existing file if the file already exists. Set to: - true to append if the file already exists. - false to overwrite if the file already exists."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Name of a registered, IANA character set (for example, ISO-8859-1). If you specify an unsupported encoding, the system throws an exception. If no value is specified or if the encoding is set to autoDetect, the default operating system encoding is used."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For security reasons, the pub.file:readerToFile service validates the input fileName against the list of allowed paths defined in the watt.server.file.canWritePaths parameter. If the specified path is not in the allowed list, Integration Server throws an exception. For more information about the server configuration parameter, see Server Configuration Parameters The readerToFile service does not automatically close the reader object. To close the reader, use the pub.io:close service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:streamToFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#A31283__title__1",
+      "description": [
+        "WmPublic. Writes the data in the InputStream to a file."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String[]",
+          "description": [
+            "Fully qualified name of the file to be written to."
+          ]
+        },
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The stream from which data is read."
+          ]
+        },
+        {
+          "name": "append",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether to append or overwrite if the specified file already exists. The default behavior is to create a new file if the file does not exist or overwrite an existing file if the file already exists. Set to: - true to append if the file already exists. - false to overwrite if the file already exists."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For security reasons, the pub.file:streamToFile service validates the input fileName against the list of allowed paths defined in the watt.server.file.canWritePaths parameter. If the specified path is not in the allowed list, Integration Server throws an exception. For more information about the server configuration parameter, see Server Configuration Parameters The streamToFile service does not automatically close the stream object. To close the input stream, use the pub.io:close service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.file:stringToFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-file-folder#A71537__title__1",
+      "description": [
+        "WmPublic. Writes text to a file."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String[]",
+          "description": [
+            "Fully qualified name of the file to be written to."
+          ]
+        },
+        {
+          "name": "data",
+          "type": "String",
+          "description": [
+            "Text to be written."
+          ]
+        },
+        {
+          "name": "append",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether to append or overwrite if the specified file already exists. The default behavior is to create a new file if the file does not exist or overwrite an existing file if the file already exists. Set to: - true to append if the file already exists. - false to overwrite if the file already exists."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Name of a registered, IANA character set (for example, ISO-8859-1). If you specify an unsupported encoding, the system throws an exception. If no value is specified or if the encoding is set to autoDetect, the default operating system encoding is used."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For security reasons, the pub.file:stringToFile service validates the input fileName against the list of allowed paths defined in the watt.server.file.canWritePaths parameter. If the specified path is not in the allowed list, Integration Server throws an exception. For more information about the server configuration parameter, see Server Configuration Parameters"
+          ]
+        }
+      ]
+    }
+  ]
+}

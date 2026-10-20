@@ -1,0 +1,314 @@
+{
+  "folder": "SCHEMA",
+  "description": [
+    "You use the elements in the schema folder to validate objects and to validate the pipeline."
+  ],
+  "total_elements": 8,
+  "elements": [
+    {
+      "name": "pub.schema:createXSD",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-schema-folder#Apub_schema_createXSD__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Creates an XML Schema definition from a document type, from the input and output parameters of a service, or from a specification."
+      ],
+      "input_parameters": [
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Fully qualified name of a document type, service, or specification on the Integration Server ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "isSuccessful",
+          "type": "String",
+          "description": [
+            "Flag indicating whether the schema definition was created successfully. A value of: - true indicates that the schema definition was created successfully. - false indicates that the schema definition was not created successfully. See errors for detailed information."
+          ]
+        },
+        {
+          "name": "xsd",
+          "type": "Document",
+          "description": [
+            "Conditional. The schema definition xsd has the following keys:"
+          ],
+          "children": [
+            {
+              "name": "url",
+              "type": "String",
+              "description": [
+                "Conditional. Relative url of the generated schema."
+              ]
+            },
+            {
+              "name": "source",
+              "type": "String",
+              "description": [
+                "Conditional. Schema definition."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "errors",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of fatal errors, if any, that occurred when generating the XSD. Each document in the list has the following structure:"
+          ],
+          "children": [
+            {
+              "name": "errorMessage",
+              "type": "String",
+              "description": [
+                "Text of the error message."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "warnings",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of non-fatal errors, if any, that were encountered while generating the XSD. Each document in the list has the following structure:"
+          ],
+          "children": [
+            {
+              "name": "warningMessage",
+              "type": "String",
+              "description": [
+                "Text of the warning message."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the document type, service signature, or specification you are providing as input to createXSD contains fields that belong to multiple XML namespaces, createXSD generates multiple XML Schema definitions (one for each XML namespace) and imports them into the XML Schema contained in the source field. These imported XML Schema definitions appear as children of xsd in the pipeline. When using createXSD to create an XML Schema definition, keep the following points in mind: - Top-level strings are not allowed. - String tables beneath the top-level are not allowed. - Field names must conform to QName lexical rules (that is, the prefix and local name must conform to NCName rules specified in http://www.w3.org/TR/REC-xml-names/#NT-NCName). - Field names cannot contain a prefix without an associated XML namespace. - Fields of type other than scalar string cannot have names that begin with the character @ or be named *body. - Fields at the same level (that is, beneath the same parent field in the input or output of the same signature) can have the same name but different types or properties. However, only one field's type and properties is used for all fields with that name at that level. Because the method used to select the field is not defined, IBM recommends avoiding this case. - Only one field named *body can occur at the same level. - Duplicate field names that begin with the character @ cannot repeat at the same level. - Fields at different levels can have the same name with duplicate XML namespace values, even if the fields have different types or properties. However, only one field's type and properties are used for all fields with that name at that level. Because the method used to select the field is not defined, IBM recommends avoiding this case. - Object constraints are allowed. However, the Integration Server does not represent them in the XSD. - Strings constrained by older schema types (types defined before the W3C XML 2001 Schema recommendations) are allowed. However, the Integration Server translates them into 2001 XML Schema types. - If a document variable is considered to be open (the Allow unspecified fields property is set to true), Integration Server adds an xsd:any element to the complex type definition that corresponds to the document variable. However, when the watt.core.schema.createSchema.omitXSDAny server configuration parameter is set to true, Integration Server omits the xsd:any element even when the document is considered to be open. For more information about this server configuration parameter, see IBM webMethods Integration Server Administrator’s Guide . If you use createXSD to create multiple XML Schema definitions that refer to each other, place the XSD files in the same folder or base path. To ensure that the references resolve correctly, make sure the relative URLs specified in the XSD files reflect the names of the XSD files within this folder or base path."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.schema:validate",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-schema-folder#Apub_schema_validate__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Validates an object using an IS document type, XML document type, or an IS schema."
+      ],
+      "input_parameters": [
+        {
+          "name": "object",
+          "type": "Document",
+          "description": [
+            "Where Document is an IData or an XMLData-formatted document, com.wm.lang.xml.Document or com.wm.lang.xml.Node Document or object to be validated."
+          ]
+        },
+        {
+          "name": "conformsTo",
+          "type": "String",
+          "description": [
+            "Document type or schema to validate object against. - If object is a Document (IData object), conformsTo must specify the fully qualified name of an IS document type on the Integration Server. - If object is a XMLData-formatted document, conformsTo must specify the fully qualified name of an XML document type on Integration Server. Note: One or more XML document types and XML fields are created from a single XML schema definition. To validate an XMLData-formatted Document using the XML document types created from an XML Schema definition, you need specify only one of the XML document types or XML fields created from the schema. Integration Server locates the related XML document types, using the complete collection of XML document types and XML fields created from the XML schema definition during validation. - If object is a com.wm.lang.xml.Document or com.wm.lang.xml.Node object, conformsTo must specify the fully qualified name of an IS schema on the Integration Server. The specified IS schema is needed only for validating nodes with \"Names\" that are not from XML namespaces (that is, qualified nodes whose XML Namespace Name properties are absent). Integration Server can only locate the IS schema if its fully qualified name is provided. If the XML document (com.wm.lang.xml.Document or com.wm.lang.xml.Node) contains namespace-qualified tags, conformsTo is ignored. Instead, Integration Server uses the XML namespaces declared in the instance document to locate the IS schemas that contain definitions and declarations for that XML namespace. Note: When validating a document type created from an XML schema definition, if you want to use the OR operator for pattern-matching, use the | operator after the pattern string. If the | operator is used at the start of the regular expression, Integration Server treats it as an empty string."
+          ]
+        },
+        {
+          "name": "maxErrors",
+          "type": "String",
+          "description": [
+            "Optional. Number of errors to be collected. Default value is 1 . When the number of errors found is equal to maxErrors , the validation processor stops validation and returns the result. If maxErrors is set to -1 , the validation processor returns all errors."
+          ]
+        },
+        {
+          "name": "ignoreContent",
+          "type": "String",
+          "description": [
+            "Optional. Flag that specifies whether the validation processor will validate content keys of the type String, String List, or String Table. Set to: - true to ignore content (that is, do not validate keys of these types). - false to validate content. This is the default."
+          ]
+        },
+        {
+          "name": "failIfInvalid",
+          "type": "String",
+          "description": [
+            "Optional. Flag that indicates whether the service should fail and throw an exception if the object is invalid. Set to: - true to indicate that the service should fail if the object is invalid. - false to indicate that service should signal success and return errors to the pipeline if object is invalid. This is the default."
+          ]
+        },
+        {
+          "name": "schemaDomain",
+          "type": "String",
+          "description": [
+            "Optional. Schema domain in which the schema specified by the XML namespaces resides. If schemaDomain is not specified, Integration Server uses the default schema domain. Note: This parameter only applies if object is a com.wm.lang.xml.Document or com.wm.lang.xml.Node"
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "isValid",
+          "type": "String",
+          "description": [
+            "Flag that indicates whether or not the validation was successful. A value of: - true indicates that the validation was successful. - false indicates that the validation was unsuccessful."
+          ]
+        },
+        {
+          "name": "errors",
+          "type": "Document List",
+          "description": [
+            "Errors encountered during validation. Each document will contain the following information:"
+          ],
+          "children": [
+            {
+              "name": "pathName",
+              "type": "String",
+              "description": [
+                "Location of the error in XQL."
+              ]
+            },
+            {
+              "name": "errorCode",
+              "type": "String",
+              "description": [
+                "Error code (for example, VV-001 )."
+              ]
+            },
+            {
+              "name": "errorMessage",
+              "type": "String",
+              "description": [
+                "Error message (for example, Missing Object )."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Integration Server uses the Java regular expression compiler to validate the supplied XML against an IS document type, XML document type, or IS schema. When validating against an IS document type, if the Allow null property is set to false for a field in the document type and the corresponding element in the instance document carries the attribute xsi:nil, Integration Server throws the following error [ISC.0082.9026] Undefined Object found. When validating against an IS document type, if the Allow null property is set to false for a field in the document type and the corresponding element in the instance document contains content or contains child elements, Integration Server throws the following error: [ISC.0082.9024] FieldName cannot have content or child elements since xsi:nil is true. When validating a com.wm.lang.xml.Document or com.wm.lang.xml.Node object, Integration Server searches the named schema domain for the specified schema. If the schema cannot be found in the specified domain, Integration Server searches the default schema domain. Note that Integration Server searches the schema domain for a schema, not an individual component (element, attribute, complex type, etc) within the schema. When validating XML, Integration Server uses the W3C recommendation XML Schema Part 2: Datatypes. If you want to validate XML for illegal values, set ignoreContent to false and the watt.core.validation.w3cConformant configuration parameter to true. For information about setting this configuration parameter, see IBM webMethods Integration Server Administrator’s Guide . The pub.schema:validate service cannot be used to validate a node produced by the enhanced XML parser."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.schema:validatePipeline",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-schema-folder#Apub_schema_validatePipeline__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Validates the pipeline against a document type."
+      ],
+      "input_parameters": [
+        {
+          "name": "conformsTo",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the document type that you want to validate the pipeline against."
+          ]
+        },
+        {
+          "name": "maxErrors",
+          "type": "String",
+          "description": [
+            "Optional. Number of errors to be collected. Default value is 1 . When the number of errors found is equal to maxErrors , the validation processor stops validation and returns the result. If maxErrors is set to -1 , the validation processor returns all errors."
+          ]
+        },
+        {
+          "name": "ignoreContent",
+          "type": "String",
+          "description": [
+            "Optional. Flag that specifies whether the validation processor will validate content keys of the type String, String List, or String Table. Set to: - true to ignore content (that is, do not validate keys of these types). - false to validate content. This is the default."
+          ]
+        },
+        {
+          "name": "failIfInvalid",
+          "type": "String",
+          "description": [
+            "Optional. Flag that indicates whether the service should fail and throw an exception if the object is invalid. Set to: - true to indicate that service should fail if object is invalid. - false to indicate that service should simply signal success and return errors to the pipeline if object is invalid. This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "isValid",
+          "type": "String",
+          "description": [
+            "Flag that indicates whether or not the validation was successful. A value of: - true indicates that the validation was successful. - false indicates that the validation was unsuccessful."
+          ]
+        },
+        {
+          "name": "errors",
+          "type": "Document List",
+          "description": [
+            "Errors encountered during validation. Each document will contain the following information:"
+          ],
+          "children": [
+            {
+              "name": "pathName",
+              "type": "String",
+              "description": [
+                "Location of the error in XQL."
+              ]
+            },
+            {
+              "name": "errorCode",
+              "type": "String",
+              "description": [
+                "Error code (for example, VV-001 )."
+              ]
+            },
+            {
+              "name": "errorMessage",
+              "type": "String",
+              "description": [
+                "Error message (for example, Missing Object )."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.schema.w3c",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-schema-folder#Apub_schema_w3c__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. This folder contains definitions for XML Schemas as defined in the W3C specification XML Schema Part 2: Datatypes . For more information about schemas and datatypes, see IBM webMethods Service Development Help ."
+      ],
+      "input_parameters": [],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.schema.w3c:datatypes",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-schema-folder#Apub_schema_w3c_datatypes__title__1",
+      "element_type": "schema",
+      "description": [
+        "WmPublic. A schema containing the simple type names for built-in schemas."
+      ]
+    },
+    {
+      "name": "pub.schema.w3c:structures",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-schema-folder#Apub_schema_w3c_structures__title__1",
+      "element_type": "schema",
+      "description": [
+        "WmPublic. A schema containing the structural components for XML schema definitions."
+      ]
+    },
+    {
+      "name": "pub.schema.w3c:xml",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-schema-folder#Apub_schema_w3c_xml__title__1",
+      "element_type": "schema",
+      "description": [
+        "WmPublic. A schema containing the XML namespace components, such as xml:lang and xml:space, as defined in the W3C specifications Namespaces in XML and Extensible Markup Language (XML) 1.0 ."
+      ]
+    },
+    {
+      "name": "pub.schema.w3c:xsi",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-schema-folder#A90476__title__1",
+      "element_type": "schema",
+      "description": [
+        "WmPublic. A schema containing the XML Schema instance components, such as xsi:nil, xsi:noNamespaceSchemaLocation, xsi:schemaLocation, and xsi:type, as defined in the W3C XML Schema recommendation Part 1: Structures."
+      ]
+    }
+  ]
+}

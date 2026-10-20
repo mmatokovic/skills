@@ -1,0 +1,246 @@
+{
+  "folder": "DATETIME",
+  "description": [
+    "You use the services in the datetime folder to build or increment a date/time. The services in datetime provide more explicit timezone processing than similar services in the date folder."
+  ],
+  "usage_notes": [
+    {
+      "title": "Supplying Time Zones",
+      "content": [
+        "You can specify timezone input parameters to the pub.datetime services in the following formats:",
+        "- As a full name. For example: Asia/Tokyo America/Los_Angeles You can use java.time.ZoneId.getAvailableZoneIds. () method to obtain a list of the valid full name time zone IDs that your JVM version supports.",
+        "- As UTC. For example: UTC - 5h",
+        "- As a custom time zone ID, in the format GMT[+ | -]hh[ [:]mm]. For example: GMT+2:00 Time zones 2 hours east of Greenwich GMT-3:00 Time zones 3 hours west of Greenwich (that is, Argentina Standard Time and Brazil Eastern Time) GMT+9:30 Time zones 9.5 hours east of Greenwich (that is, Australian Central Time)",
+        "- As a three-letter abbreviation. For example: PST Pacific Standard Time Important: Because some three-letter abbreviations can represent multiple time zones (for example, \"CST\" could represent both U.S. \"Central Standard Time\" and \"China Standard Time\"), all abbreviations are deprecated. Use the full name, UTC, or custom time zone ID GMT formats instead."
+      ]
+    }
+  ],
+  "total_services": 2,
+  "services": [
+    {
+      "name": "pub.datetime:build",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-datetime-folder#idd1d92852-6681-4ade-a10f-9982074da7ab__title__1",
+      "description": [
+        "WmPublic. Builds a date/time string using the specified pattern and the supplied date/time elements."
+      ],
+      "input_parameters": [
+        {
+          "name": "pattern",
+          "type": "String",
+          "description": [
+            "The pattern with which to format the string. For more information about these pattern letters and symbols, see the Oracle Java API documentation for the DateTimeFormatter class."
+          ]
+        },
+        {
+          "name": "year",
+          "type": "String",
+          "description": [
+            "Optional. The year expressed as a 4-digit Integer. If you do not specify year, the year will be from the current date which is determined by the JVM in which Integration Server runs. If you specify an invalid value for year , the service will end with an error from the JDK."
+          ]
+        },
+        {
+          "name": "month",
+          "type": "String",
+          "description": [
+            "Optional. The month expressed as an Integer where January is 1. If you do not specify month, the month will be from the current date which is determined by the JVM in which Integration Server runs. If you specify an invalid value for month , the service will end with an error from the JDK."
+          ]
+        },
+        {
+          "name": "dayOfMonth",
+          "type": "String",
+          "description": [
+            "Optional. The day of the month expressed as an Integer, starting with 1 as the first day of the month. If you do not specify dayOfMonth the day of the month will be from the current date which is determined by the JVM in which Integration Server runs. If you specify an invalid value for day , the service will end with an error from the JDK."
+          ]
+        },
+        {
+          "name": "hour",
+          "type": "String",
+          "description": [
+            "Optional. The hour of the day expressed as an Integer from 0 through 23. If you do not specify hour , the hour will be from the current time which is determined by the JVM in which Integration Server runs. If you specify an invalid value for hour , the service will end with an error from the JDK."
+          ]
+        },
+        {
+          "name": "minute",
+          "type": "String",
+          "description": [
+            "Optional. The minute expressed as an Integer from 0 through 59. If you do not specify minute , the minute will be from the current time which is determined by the JVM in which Integration Server runs. If you specify an invalid value for minute , the service will end with an error from the JDK."
+          ]
+        },
+        {
+          "name": "second",
+          "type": "String",
+          "description": [
+            "Optional. The seconds of the hour expressed as an Integer from 0 through 59. If you do not specify second , the second will be from the current time which is determined by the JVM in which Integration Server runs. If you specify an invalid value for second , the service will end with an error from the JDK."
+          ]
+        },
+        {
+          "name": "millis",
+          "type": "String",
+          "description": [
+            "Optional. The number of milliseconds expressed as a Long. If you do not specify millis , the millis will be from the current time which is determined by the JVM in which Integration Server runs. If you specify an invalid value for millis , the service will end with an error from the JDK."
+          ]
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "description": [
+            "Optional. The time zone. If you specify a value for timezone , the service ignores the useSystemTimeZone parameter value. IBM recommends supplying the full name for timezones, such as Asia/Tokyo, or using UTC. If pattern includes a timezone, you must specify timezone input parameter value or set useSystemTimeZone to true."
+          ]
+        },
+        {
+          "name": "useSystemTimeZone",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether the service uses the time zone of the Integration Server JVM if timezone was not specified. Set to: - true to use the time zone of Integration Server when timezone is not specified. - false if you do not want the service to use the timezone of Integration Serverif timezone was not set. The default is false. If pattern includes a timezone, you must specify the timezone input parameter value or set useSystemTimeZone to true. To match the behavior of pub.date:dateTimeBuild which produced a date/time that always included a time zone set useSystemTimeZone to true. This ensures that if timezone is not specified, the resulting date/time will include a time zone."
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. The locale in which to express the date. If locale is not specified, Integration Server uses the value of the watt.server.session.locale.ignore server configuration parameter to determine whether the locale is obtained from the session used by the client that invoked the service or if the locale is the locale of Integration Server . An invalid locale results in an error from the JDK."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "The formatted date and time."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.datetime:build service replaces the pub.date:dateBuild and pub.date:dateTimeBuild services which are deprecated. If you specify a parameter that does not exist in the supplied pattern, the service ignores that parameter. If you do not specify a timezone, useSystemTimeZone is set to false, and the pattern includes a time zone, the service ends with an exception. If a time zone is provided as input to the service either in the timezone parameter or by setting useSystemTimeZone to true, the pub.datetime:build service calculates the date/time starting with a \"zoned\" date/time. The resulting values can differ when daylight savings time transitions are in effect. If no time zone is provided as input to the service either by not specifying timezone or by setting useSystemTimeZone to false, then the pub.datetime:build service calculates the date/time starting with an \"unzoned\" date/time. The pub.datetime:build service is similar to pub.date:dateBuild and pub.date:dateTimeBuild, however, the pub.datetime:build service allows the building of a date/time that does not include a time zone. Furthermore, the pub.datetime:build service assembles a date/time using each of the provided parameters. Consequently the pub.datetime:build service can build a date/time with a value that would be invalid in the current time zone, such as a date/time that would fall into the gap of a daylight saving time transition. This is unlike the pub.date:dateBuild and pub.date:dateTimeBuild services which build a local java.util.Date object that uses the timezone of the machine running Integration Server. The pub.date:dateBuild and pub.date:dateTimeBuild service then applies the offset between the local timezone and the specified timezone."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.datetime:increment",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-datetime-folder#id07617c13-2fa5-488b-83bc-6b58f5e933bd__title__1",
+      "description": [
+        "WmPublic. Increments or decrements a date and time by a specified amount of time."
+      ],
+      "input_parameters": [
+        {
+          "name": "startDate",
+          "type": "String",
+          "description": [
+            "Starting date and time."
+          ]
+        },
+        {
+          "name": "startDatePattern",
+          "type": "String",
+          "description": [
+            "Pattern in which the startDate value is specified. For more information about these pattern letters and symbols, see the Oracle Java API documentation for the DateTimeFormatter class."
+          ]
+        },
+        {
+          "name": "endDatePattern",
+          "type": "String",
+          "description": [
+            "Pattern in which to format the resulting date/time. For more information about these pattern letters and symbols, seethe Oracle Java API documentation for the DateTimeFormatter class. If no endDatePattern is specified, the endDate will be returned in the format specified in the startDatePattern parameter."
+          ]
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "description": [
+            "Optional. The time zone to use for parsing startDate and formatting endDate . The service uses timezone to parse the startDate String and convert it from the time zone specified in the input, if one was provided. For example, if the timezone input parameter is MST and the startDate is \"2019-02-21 11:30:00 EST\", then the service converts the startDate time from EST to MST. The service uses timezone when formatting endDate as a String. That is, the timezone determines the time zone in which the service expresses the endDate."
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "String",
+          "description": [
+            "Optional. Locale in which the endDate is to be expressed. If locale is not specified, Integration Server uses the value of the watt.server.session.locale.ignore server configuration parameter to determine whether the locale is obtained from the session used by the client that invoked the service or if the locale is the locale of Integration Server ."
+          ]
+        },
+        {
+          "name": "addYears",
+          "type": "String",
+          "description": [
+            "Optional. The number of years to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addMonths",
+          "type": "String",
+          "description": [
+            "Optional. The number of months to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addDays",
+          "type": "String",
+          "description": [
+            "Optional. The number of days to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addHours",
+          "type": "String",
+          "description": [
+            "Optional. The number of hours to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addMinutes",
+          "type": "String",
+          "description": [
+            "Optional. The number of minutes to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addSeconds",
+          "type": "String",
+          "description": [
+            "Optional. The number of seconds to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "addMilliseconds",
+          "type": "String",
+          "description": [
+            "Optional. The number of milliseconds to add to startDate . The value must be an integer between -2147483648 and 2147483647."
+          ]
+        },
+        {
+          "name": "useSystemTimeZone",
+          "type": "String",
+          "description": [
+            "Optional. Whether to use the system time zone to increment the date/time when the startDate value does not have a time zone. Usually, the system time zone is the time zone from which the JVM that containsIntegration Server was launched. Note that it possible to modify the JVM time zone after the JVM launches. Set to: - false if the startDate does not include a time zone, the timezone parameter was not set, and you want to increment the date/time without being affected by a time zone. This is the default. - true to use the system time zone when incrementing the startDate. When useSystemTimeZone is false and no timezone is provided, the resulting endDate will not include a timezone.To match the behavior of pub.date:incrementDate , which produced a date/time that always included a time zone, set useSystemTimeZone to true."
+          ]
+        },
+        {
+          "name": "useSameInstant",
+          "type": "String",
+          "description": [
+            "Optional. Whether to use the same Instant, where Instant represents a moment on the timeline in UTC, or the same unzoned date/time when applying a different time zone. Using the same Instant will usually result in changes to the unzoned date/time when the time zone and its offset are applied. Not using the same Instant will result in the unzoned date/time being unchanged when the time is applied. If useSameInstant is true, the pub.datetime:increment service uses the Instant (the absolute time with no time zones) to determine how the timezone value is used. If useSameInstant is false, the pub.datetime:increment service uses the unzoned date/time and only changes the time zone. The default is true. Note: For the purpose of this documentation, the term \"unzoned date/time\" is synonymous with the term \"local date/time\". For example, if startDate is a date/time of \"2019-02-25 08:25:00 CET\" (Central European Time, UTC+1:00) and the specified timezone value is America/New_York (EST, UTC-5:00) , the value of useSameInstant has the following impact: - If useSameInstant is true, then 2019-02-25 08:25:00 CET becomes 2019-02-25 02:25:00 EST - If useSameInstant is false, then 2019-02-25 08:25:00 CET becomes 2019-02-25 08:25:00 EST"
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "endDate",
+          "type": "String",
+          "description": [
+            "The incremented date and time."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.datetime:increment service replaces the pub.date:incrementDate service which is deprecated. The pub.datetime:increment service can be used to decrement a date and time by specifying negative numbers. The addYears, addMonths, addDays, addHours, addMinutes, addSeconds, and addMilliSeconds input parameters can take positive or negative values. The service ends with an exception if the format of the date specified in the startDate parameter does not match the format specified in the startDatePattern. If you want to increment the startDate value by hours, minutes, seconds, or milliseconds, the startDate must include the time; otherwise, the service ends with an UnsupportedTemporalTypeException. If you need milliseconds in the timestamp, it is recommended to use triple S (SSS) in the date pattern and enter 3 digits in place of SSS. For example, in the date pattern (yyyy-MM-dd'T'H:mm:ss.SSS'Z'), enter three digits in place of SSS like: 2021-07-08T1:20:20.001Z. Otherwise, the service might show inconsistent results. If endDatePattern includes a time zone, such as \"z\", then the input string and startDatePattern must also have time zone fields, or timeZone must be set, or useSystemTimeZone must be true. Otherwise the service ends with an error. If you specify only the startDate, startDatePattern, and endDatePattern input parameters and do not specify any of the optional input parameters to increment the period, the pub.datetime:increment service just converts the format of startDate from startDatePattern to endDatePattern and returns it as endDate. If you specify a value for timezone, the service ignores the useSystemTimeZone parameter value. If you specify a value for timezone and the startDate includes a time zone, then the service uses the supplied timezone to convert the startDate time zone. If you do not specify a value for timezone and the startDate includes a time zone, then the service uses the time zone in the startDate and ignores the useSystemTimeZone parameter. If you do not specify a value for timezone, the startDate does not include a time zone, and useSystemTimeZone parameter is true, then the service uses the system time zone. If startDate does not include a time zone, you do not specify a value for timezone, and useSystemTimeZone is false, the resulting endDate will not include a time zone. The pub.datetime:increment service is similar to pub.date:incrementDate, however, the pub.datetime:increment service provides more specific handling of time zones. To match the behavior of pub.date:incrementDate, set useSameInstant to true."
+          ]
+        }
+      ]
+    }
+  ]
+}

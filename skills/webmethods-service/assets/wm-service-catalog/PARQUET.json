@@ -1,0 +1,533 @@
+{
+  "folder": "PARQUET",
+  "description": [
+    "Use the elements in the Parquet folder to read and write Apache Parquet files on the Integration Server to and from IData."
+  ],
+  "total_services": 6,
+  "services": [
+    {
+      "name": "pub.parquet:closeBatchIterator",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-parquet-folder#Apub_parquet_closeBatchIterator__title__1",
+      "description": [
+        "WmParquet. Closes the Parquet iterator. The Parquet iterator object, which is obtained from the pub.parquet:getBatchIterator service, cannot be used after running this service."
+      ],
+      "input_parameters": [
+        {
+          "name": "iterator",
+          "type": "Object",
+          "description": [
+            "The iterator object returned by the pub.parquet:getBatchIterator service."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.parquet:documentTypeToSchema",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-parquet-folder#Apub_parquet_documentTypeToSchema__title__1",
+      "description": [
+        "WmParquet. Converts an Integration Server document type to the Parquet schema format. This service enables you to create a Parquet schema that can be passed to the pub.parquet:write service."
+      ],
+      "input_parameters": [
+        {
+          "name": "docTypeName",
+          "type": "String",
+          "description": [
+            "The fully qualified name of an IS document type."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "schema",
+          "type": "String",
+          "description": [
+            "A Parquet schema for the given IS document type."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.parquet:getBatchIterator",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-parquet-folder#Apub_parquet_getBatchIterator__title__1",
+      "description": [
+        "WmParquet. Reads a Parquet file and returns a batch iterator object that can be used to iterate over the records in the Parquet file."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "Name of the Parquet file to be read."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "iterator",
+          "type": "Object",
+          "description": [
+            "An iterator object that can be used to iterate over the records in the Parquet file."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "None."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.parquet:getNextBatch",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-parquet-folder#Apub_parquet_getNextBatch__title__1",
+      "description": [
+        "WmParquet. Gets the next batch of Parquet records from the iterator object returned by the pub.parquet:getBatchIterator service. This service returns records based on the batch size (batchSize) provided as input. The batch size can vary across invocations of the service. To retrieve all records from a Parquet file, invoke this service in a loop till all the records are retrieved (till the hasNext output parameter of this service is not false)."
+      ],
+      "input_parameters": [
+        {
+          "name": "iterator",
+          "type": "Object",
+          "description": [
+            "The iterator object from which the records have to be retrieved. This object is obtained from the pub.parquet:getBatchIterator service."
+          ]
+        },
+        {
+          "name": "batchSize",
+          "type": "String",
+          "description": [
+            "Number of records to be fetched in the current iteration."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "records",
+          "type": "Document List",
+          "description": [
+            "A batch of Parquet records converted to an IData array. The number of records returned is less than or equal to the batchSize parameter."
+          ]
+        },
+        {
+          "name": "iterationStatus",
+          "type": "Document",
+          "description": [
+            "Details about the iteration are provided in the following fields:"
+          ],
+          "children": [
+            {
+              "name": "hasNext",
+              "type": "String",
+              "description": [
+                "Returns true if the iterator has more records to read after this iteration."
+              ]
+            },
+            {
+              "name": "iteration",
+              "type": "String",
+              "description": [
+                "The current iteration count, with the first iteration being 1."
+              ]
+            },
+            {
+              "name": "noOfElementsInBatch",
+              "type": "String",
+              "description": [
+                "The number of records retrieved in the current iteration."
+              ]
+            },
+            {
+              "name": "totalElementsProccesed",
+              "type": "String",
+              "description": [
+                "Total number of records retrieved till the current iteration (including the current noOfElementsInBatch )."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The getNextBatch service may run into a memory limitation when reading a batch with a large number of records. Consider using a smaller batch size or allocating more memory to the Integration Server instance."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.parquet:read",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-parquet-folder#Apub_parquet_read__title__1",
+      "description": [
+        "WmParquet. Reads a Parquet file and converts it to an IData array (Document list)."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "Name of the Parquet file to be read."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "records",
+          "type": "Document List",
+          "description": [
+            "An array of IData objects containing Parquet records. The tables Mapping of Parquet basic types to Integration Server data types and Mapping of Parquet logical types to Integration Server data types list how Parquet data types map to Integration Server data types."
+          ],
+          "references": [
+            {
+              "title": "Mapping of Parquet basic types to Integration Server data types",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-parquet-folder#Apub_parquet_read__table_0ED8FFD7DBCE48B099C7825C24116C15"
+            },
+            {
+              "title": "Mapping of Parquet logical types to Integration Server data types",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-parquet-folder#Apub_parquet_read__table_5477AF841DC54EE6B53A0B2987BA728E"
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The following tables list how Parquet data types are converted to Integration Server data types.",
+            {
+              "table": [
+                [
+                  "Parquet Basic Type",
+                  "Integration Server Type"
+                ],
+                [
+                  "BOOLEAN",
+                  "java.lang.Boolean"
+                ],
+                [
+                  "INT32",
+                  "java.lang.Integer"
+                ],
+                [
+                  "INT64",
+                  "java.lang.Long"
+                ],
+                [
+                  "INT96",
+                  "byte[]"
+                ],
+                [
+                  "FLOAT",
+                  "java.lang.Float"
+                ],
+                [
+                  "DOUBLE",
+                  "java.lang.Double"
+                ],
+                [
+                  "BYTE_ARRAY or BINARY",
+                  "byte[]"
+                ],
+                [
+                  "Group",
+                  "Document"
+                ],
+                [
+                  "Repeated Group",
+                  "Document List"
+                ]
+              ]
+            },
+            {
+              "table": [
+                [
+                  "Parquet Logical Type",
+                  "Parquet Basic Type",
+                  "Integration Server Type",
+                  "Remarks"
+                ],
+                [
+                  "Signed Integers",
+                  "INT32(INT)",
+                  "java.lang.Integer",
+                  ""
+                ],
+                [
+                  "INT64(INT)",
+                  "java.lang.Long",
+                  ""
+                ],
+                [
+                  "Unsigned Integers",
+                  "INT32(INT)",
+                  "java.lang.Integer",
+                  "IS types are signed values, therefore conversion of input Parquet values that exceed the maximum or minimum values of the IS types may not be accurate and require further processing and/or reconversion to larger type to get the correct values."
+                ],
+                [
+                  "INT64(INT)",
+                  "java.lang.Long"
+                ],
+                [
+                  "TIMESTAMP",
+                  "INT64(TIMESTAMP)",
+                  "java.lang.Long",
+                  "The conversion of TIMESTAMP values captures only the integer value but not the isAdjustedToUTC and precision parameters."
+                ],
+                [
+                  "INTERVAL",
+                  "fixed_len_byte_array (INTERVAL)",
+                  "byte[]",
+                  "The converted byte array has the same structure as the Parquet INTERVAL byte array."
+                ],
+                [
+                  "STRING",
+                  "Binary (UTF8) or Binary (STRING)",
+                  "String",
+                  ""
+                ],
+                [
+                  "ENUM",
+                  "Binary(ENUM)",
+                  "String",
+                  ""
+                ],
+                [
+                  "JSON",
+                  "Binary(JSON)",
+                  "String",
+                  ""
+                ],
+                [
+                  "BSON",
+                  "Binary(BSON)",
+                  "byte[]",
+                  "The conversion of the BSON Parquet type is not supported currently. The generated IS document may not have the expected data."
+                ],
+                [
+                  "UUID",
+                  "Binary",
+                  "byte[]",
+                  "The converted byte array has the same structure as the Parquet UUID byte array."
+                ],
+                [
+                  "DECIMAL",
+                  "INT32(DECIMAL)",
+                  "java.lang.Integer",
+                  "The conversion of Decimal values captures only the numerical value but not the precision and scale parameters."
+                ],
+                [
+                  "INT64(DECIMAL)",
+                  "java.lang.Long"
+                ],
+                [
+                  "fixed_len_byte_array (DECIMAL)",
+                  "byte[]"
+                ],
+                [
+                  "DATE",
+                  "INT32(DATE)",
+                  "java.lang.Integer",
+                  "DATE is converted to an integer value that represents the number of days from the base date, 1 January 1970, which corresponds to 0."
+                ],
+                [
+                  "TIME",
+                  "INT32(TIME)",
+                  "java.lang.Integer",
+                  "The conversion of TIME values captures only the integer value but not the UTC adjustment and precision parameters."
+                ],
+                [
+                  "INT64(TIME)",
+                  "java.lang.Long"
+                ],
+                [
+                  "LIST",
+                  "GROUP(LIST)",
+                  "Document (IData)",
+                  "LIST is converted to a Document List that has Documents that contain the list values."
+                ],
+                [
+                  "MAP",
+                  "GROUP(MAP)",
+                  "Document (IData)",
+                  "MAP is converted to a Document List that has Documents that contain the key-values."
+                ]
+              ]
+            },
+            "Note: The read operation may run into a memory limitation when reading a Parquet file that has a large number of records: Consider using the pub.parquet:getBatchIterator and pub.parquet:getNextBatch services instead. Note: The pub.parquet:read service does not support network paths that use a universal naming convention (UNC) path, such as \\\\Server\\Volume\\File or /<internet resource name>[\\Directory name]."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.parquet:write",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-parquet-folder#Apub_parquet_write__title__1",
+      "description": [
+        "WmParquet. Writes a document list (an array of IData objects) to a Parquet file."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "Name of the Parquet file to which the records will be written."
+          ]
+        },
+        {
+          "name": "schema",
+          "type": "String",
+          "description": [
+            "Optional. A Parquet schema against which the documents will be matched before the records are written to the file. If a schema is not provided, an IS document type must be provided using the docTypeName parameter. If any of provided documents do not conform to the given schema exactly, an exception is thrown."
+          ]
+        },
+        {
+          "name": "docTypeName",
+          "type": "String",
+          "description": [
+            "Optional. The fully qualified name of an IS document type. A document type can be provided instead of the schema parameter. The document type is converted to a Parquet schema internally and used for converting and writing the Parquet file. The tables Mapping of Integration Serverdata types to Parquet basic types for write operations and Mapping of Integration Server data types to Parquet Logical types list howIntegration Server data types map to Parquet schema types. Note: Either a schema or a docTypeName must be provided to validate the data before it is written to the Parquet file."
+          ],
+          "references": [
+            {
+              "title": "Mapping of Integration Serverdata types to Parquet basic types for write operations",
+              "url": "to-parquet_folder.html#Apub_parquet_write__table_999C0C0D365E4A73AF047A78DCC8EFA4"
+            },
+            {
+              "title": "Mapping of Integration Server data types to Parquet Logical types",
+              "url": "to-parquet_folder.html#Apub_parquet_write__table_F6D8F935AF50462E985214EED1E08A09"
+            }
+          ]
+        },
+        {
+          "name": "records",
+          "type": "Document List",
+          "description": [
+            "Array of IData objects to be written to the Parquet file."
+          ]
+        },
+        {
+          "name": "options",
+          "type": "Document",
+          "description": [
+            "Optional. Options such as compression methods can be passed to this service."
+          ],
+          "children": [
+            {
+              "name": "compressionCodec",
+              "type": "String",
+              "description": [
+                "Optional. The following compression methods are supported: - gzip - snappy - uncompressed Note: If a compressionCodec is not provided then data is not compressed."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The following tables list how Integration Server data types map to Parquet types.",
+            {
+              "table": [
+                [
+                  "Integration Server Type",
+                  "Parquet Basic Type"
+                ],
+                [
+                  "String",
+                  "STRING"
+                ],
+                [
+                  "String List",
+                  "Repeated STRING"
+                ],
+                [
+                  "String Table",
+                  "BINARY"
+                ],
+                [
+                  "Document",
+                  "Group"
+                ],
+                [
+                  "Document List",
+                  "Repeated Group"
+                ],
+                [
+                  "Document Reference",
+                  "Group (flatten)"
+                ],
+                [
+                  "Document Reference List",
+                  "Repeated Group (flatten)"
+                ],
+                [
+                  "java.lang.Boolean",
+                  "BOOLEAN"
+                ],
+                [
+                  "java.lang.Integer",
+                  "INT32"
+                ],
+                [
+                  "java.lang.Long",
+                  "INT64"
+                ],
+                [
+                  "java.lang.Float",
+                  "FLOAT"
+                ],
+                [
+                  "java.lang.Double",
+                  "DOUBLE"
+                ],
+                [
+                  "java.util.Date",
+                  "BINARY"
+                ],
+                [
+                  "java.lang.Byte",
+                  "BINARY"
+                ],
+                [
+                  "java.lang.Short",
+                  "BINARY"
+                ],
+                [
+                  "byte[]",
+                  "BINARY"
+                ],
+                [
+                  "Object (unidentified)",
+                  "BINARY"
+                ],
+                [
+                  "Object List (unidentified)",
+                  "Repeated BINARY"
+                ]
+              ]
+            },
+            "Note: Arrays of objects, such as java.lang.Boolean and java.lang.Long, are converted to arrays of the corresponding basic types.",
+            {
+              "table": [
+                [
+                  "Integration Server Type",
+                  "Parquet Logical Type",
+                  "Parquet Basic Type"
+                ],
+                [
+                  "String",
+                  "ENUM",
+                  "Binary(ENUM)"
+                ],
+                [
+                  "String",
+                  "JSON",
+                  "Binary(JSON)"
+                ]
+              ]
+            },
+            "Note: The pub.parquet:write service silently overwrites the file if it already exists: No exception is thrown. Currently, there is no option to append to an existing file. Important: Null values are not written to a Parquet file. Note: Ensure that the schema does not have field names with characters such as '{', '}', '(', ',', ')' ';', '=', or ' ' (empty space) that are not supported by the Parquet specification. An input file path for the pub.parquet:write service that contains a consecutive backslash and forward slash may cause unexpected results. For example, the path \"packages/replicatePackage/resources\\\\/testService2.parquet\" in Linux creates a directory named \"resources\\\\\" that cannot be traversed. To work around this issue, ensure the paths passed to the service are in the appropriate format for the operating system."
+          ]
+        }
+      ]
+    }
+  ]
+}

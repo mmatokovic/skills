@@ -1,0 +1,1594 @@
+{
+  "folder": "CACHE",
+  "description": [
+    "You use the elements in the cache folder to place data in a cache and retrieve it again later. You can also use the services in the cache folder to perform administrative operations such as enabling, disabling, and clearing a cache, or to implement checkpoint restart in services you write. Integration Server uses Terracotta Ehcache internally for all of the services in the cache folder. Before using these services, you need to create a cache manager and cache using Integration Server Administrator. For instructions, see Understanding Caches and Cache Managers.",
+    "The key you use for the services in the cache folder must be an object that overrides the equals() method from java.lang.Object. Failure to use such an object can cause the service to return incorrect results.",
+    "Note: You cannot use an IS document object as a key for storing objects in the cache because IS document objects do not implement the equals() method."
+  ],
+  "usage_notes": [
+    {
+      "title": "Requirements for the Cached Elements Key",
+      "content": [
+        "Each cached element is associated with a key. Integration Server has the following requirements for the key value used in the pub.cache services:",
+        "- The key must be immutable and serializable.",
+        "- IBM recommends using a java.lang.String for the key.",
+        "- Do not use an IData object as a key as IData objects are mutable. If an IData object is used as the key when placing a value in cache using a pub.cache* service, later attempts to retrieve the value using the same key might fail. Integration Server includes the server configuration parameter watt.server.cache.iDataKey.toString that specifies whether a com.wm.data.IData object used as a key in one of the pub.cache* services is converted to an immutable String before accessing the cache. However, if the IData object is modified after it has been used as a key, Integration Server will not be able to retrieve values stored with the key regardless of the value of watt.server.cache.iDataKey.toString.",
+        "- The key must be an object that overrides the equals() method from java.lang.Object. Failure to use such an object can cause the service to return incorrect results."
+      ]
+    },
+    {
+      "title": "Using the pub.cache Services with a JSR 107 Cache",
+      "content": [
+        "You can configure the pub.cache services to use a Java Specification Request 107 (JSR 107) cache. To set a JSR 107 cache, you must:",
+        "- Specify jsr107 as the value of the watt.server.services.cache.storeType server parameter. You can configure Integration Server to use only one type of cache for pub.cache services at a time, either Terracotta Ehcache or JSR 107 Cache.",
+        "- Specify the JSR 107 cache provider in the watt.server.cache.jsr107.className server parameter.",
+        "- Specify the configuration file of the JSR 107 cache to which Integration Server connects to cache data for the pub.cache services in the watt.server.cache.jsr107.configFileName server parameter.",
+        "For more information about the server parameters, see the watt.server parameter reference in the IBM webMethods Integration Server Administrator’s Guide .",
+        "For details about configuring a JSR cache on Integration Server, see the IBM webMethods Integration Server Administrator’s Guide",
+        "When you configure Integration Server to use a JSR 107 cache for the pub.cache services, the services support only the cache operations that the JSR 107 cache supports. If a cache operation is not supported by the JSR 107 cache, the pub.cache service returns an error message or an empty or false value in the service output. If you want to configure Integration Server to skip the unsupported cache operation and run the next service, set the following server parameter:",
+        "watt.server.services.cache.jsr107.operation=noop",
+        "Even when a pub.cache service is supported with a JSR 107 cache, some of the input or output service parameters might not be supported. When you run a pub.cache service that has parameters that are not supported with a JSR 107 cache, Integration Server ignores the values specified for the unsupported service parameters. For details about which service parameters are not supported with a JSR 107 cache, see the the service reference for the pub.cache service that you want to run."
+      ]
+    },
+    {
+      "title": "About Checkpoint Restart",
+      "content": [
+        "You can use the pub.cache services to implement checkpoint restart in services that you write to make them more robust. You use the pub.cache services to write state information and other pertinent data to the cache. If the Integration Server on which your service is executing becomes unavailable, your service will be able to check the state information in the cache and resume processing at the point where the service was interrupted.",
+        "Note: The pub.cache services are a tool for maintaining state information for the short term. It is up to the developer of the services to make sure they keep track of state information and correctly handle restarts.",
+        "The following diagram shows the logic of a flow service that uses checkpoint restart."
+      ]
+    }
+  ],
+  "total_services": 30,
+  "services": [
+    {
+      "name": "pub.cache:containsKey",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id9b673851-0900-4485-9390-53796a7df769__title__1",
+      "description": [
+        "WmPublic. Checks whether an element with the specified key exists in the cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache that contains the key. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key of the element for whose existence you are checking."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "found",
+          "type": "String",
+          "description": [
+            "Indicates whether the key exists in the cache. - true indicates that the key exists in the cache. - false indicates that the key does not exist in the cache."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.cache:containsKey service does not verify whether the element is expired. If the element of the specified key is expired, and the element is present in the cache, pub.cache:containsKey returns found with a value of true. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache:get",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#Apub_bpel_invokeProcess__title__1",
+      "description": [
+        "WmPublic. Retrieves the value of a cached element for the specified key."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache from which to retrieve the element. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key associated with the cached value."
+          ]
+        },
+        {
+          "name": "useLoader",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether to use a cache loader to retrieve the element from the cache. Set to: - true to use a cache loader to retrieve the element if it is not already in the cache. Note: If useLoader is true and no loaders are configured for the cache, Integration Server issues a ServiceException. - false to retrieve the element from the cache without a cache loader. This is the default setting. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Value of the element retrieved from the cache."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If useLoader is set to false and pub.cache:get finds the key in the cache, the results contain the value of the element. If the key does not exist in the cache, pub.cache:get returns a null in the value parameter. If useLoader is set to true and pub.cache:get cannot find the specified key in the cache, it uses the configured cache loader to find the key in the system-of-record (SOR). If the SOR contains the key, pub.cache:get returns the value of the element. If the key does not exist in the SOR, pub.cache:get returns a null in the value parameter. The pub.cache:get service returns a null in the value parameter if: - You run the service on a disabled cache. - The service cannot find the specified key. - The element associated with the specified key is expired. Integration Server issues a ServiceException in the following cases: - If useLoader is true and no loaders are configured for the cache. - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache:getAll",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id46b1f34a-8dd3-4f37-9176-d429279ab9d3__title__1",
+      "description": [
+        "WmPublic. Retrieves the values of the cached elements for the specified keys."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache from which to retrieve the elements. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "keys",
+          "type": "Object List",
+          "description": [
+            "Keys associated with the cached elements for which you want to retrieve values."
+          ]
+        },
+        {
+          "name": "useLoader",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether to use a cache loader to retrieve the elements from the cache. Set to: - true to use a cache loader to retrieve an element if the element is not already in the cache. Note: If useLoader is true and no loaders are configured for the cache, Integration Server issues a ServiceException. - false to retrieve an element from the cache without a cache loader. This is the default setting. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "elements",
+          "type": "Document List",
+          "description": [
+            "An IData[] containing the values for the requested cached elements."
+          ],
+          "children": [
+            {
+              "name": "key",
+              "type": "Object",
+              "description": [
+                "Key associated with the cached element."
+              ]
+            },
+            {
+              "name": "value",
+              "type": "Object",
+              "description": [
+                "Value of the element retrieved from the cache."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.cache:getAll service can be memory-intensive because it loads all of the specified keys into memory. If useLoader is set to false and pub.cache:get finds the key in the cache, the results contain the value of the element. If the key does not exist in the cache, pub.cache:getAll returns a null in the value parameter. If useLoader is set to true and pub.cache:get cannot find the specified key in the cache, it uses the configured cache loader to find the key in the system-of-record (SOR). If the SOR contains the key, pub.cache:get returns the value of the element. If the key does not exist in the SOR, pub.cache:getAll returns a null in the value parameter. The pub.cache:getAll service returns a null in the elements/value parameter if: - You run the service on a disabled cache. - The service cannot find the specified key. - The element associated with the specified key is expired. Integration Server issues a ServiceException in the following cases: - If useLoader is true and no loaders are configured for the cache. - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache:getKeys",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#idaccf1852-06fc-4e96-b879-29836037e433__title__1",
+      "description": [
+        "WmPublic. Retrieves the keys of all elements available in the cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache from which to retrieve the keys. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "excludeExpiredKeys",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether the service results exclude keys for expired elements. Set to: - true to exclude the keys of expired elements. This is the default. - false to include the keys of all elements. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache. The expiry of the keys is handled by the external JSR 107 cache."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "keys",
+          "type": "Object List",
+          "description": [
+            "List of keys of elements in the cache."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Retrieving all of the keys from a cache may negatively impact the performance of the calling service. This may be especially true when retrieving all of the keys for a large, distributed cache. Retrieving all of the keys from a cache is a memory-intensive activity. It is possible for the list of available keys to be larger than the memory available on your system. In such cases, Integration Server might issue an OutOfMemoryError and become unresponsive. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache:put",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id9e44d26e-f8dc-4102-9948-6354a0406e65__title__1",
+      "description": [
+        "WmPublic. Populates a cached element with a specified key-value pair."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache in which to put the element. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key of the cached element."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Value of the cached element."
+          ]
+        },
+        {
+          "name": "useWriter",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether to use a cache writer to populate the value of the cached element in the system-of-record (SOR). Set to: - true to use a cache writer to add the value to the cached element and the SOR. - false to add the value to the cached element without writing to the SOR. This is the default setting. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache. Note: If the value already exists in the cache, pub.cache:put replaces the value."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If your cache is a distributed cache or is configured to use disk store or BigMemory, key and value must be Java Serializable objects. If the element with the specified key does not already exist in the cache, the pub.cache:put service puts the element in the cache. If the element with the specified key already exists in the cache, pub.cache:put updates the element with the specified value. If you run pub.cache:put on a disabled Terracotta Ehcache cache, the cache discards the call. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If useWriter is set to true and no writer is configured for the cache. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache:putAll",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id4e22a88a-85c4-4412-8768-12aec355e054__title__1",
+      "description": [
+        "WmPublic. Populates a collection of elements in the cache with the specified key-value pairs."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache in which to put the elements. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "elements",
+          "type": "Document List",
+          "description": [
+            "An IData[] containing the key-value pairs to put in the cache."
+          ],
+          "children": [
+            {
+              "name": "key",
+              "type": "Object",
+              "description": [
+                "Key of the cached element."
+              ]
+            },
+            {
+              "name": "value",
+              "type": "Object",
+              "description": [
+                "Value of the cached element."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If your cache is a distributed cache or is configured to use disk store or BigMemory, key and value must be Java Serializable objects. The key and value input parameters cannot be null. The service might end with a NullPointerException if any key or value parameters are null. If the element with the specified key does not already exist in the cache, the pub.cache:putAll service puts the element in the cache. If the element with the specified key already exists in the cache, pub.cache:putAll updates the element with the specified value. If you run pub.cache:putAll on a disabled cache, the cache discards the call. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache:remove",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#idf7393630-573b-44cc-9511-158533892691__title__1",
+      "description": [
+        "WmPublic. Removes the cached element associated with the specified key."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache from which to remove the element. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key of the element to remove."
+          ]
+        },
+        {
+          "name": "useWriter",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether to use a cache writer to remove the value of the cached element from the system-of-record (SOR). Set to: - true to use a cache writer to remove the value from the cached element and the SOR. - false to remove the value to the cached element without using a cache writer. This is the default setting. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "removed",
+          "type": "String",
+          "description": [
+            "Indicates whether the element was removed. - true indicates that the element was removed from the cache. - false indicates that the element was not removed from the cache."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the element associated with the specified key does not exist, pub.cache:remove returns false for removed. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache:removeAll",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#ide4ccd868-3533-4d9c-afc4-8d2c649f9321__title__1",
+      "description": [
+        "WmPublic. Removes the cached elements associated with a list of keys or, if no keys are specified, removes all elements from the cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache in which to put the elements. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "keys",
+          "type": "Object List",
+          "description": [
+            "Optional. Keys of the elements to remove from the cache. If you do not specify any keys, the service removes all of the elements from the specified cache."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache:search",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id58cea799-a2de-412d-94a3-8519022752bd__title__1",
+      "description": [
+        "WmPublic. With Terracotta Ehcache, the service searches through an indexed cache and returns the results. The pub.cache:search service accepts the selection criteria as an IData object and performs the search by converting the IData object to a search query of Terracotta Ehcache. Note: Before using this service, you must make the cache searchable. For more information about making a cache searchable, see Making a Cache Searchable. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache. When you set watt.server.services.cache.jsr107.operation=noop, the service output returns an empty list."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache from which the search results are to be returned. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "includeAttributes",
+          "type": "String",
+          "description": [
+            "Optional. List of attributes that should be included in the search results."
+          ]
+        },
+        {
+          "name": "includeKey",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether or not the keys should be returned as part of the search results. - true indicates that the keys should be returned as part of the search results. - false indicates that the keys should not be returned as part of the search results. This is the default. Note: You should set this parameter to true only if the value is required for your programming logic."
+          ]
+        },
+        {
+          "name": "includeValue",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether or not the values should be returned as part of the search results. - true indicates that the values should be returned as part of the search results. - false indicates that the values should not be returned as part of the search results. This is the default. Note: You should set this parameter to true only if the value is required for your programming logic."
+          ]
+        },
+        {
+          "name": "criteria",
+          "children": [
+            {
+              "name": "OP1",
+              "type": "String",
+              "description": [
+                "or Document A string operand or a nested document type that can be evaluated by a logical operator."
+              ]
+            },
+            {
+              "name": "OPR",
+              "type": "String",
+              "description": [
+                "A logical (and, or, and not) or comparison operator (between, gt (greater than), eq (equal to), and so on). For a complete list of operators that Integration Server supports as the value for the criteria\\OPR parameter, see the Usage Notes for this service."
+              ]
+            },
+            {
+              "name": "OP2",
+              "type": "String",
+              "description": [
+                ", Document, Object, or Object List A string operand, nested document type, object, or object list that can be evaluated by a logical operator."
+              ]
+            }
+          ],
+          "type": "Document",
+          "description": [
+            "A document (IData) that specifies the conditions based on which the data in the cache is to be queried."
+          ]
+        },
+        {
+          "name": "maxResults",
+          "type": "String",
+          "description": [
+            "Optional. The maximum number of results to return. If maxResults is not specified, Integration Server returns all the results."
+          ]
+        },
+        {
+          "name": "groupBy",
+          "type": "String List",
+          "description": [
+            "Optional. The unique values of specified attributes based on which the search results are to be grouped. The attributes that you specify for grouping the results must be included in the list of attributes specified for the includeAttributes parameter."
+          ]
+        },
+        {
+          "name": "orderBy",
+          "type": "String Table",
+          "description": [
+            "Optional. Whether the service results are to be returned in ascending or descending order. Values for this parameter must be specified as a two-dimensional string array comprising the field name and whether DESCENDING or ASCENDING (case sensitive) in the following format: {{\"fieldName\",\"order\"},{\"fieldName\",\"order\"}} Where order is ASCENDING or DESCENDING. For example, if you have configured name and age as the search attributes for the personCache cache that stores name, age, and address, the orderBy parameter can be specified as shown below: {{\"name\",\"ASCENDING\"}} -or- {{\"name\",\"ASCENDING\"},{\"age\",\"DESCENDING\"}}"
+          ]
+        },
+        {
+          "name": "aggregator",
+          "type": "String Table",
+          "description": [
+            "Aggregator function such as average, count, max, min, or sum that you want to be applied on the search results. Values for this parameter should be specified as a two-dimensional string array in the following format: {{\"fieldName\",\"aggregator\"}, {\"fieldName\",\"aggregator\"}} Where aggregator can be average, count, max, min, or sum (case-insensitive). For example, {{\"age\",\"Max\"}} or {{\"income\",\"Average\"}}. If you want to use the aggregator function, you must: - Specify a value for the groupBy parameter. - Set the includeKey and includeValue parameters to false."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "result",
+          "type": "Object List",
+          "description": [
+            "The returned results of the search. Each object in the result parameter is of type com.wm.app.b2b.client.cache.config.SearchResult. For more information about com.wm.app.b2b.client.cache.config.SearchResult type, see IBM webMethods Integration Server Java API Reference . Each object contains information about the cache element, key, value, search attribute values, and aggregator results, if any."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If you want to search a document (IData) in the cache, you must first create an attribute extractor class and identify the search attributes for the cache. Terracotta Ehcache uses the extractor class and the provided search attribute information to search the cache when the pub.cahce:search service executes. A sample IData that you can specify as the criteria input parameter is given below. The following input searches the personCache cache for entries, where age is greater than 60 and gender is female. IData idata = IDataFactory.create(); //Cache information IDataMap map = new IDataMap(idata) ; map.put(\"cacheManagerName\", \"SearchTestManager\") ; map.put(\"cacheName\", \"personCache\") ; map.put(\"includeKey\", \"true\") ; map.put(\"includeValue\", \"true\") ; //Condition 1 - Age > 60 IData input1 = IDataFactory.create() ; IDataCursor cursor1 = input1.getCursor() ; IDataUtil.put(cursor1, \"OP1\", \"age\") ; IDataUtil.put(cursor1, \"OPR\", \"gt\") ; IDataUtil.put(cursor1, \"OP2\", 60) ; //Condition 2 - Gender == Female IData input2 = IDataFactory.create() ; IDataCursor cursor2= input2.getCursor() ; IDataUtil.put(cursor2, \"OP1\", \"gender\") ; IDataUtil.put(cursor2, \"OPR\", \"eq\") ; IDataUtil.put(cursor2, \"OP2\", Person.Gender.FEMALE) ; //Joining conditions, condition 1 && condition 2 IData input3 = IDataFactory.create() ; IDataCursor cursor3 = input3.getCursor() ; IDataUtil.put(cursor3, \"OP1\", input1) ; IDataUtil.put(cursor3, \"OPR\", \"AND\") ; IDataUtil.put(cursor3, \"OP2\", input2) ; map.put(\"criteria\", input3) ; //Run the search IData result = invoke(NSName.create(\"pub.cacheimpl:search\"), idata); Object[] objectList = (Object[]) IDataUtil.get(result.getCursor(), \"result\"); for (int i = 0; i < objectList.length; i++) { Person value = (Person) ((SearchResult) objectList[i]).getValue(); System.out.println(value.getGender()); System.out.println( value.getAge()); } When using the between operator for the criteria\\OPR parameter, you must specify start and end values. That is, you must specify a two-element Object List with the 0 element as the start value and the first element as the end value. For example: //Condition 1 < age <10 IData input1 = IDataFactory.create() ; IDataCursor cursor1 = input1.getCursor() ; IDataUtil.put(cursor1, \"OP1\", \"age\") ; IDataUtil.put(cursor1, \"OPR\", \"between\") ; IDataUtil.put(cursor1, \"OP2\", {1,10}) ; Integration Server supports the following operators as the value for criteria\\OPR parameter:",
+            {
+              "table": [
+                [
+                  "Operators",
+                  "Description"
+                ],
+                [
+                  "and",
+                  "AND logical operator"
+                ],
+                [
+                  "between",
+                  "Comparison between two values."
+                ],
+                [
+                  "eq",
+                  "Equals"
+                ],
+                [
+                  "gt",
+                  "Greater than"
+                ],
+                [
+                  "ge",
+                  "Greater than or equal to"
+                ],
+                [
+                  "ilike",
+                  "Regular expression matcher using '?' and \"*\"."
+                ],
+                [
+                  "in",
+                  "Comparison operator meaning in the collection given as an argument."
+                ],
+                [
+                  "isNull",
+                  "Checks whether the value of an attribute is null."
+                ],
+                [
+                  "lt",
+                  "Less than."
+                ],
+                [
+                  "le",
+                  "Less than or equal to"
+                ],
+                [
+                  "not",
+                  "NOT logical operator"
+                ],
+                [
+                  "ne",
+                  "Not equal to"
+                ],
+                [
+                  "notNull",
+                  "Checks whether the value of an attribute with given name is NOT null."
+                ],
+                [
+                  "or",
+                  "OR logical operator"
+                ]
+              ]
+            },
+            "Because the state of the cache can change between search executions, include all of the aggregators to the search query at the same time, so that the returned aggregators are of the same iteration of the cache. By default a search will return an unlimited number of results. If too many results are returned, Integration Server might issue an OutOfMemoryError and become unresponsive. Limit the size of the results using the maxResults parameter. To ensure that Integration Server does not issue an OutOfMemoryError while invoking the service using Designer , do the following: 1. Copy the ehcache-ee.jar from IBMwebMethods_directory/common/lib/ to the IBMwebMethods_directory/Designer/eclipse/plugins/com.webmethods.sdev.runtimejars folder. 2. Edit the IBMwebMethods_directory/Designer/eclipse/plugins/com.webmethods.sdev.runtimejars/META-INF/MANIFEST.MF file by appending ehcache-ee.jar to the \"Bundle-ClassPath:\" property. Maintain the characters per line in the MANIFEST.MF file while editing. 3. Restart Designer using the -clean option: IBMwebMethods_directory /Designer/eclipse/ eclipse.exe -cleanThis cleans the folders in the following directory: <workspace_location>\\.metadata\\.plugins\\com.webmethods.sdev.runtimejars."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.admin:clearAllCaches",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#idc5b201d3-cc5e-410a-9d4b-2c1a2761ee46__title__1",
+      "description": [
+        "WmPublic. Deletes all of the elements from all caches contained in the specified cache manager. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cachePrefix",
+          "type": "String",
+          "description": [
+            "Optional. Prefix of the name of the caches from which to delete elements. If you do not specify a prefix, the service deletes elements from all caches in the cache manager. Note: If pub.cache.admin:clearAllCaches does not find any caches with the specified prefix, the service does not clear any caches."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "The status indicating either Error or Success ."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "The status message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Only users with administrator privileges can execute this service. Important: The elements you delete from the caches are deleted permanently. You cannot undo this action. When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, the service output returns Error status and the message indicates that the service is not supported with a JSR 107 cache. If pub.cache.admin:clearAllCaches does not find any caches with the specified prefix, the service does not clear any caches, but returns Success for status. You cannot clear caches managed by system cache managers. If you have any existing locks on any of the elements in the cache, the pub.cache.admin:clearAllCaches service waits indefinitely until all locks are released. Integration Server returns a status of Error in the following cases: - If the cache is managed by a system cache manager. - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.admin:clearCache",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#idba6222fd-0588-4c42-94b9-bdefee781902__title__1",
+      "description": [
+        "WmPublic. Deletes all elements from the specified cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache from which to delete the elements. This parameter is case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "The status indicating either Error or Success ."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "The status message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Only users with administrator privileges can execute this service. Important: The elements you delete from the cache are deleted permanently. You cannot undo this action. You cannot clear caches managed by system cache managers. If you have any existing locks on any of the elements in the cache, the pub.cache.admin:clearCache service waits indefinitely until all locks are released. Integration Server returns a status of Error in the following cases: - If the cache is managed by a system cache manager. - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.admin:disableCache",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id911f331e-d5ba-4881-a632-e03a275786eb__title__1",
+      "description": [
+        "WmPublic. Disables a cache. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache to disable. This parameter is case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "The status indicating either Error or Success ."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "The status message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Note: Only users with administrator privileges can execute this service. When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, the service output returns Error status and the message indicates that the service is not supported with a JSR 107 cache. When you disable a cache, the cached elements are unavailable for cache operations but still present in the cache. Use the pub.cache.admin:enableCache service to make the disabled cached elements available again. You cannot disable caches managed by system cache managers. After the pub.cache.admin:disableCache service disables a cache, other services cannot add, modify, delete, or retrieve its contents. For example, calls to the pub.cache:get service will return null. The disabled state of a cache lasts only for the lifetime of its cache manager. When the cache manager is restarted, either by restarting Integration Server or clicking the reload icon on the Settings > Caching page in Integration Server Administrator, the cache is enabled. When you disable a cache, Integration Server: - Discards operations such as pub.cache:get, pub.cache:remove, and pub.cache.atomic:replace calls on the cache. - Returns a null for pub.cache:get calls on the cache. Integration Server returns a status of Error in the following cases: - If the cache is managed by a system cache manager. - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.admin:enableCache",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#idc57fb7ec-4cd9-45f0-8acb-7ac98d6e2f5f__title__1",
+      "description": [
+        "WmPublic. Enables a cache. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache to enable. This parameter is case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "The status indicating either Error or Success ."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "The status message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Note: Only users with administrator privileges can execute this service. When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, the service output returns Error status and the message indicates that the service is not supported with a JSR 107 cache. You cannot enable caches managed by system cache managers. When you disable a cache, the cached elements are unavailable but still present in the cache. Use pub.cache.admin:enableCache to make the cached elements available again. Integration Server returns a status of Error in the following cases: - If the cache is managed by a system cache manager. - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.admin:evictExpiredElements",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#idfe62af9b-a15c-4565-85dd-1178f0ce12dc__title__1",
+      "description": [
+        "WmPublic. Deletes all of the expired elements from a cache. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache from which you want to delete the expired elements. This parameter is case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "The status indicating either Error or Success ."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "The status message."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Only users with administrator privileges can execute this service. Important: The elements you delete from the cache are deleted permanently. You cannot undo this action. When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, the service output returns Error status and the message indicates that the service is not supported with a JSR 107 cache. The pub.cache.admin:evictExpiredElements service can take longer to delete expired elements depending on the number of elements contained in the cache. If the cache contains a large number of elements, pub.cache.admin:evictExpiredElements might take longer to process the request than when the cache contains fewer elements. Integration Server returns a status of Error in the following cases: - If the cache is managed by a system cache manager. - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.admin:isCacheDisabled",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id85b649d5-6c4b-4f1f-aa6d-9bd35436d5e3__title__1",
+      "description": [
+        "WmPublic. Checks whether the cache is disabled. The service is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache for which you want to check the status (whether it is disabled or enabled). This parameter is case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "isDisabled",
+          "type": "String",
+          "description": [
+            "Indicates whether the cache is disabled. A value of: - true indicates that the cache is disabled. - false indicates that the cache is enabled."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Conditional. The status indicating Error . The service returns Error for status only if the service fails when checking whether the cache is disabled."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Conditional. The status message of the error. The service returns message with status only if an error occurs when checking whether the cache is disabled."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Note: Only users with administrator privileges can execute this service. When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, the service output returns isDisabled=false, Error status, and the message indicates that the service is not supported with a JSR 107 cache. pub.cache.admin:isCacheDisabled returns Error for status and an accompanying message in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.atomic:putIfAbsent",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id823b64c1-2794-4d19-b4d0-82ef29854aa9__title__1",
+      "description": [
+        "WmPublic. Adds an element to the cache if the cache does not contain an element with the specified key."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache to which to add the element. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key of the element."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Value to add to the element."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "keyExists",
+          "type": "String",
+          "description": [
+            "Indicates whether an element with the specified key exists in the cache. - true indicates that an element with the key already exists in the cache. - false indicates that an element with the key does not exist in the cache."
+          ]
+        },
+        {
+          "name": "oldValue",
+          "type": "Object",
+          "description": [
+            "Conditional. Value of the element that already exists in the cache. Returned only if keyExists is true . The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.cache.atomic:putIfAbsent service adds the specified value to the cache only if the specified key does not already exist in the cache. If the specified key already exists in the cache, pub.cache.atomic:putIfAbsent returns true for keyExists and the value of the cached element for oldValue. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.atomic:remove",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#idff892c85-5ca7-4c26-a30b-edb5f87bd793__title__1",
+      "description": [
+        "WmPublic. Removes the cached element associated with the specified key and value."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache from which to remove the element. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key of the element to remove."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Value of the element to remove."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "removed",
+          "type": "String",
+          "description": [
+            "Indicates whether the service removed the element. - true indicates that the element was removed from the cache. - false indicates that the element was not removed from the cache. The service returns false if the specified key and value do not exist in the cache."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.atomic:replace",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#ida4b0f284-8aee-4056-bd69-48b9e2acf651__title__1",
+      "description": [
+        "WmPublic. Replaces the cached element value with the supplied value."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache that contains the value you want to replace. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key of the cache element whose value you want to replace."
+          ]
+        },
+        {
+          "name": "oldValue",
+          "type": "Object",
+          "description": [
+            "Value of the cached element."
+          ]
+        },
+        {
+          "name": "newValue",
+          "type": "Object",
+          "description": [
+            "Value with which to replace the value of the cached element."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "replaced",
+          "type": "String",
+          "description": [
+            "Indicates whether the service replaced oldValue with newValue in the cache. - true indicates that the value was replaced in the cache. - false indicates that the value was not replaced in the cache."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.cache.atomic:replace service replaces an element in the cache only if an element with the values of the specified key and oldValue parameters already exist in the cache. If an element exist in the cache with the specified key and oldValue, pub.cache.atomic:replace replaces the cached element with the specified key and newValue. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.atomic:replaceIfKeyExists",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id2a630062-3441-4925-bc7e-eeb4305a27bb__title__1",
+      "description": [
+        "WmPublic. Replaces the cached element if an element for the specified key exists in a cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive. The parameter is not supported when the service uses Java Specification Request 107 (JSR 107) cache."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache that contains the key. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key of the element whose value you want to replace."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Value with which to replace the value of the cached element."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "keyExists",
+          "type": "String",
+          "description": [
+            "Indicates whether the element with the passed key exists in the cache. - true indicates that the element with the key already exists in the cache. - false indicates that the element with the key does not exist in the cache."
+          ]
+        },
+        {
+          "name": "oldValue",
+          "type": "Object",
+          "description": [
+            "Conditional. Value of the element the service replaced with value . Returned only if keyExists is true ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.cache.atomic:replaceIfKeyExists service replaces an element in the cache only if the specified key already exists in the cache. If an element with the specified key exists, pub.cache.atomic:replaceIfKeyExists replaces value of the cached element with the one specified in value. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.bulk:isClusterBulkLoadEnabled",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id2fca80e0-ced0-455f-9fd5-c088225c481b__title__1",
+      "description": [
+        "WmPublic. Checks whether the cache on at least one Integration Server node in the Terracotta Server Array cluster is enabled for bulk loading. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache to check for bulk loading. This parameter is case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "enabled",
+          "type": "String",
+          "description": [
+            "Indicates whether the cache on at least one Integration Server node of the Terracotta Server Array cluster is in bulk-load mode. - true indicates that at least one node is in bulk-load mode. - false indicates that the node is not in bulk-load mode."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, the service output returns enabled as false. The pub.cache.bulk:isClusterBulkLoadEnabled service applies only to distributed caches. If you run pub.cache.bulk:isClusterBulkLoadEnabled on a local cache, the service returns false for enabled. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.bulk:isNodeBulkLoadEnabled",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id77a61866-82c5-43ec-b2d5-c8a9664941c9__title__1",
+      "description": [
+        "WmPublic. Checks whether the cache of the current Integration Server node in the Terracotta Server Array cluster is bulk-load enabled. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the distributed cache to check for bulk loading. This parameter is case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "enabled",
+          "type": "String",
+          "description": [
+            "Indicates whether the cache is enabled for bulk loading. - true indicates that the Integration Server node calling the service is the same one that enabled bulk-loading. - false indicates one of the following: The Integration Server node calling the service was not the same node that enabled bulk loading. The specified cache is a local cache."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, the service output returns enabled as false. The pub.cache.bulk:isNodeBulkLoadEnabled service applies only to distributed caches. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.bulk:setNodeBulkLoadEnabled",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#idbfab45e7-c223-4926-8a1d-b80e57b8b381__title__1",
+      "description": [
+        "WmPublic. Enables or disables bulk loading mode in the current Integration Server node for the cache. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache on which to enable or disable bulk loading. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "bulkMode",
+          "type": "String",
+          "description": [
+            "Indicates whether to enable the bulk-load mode for the cache. Set to: - true to enable the bulk-load mode. This is the default. - false to disable the bulk-load mode."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, Integration Server skips this service. The pub.cache.bulk:setNodeBulkLoadEnabled service applies only to distributed caches. The pub.cache.bulk:setNodeBulkLoadEnabled service does nothing if you: - Try to enable bulk loading (bulkMode set to true) when the node is already in bulk-load mode. - Try to disable bulk loading (bulkMode set to false) when the node is not already in bulk-load mode. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.bulk:waitUntilClusterBulkLoadComplete",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id6918a1e7-4c35-4b54-912d-1a34515a4b04__title__1",
+      "description": [
+        "WmPublic. Indicates whether Integration Server delays execution of the next step in a flow service until all of the Integration Server nodes in the Terracotta Server Array cluster disable bulk loading for the cache. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache on which to hold processing. This parameter is case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, Integration Server skips this service. The pub.cache.bulk:waitUntilClusterBulkLoadComplete service applies only to distributed caches. If none of the nodes are bulk-load enabled, Integration Server immediately executes the next step in the flow service without waiting. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.lock:acquireLock",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id2f8ee7e3-27c6-4dcb-8303-c3103056ae24__title__1",
+      "description": [
+        "WmPublic. Acquires a lock on the cached element that contains the specified key. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache that contains the element to lock. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key of the cached element to lock."
+          ]
+        },
+        {
+          "name": "lockType",
+          "type": "String",
+          "description": [
+            "Optional. Type of lock you want to place on the cached element."
+          ]
+        },
+        {
+          "name": "lockWaitTime",
+          "type": "String",
+          "description": [
+            "Optional. Amount of time in milliseconds to wait to acquire a lock before timing out."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, Integration Server skips this service. If the pub.cache.lock:acquireLock service acquires a lock, the element remains locked until released with the pub.cache.lock:releaseLock service. You must acquire and release a lock in the same thread in which pub.cache.lock:acquireLock is executing. Failing to do so could cause the key to remain locked indefinitely. When using the debug flow service to step through a flow service, depending on your breakpoint settings Designer might use a new thread for each step. You cannot release a lock acquired in a previous step of the same flow if break points are triggered on Designer or if you are stepping through a flow service. To avoid orphaned locks, disable invocations of pub.cache.lock:acquireLock and pub.cache.lock:releaseLock before stepping through the flow service or make sure that pub.cache.lock:acquireLock and pub.cache.lock:releaseLock services are called between the boundaries of two breakpoints. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - Whether or not a cached element needs to be locked depends on the application that is using the element. For example, if an application retrieves and holds an element for a time and needs to prevent another client from changing the element during this time, the application should acquire a lock on the element. However, if the application does not hold the element, a lock might not be required. - If Integration Server cannot find the specified cache manager or cache. - If pub.cache.lock:acquireLock is unable to acquire a lock. - If the specified lockWaitTime is not a valid integer. - If a cache operation fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.lock:isLockedByCurrentThread",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id777556f5-ff12-4b65-bf5b-3eb143f1537a__title__1",
+      "description": [
+        "WmPublic. Checks whether the current thread is holding a lock on the cached element for the specified key. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache that contains the key. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key for which you want to check locks."
+          ]
+        },
+        {
+          "name": "lockType",
+          "type": "String",
+          "description": [
+            "Optional. Type of lock for which to check the cached element."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "locked",
+          "type": "String",
+          "description": [
+            "Indicates whether the cached element is locked by the current thread. - true indicates that the element is locked. - false indicates that the element is not locked. Note: If the specified cache is a local cache and the specified lockType is read, the service always returns false."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, the service returns locked as false. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.lock:releaseLock",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id2ca4ee8d-ada2-4a18-b202-2695568fd81e__title__1",
+      "description": [
+        "WmPublic. Releases a lock on the element for the specified key. The service is not supported when Integration Server uses Java Specification Request 107 (JSR 107) cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "cacheManagerName",
+          "type": "String",
+          "description": [
+            "Name of the cache manager that manages the cache. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "cacheName",
+          "type": "String",
+          "description": [
+            "Name of the cache that contains the key. This parameter is case sensitive."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Object",
+          "description": [
+            "Key of the cached element to unlock."
+          ]
+        },
+        {
+          "name": "lockType",
+          "type": "String",
+          "description": [
+            "Optional. Type of lock you want to release from the cached element."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When Integration Server uses a JSR 107 cache and you set watt.server.services.cache.jsr107.operation=noop, Integration Server skips this service. You must call pub.cache.lock:releaseLock from the same thread from which you call pub.cache.lock:acquireLock. Failing to do so could cause the key to remain locked indefinitely. Integration Server issues a ServiceException in the following cases: - If you do not specify all required input parameters. - If Integration Server cannot find the specified cache manager or cache. - If you try to release a read lock on a cached element for which a write lock is set, or release a write lock on a cached element for which a read lock is set."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.serviceResults:addCacheEntry",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id9cc730c1-9405-4aa8-b7c8-8b139815688b__title__1",
+      "description": [
+        "WmPublic. Adds cached entry into service results for the service without executing the actual service. This service can be useful to perform bulk load of service results at Integration Server startup."
+      ],
+      "input_parameters": [
+        {
+          "name": "serviceName",
+          "type": "String",
+          "description": [
+            "Name of the service for which to add the cache entry into cached service results."
+          ]
+        },
+        {
+          "name": "input",
+          "type": "Document",
+          "description": [
+            "An IData containing the key/value pairs for the cached service input."
+          ]
+        },
+        {
+          "name": "output",
+          "type": "Document",
+          "description": [
+            "An IData containing the key/value pairs for the cached service output."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the serviceName service does not exist in Integration Server, or it is not enabled to cache service results, Integration Server throws an exception."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.serviceResults:listServiceCache",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#ide6dd11a4-5ed1-4a83-977c-d76604354b73__title__1",
+      "description": [
+        "WmPublic. Returns a list of the cached service results for a particular service."
+      ],
+      "input_parameters": [
+        {
+          "name": "serviceName",
+          "type": "String",
+          "description": [
+            "Name of the service for which you want to view the cached service results."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "elements",
+          "type": "Document List",
+          "description": [
+            "Conditional. A document list (IData []) containing the cached service results for the specified service. The pub.cache.serviceResults:listServiceCache service returns the elements output only if the service results cache contains cached results for the specified service. For each set of cached service results, the pub.cache.serviceResults:listServiceCache returns the following information:"
+          ],
+          "children": [
+            {
+              "name": "key",
+              "type": "String",
+              "description": [
+                "Optional. Key for the cached element containing the service results."
+              ]
+            },
+            {
+              "name": "input",
+              "type": "Document",
+              "description": [
+                "Optional. An IData containing the key/value pairs for the cached service input."
+              ]
+            },
+            {
+              "name": "output",
+              "type": "Document",
+              "description": [
+                "Optional. An IData containing the key/value pairs for the cached service output."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If serviceName specifies a service that does not exist or a service for which Integration Server does not cache service results, Integration Server returns an empty elements output parameter. You can use the pub.cache.serviceResults:listServiceCache with a public service results cache only. You cannot use the pub.cache.serviceResults:listServiceCache with the ServiceResults system cache. When you use a Terracotta Ehcache cache for the pub.cache.serviceResults:listServiceCache service, make sure that the Terracotta Ehcache cache for the service results is searchable and that the cache allows automatic indexing for keys. That is, for the Terracotta Ehcache cache, the Searchable check box must be selected and the Key check box next to Allow Automatic Indexing must be selected. Exposing the contents of the Terracotta Ehcache cache for service results via the pub.cache.serviceResults:listServiceCache may represent a security risk."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.serviceResults:resetServerCache",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id6d6f6fea-f3ea-4436-808a-eb794e403e72__title__1",
+      "description": [
+        "WmPublic. Resets the cache for all services in the service results cache, resulting in the removal of all cached service results for all services from the service results cache."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message indicating whether Integration Server cleared the entire service results cache successfully. If it did not, review the server and error logs to determine the reason."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.cache.serviceResults:resetServiceCache",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-cache-folder#id866798e9-1db6-4bfb-b2ff-23869d2d4e46__title__1",
+      "description": [
+        "WmPublic. Resets the cache for specific service, resulting in the removal of cached service results for the service."
+      ],
+      "input_parameters": [
+        {
+          "name": "serviceName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the service in the format folder.subfolder:serviceName for which you want to remove cached service results."
+          ]
+        },
+        {
+          "name": "input",
+          "type": "Document",
+          "description": [
+            "Optional. An IData containing key/value pairs that indicate the cached elements to remove."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message indicating whether or Integration Server cleared the service results cache for the specified service successfully. If it did not, review the server and error logs to determine the reason. Note: If serviceName specifies a service that does not exist, or no cached entry with the specified input exists, the message output parameter returns the message “Cache reset successfully,” to avoid revealing whether a service exists."
+          ]
+        }
+      ]
+    }
+  ]
+}

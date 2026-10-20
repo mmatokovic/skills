@@ -1,0 +1,1870 @@
+{
+  "folder": "FLOW",
+  "description": [
+    "You use the elements in the flow folder to perform debugging and utility-type tasks in a flow service."
+  ],
+  "total_elements": 32,
+  "elements": [
+    {
+      "name": "pub.flow:clearPipeline",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_clearPipeline__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Removes all fields from the pipeline. You may optionally specify fields that should not be cleared by this service."
+      ],
+      "input_parameters": [
+        {
+          "name": "preserve",
+          "type": "String List",
+          "description": [
+            "Optional. Field names that should not be cleared from the pipeline."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.flow:debugLog",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_debugLog__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Writes a message to the server log. Each log message contains a timestamp, a message ID, the function name field, and message field. See the following example."
+      ],
+      "input_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Optional. Text of the message to write to the log."
+          ]
+        },
+        {
+          "name": "function",
+          "type": "String",
+          "description": [
+            "Optional. Function name, typically an abbreviation used to identify the source of the message."
+          ]
+        },
+        {
+          "name": "level",
+          "type": "String",
+          "description": [
+            "Optional. Debug level at which to display this message. Whether or not Integration Server displays this message depends on the logging level setting for the 0090 pub Flow services facility. For example, if you specify Error for this message, but 0090 pub Flow services facility is configured to display only Fatal errors, this message will not be displayed. However, if the 0090 pub Flow services logging facility logging level is set to Warn, this message will be displayed (the Warn setting displays warning, error, and fatal messages). Specify one of the following values:"
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can control the logging level for flow messages independent of log messages for other facilities. On the Logs > Logging configuration > Server Logger > Edit Server Logger > Edit server logger details page in Integration Server Administrator, go to 0090 pub Flow Services under Integration Server and specify the level of messages that you want Integration Server to display for services in the pub.flow folder. Prior to Integration Server 7.1, Integration Server used a number-based system to set the level of debug information written to the server log. Integration Server maintains backward compatibility with this system."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:getCallerIdentity",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#reference_h1n_mnz_13c__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Retrieves the user identity and authentication context information for the current session."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "userId",
+          "type": "String",
+          "description": [
+            "The user name or ID of the user account logged into Integration Server."
+          ]
+        },
+        {
+          "name": "isAdministrator",
+          "type": "Boolean",
+          "description": [
+            "A value of true indicates that the user is in the \"Administrators\" group and false indicates that the user is not in the \"Administrators\" group."
+          ]
+        },
+        {
+          "name": "openId",
+          "type": "IData",
+          "description": [
+            "Conditional. The OpenID Connect (OIDC) claims that include identifiable details about the user, such as name and email. The value is empty if OIDC authentication is not used for the session."
+          ]
+        },
+        {
+          "name": "oAuth",
+          "type": "IData",
+          "description": [
+            "Conditional. The extracted JWT claims that identify the user if the token is JWT. The value is empty if OAuth authentication is not used for the session or the bearer token is not JWT."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use the pub.flow:getCallerIdentity service to verify the identity of a user account logged into Integration Server and determine if the authenticated user is authorized to access the protected resources requested in the session."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:getCallingService",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#id883aa36e-8e61-417b-b5b4-a00d270094b9__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Retrieves the service name and package name of the parent of the calling child service."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "svcName",
+          "type": "String",
+          "description": [
+            "Fully qualified namespace name of the parent service."
+          ]
+        },
+        {
+          "name": "pkgName",
+          "type": "String",
+          "description": [
+            "Package name of the parent service."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If pub.flow:getCallingService is invoked from a service that does not have a parent service (for example, if the service is a top-level service), Integration Server does not return the output parameters."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:getLastError",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_getLastError__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Obtains detailed information about the last exception that was trapped within a flow. An exception is trapped in a flow when a service failure occurs inside a SEQUENCE step that executes until DONE, or when a service failure occurs inside a REPEAT step that repeats on FAILURE."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "lastError",
+          "type": "Document",
+          "description": [
+            "Information about the last error, translated into the language used by the Integration Server . The structure of this document is defined by pub.event:exceptionInfo ."
+          ],
+          "references": [
+            {
+              "title": "pub.event:exceptionInfo",
+              "url": "to-event_folder.html#Apub_event_exceptionInfo"
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If this service is not invoked from within a flow service, an exception is thrown. Each execution of a service (whether the service succeeds or fails) updates the value returned by getLastError. Consequently, getLastError itself resets the value of lastError. Therefore, if the results of getLastError will be used as input to subsequent services, map the value of lastError to a variable in the pipeline. If a map has multiple transformers, then a subsequent call to getLastError will return the error associated with the last failed transformer in the map, even if it is followed by successful transformers. The pub.flow:getLastError services returns information for failures that originate in a service call made by flow only. The error information is not updated to reflect a failure caused by the EXIT step such as an EXIT step configured to exit $parent and signal failure. Invoking pub.flow:getLastError repeatedly in a flow service increases the pipeline size as the pipeline/lastError document has the lastError of all previous pub.flow:getLastError executions, which leads to \"out of memory\" issues in Integration Server when the exceptions are high. In such scenarios, set the watt.server.getLastError.removeLastError server configuration parameter to true, which removes the pipeline/lastError document from the output of the last invocation of the pub.flow:getLastError service. When you invoke pub.flow:getLastError in a flow service and the input to the flow service has non-serializable objects, the pub.flow:getLastError service returns the object type as strings instead of the object reference. For example, consider the following flow service. In the example, the \"SEQUENCE (Try)\" step returns a reference to non-serializable objects or object lists of class such as java.io.ByteArraylnputStream. For such non-serializable objects or object lists in the pipeline, when the error occurs, the pub.flow:getlastError service in the \"SEQUENCE (Catch)\" step returns the object type (java.io.ByteArraylnputStream) as strings instead of the object reference. Therefore, you must initialize the objects outside the \"SEQUENCE (Try)\" step to make them available to the \"SEQUENCE (Catch)\" step."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:getLastFailureCaught",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#iddbfe4aad-7bc7-4b79-afd9-0e6988f30a9a__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Returns information about the last failure that was caught by a CATCH step."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "failure",
+          "type": "Object",
+          "description": [
+            "The last failure caught by a CATCH step. The failure parameter is null if no failure have been caught."
+          ]
+        },
+        {
+          "name": "failureMessage",
+          "type": "String",
+          "description": [
+            "Conditional. The message associated with the failure. The service returns a failureName output parameter only if a failure has been caught."
+          ]
+        },
+        {
+          "name": "failureName",
+          "type": "String",
+          "description": [
+            "Conditional. The class name of the exception. The service returns a failureMessage output parameter only if a failure has been caught."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When a CATCH step can handle multiple failures, use the pub.flow:getLastFailureCaught service to determine which failure the step caught. If you want to rethrow a caught failure, use the pub.flow:getLastFailureCaught service to determine which failure the CATCH step caught and then use an EXIT step configured to signal failure to rethrow the failure. The pub.flow:getLastFailureCaught service does not have to be executed within a CATCH step. Invoking the service any time after a failure has been caught returns the caught failure."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:getRetryCount",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#A32754__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Retrieves the retry count and the maximum retry count for a service. The retry count indicates the number of times the Integration Server has re-executed a service. For example, a retry count of 1 indicates that the Integration Server tried to execute the service twice (the initial attempt and then one retry). The maximum retry count indicates the maximum number of times the Integration Server can re-execute the service if it continues to fail because of an ISRuntimeException."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "retryCount",
+          "type": "String",
+          "description": [
+            "The number of times the Integration Server has re-executed the service."
+          ]
+        },
+        {
+          "name": "maxRetryCount",
+          "type": "String",
+          "description": [
+            "The maximum number of times the Integration Server can re-execute the service. A value of -1 indicates that the service is being invoked by a trigger configured to retry until success."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Although the pub.flow:getRetryCount service can be invoked at any point in a flow service, the pub.flow:getRetryCount service retrieves retry information for the service within which it is invoked. That is, you can use the pub.flow:getRetryCount service to retrieve retry information for top-level services or services invoked by a trigger only. The pub.flow:getRetryCount service does not retrieve retry information for a nested service (a service that is invoked by another service). The Integration Server retries a service that is configured to retry if the service uses the pub.flow:throwISRuntimeException service to catch a transient error and re-throw it as an ISRuntimeException. The Integration Server will also retry a service written in Java if the service throws an exception using com.wm.app.b2b.server.ISRuntimeException(). For more information about constructing com.wm.app.b2b.server.ISRuntimeExceptions in Java services, see the IBM webMethods Integration Server Java API Reference for the com.wm.app.b2b.server.ISRuntimeException class. The maximum number of times the Integration Server retries a service depends on the value of the Max attempts property for the service. If the service is invoked by a trigger, the retry behavior is determined by the trigger retry properties."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.flow:throwExceptionForRetry"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:getSession",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_getSession__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Inserts the Session object into the pipeline as a document named $session. Session is useful for associating values with particular clients or users. Once $session is added to the pipeline, it can be used like any other document in a flow. This permits more powerful flows that perform work spanning several user requests."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "$session",
+          "type": "Document",
+          "description": [
+            "Information for the current user session. Setting, copying, or dropping fields within $session is effectively manipulating the Session object on the server."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:getTransportInfo",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_getTransportInfo__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Retrieves information about the protocol from which the current service was invoked."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "transport",
+          "type": "Document",
+          "description": [
+            "Information about the protocol that invoked the service. The structure of this document is defined by pub.flow:transportInfo ."
+          ],
+          "references": [
+            {
+              "title": "pub.flow:transportInfo",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_transportInfo"
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.flow:getTransportInfo service can be used to retrieve protocol information for a top-level service only. A top-level service is one that is invoked by a client request or a trigger. The value of the protocol key in transport indicates which protocol was used to invoked the top-level service. For example, if the service was invoked through SMTP, protocol would be set to email. transport will also contain a document (whose key is protocol-dependent) that holds protocol-specific details. To use this service, first check the value of the transport/protocol parameter to determine which protocol was used. Then, depending on the value of protocol, extract the appropriate protocol information from transport. See pub.flow:transportInfo for the structure of the document that holds the protocol details."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:HTTPRequest",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#reference_EAA26ACDF44A46CD99F8399D3946D6F9__title__1",
+      "element_type": "document_type",
+      "description": [
+        "WmPublic. Document type used to represent information about the HTTP request received by the Integration Server."
+      ],
+      "fields": [
+        {
+          "name": "headers",
+          "type": "Document",
+          "description": [
+            "Contains the header fields from the HTTP request."
+          ]
+        },
+        {
+          "name": "requestURL",
+          "type": "String",
+          "description": [
+            "URL used by the client to invoke the service."
+          ]
+        },
+        {
+          "name": "method",
+          "type": "String",
+          "description": [
+            "HTTP method used by the client to request the top-level service. Possible values are GET, PUT, POST, PATCH, and DELETE."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To get the details of an HTTP request for a service, you can add a document reference variable named $httpRequest that references the pub.flow:HTTPRequest document type in the input signature of a service. While invoking a service that includes a $httpRequest document reference variable, Integration Server populates the $httpRequest variable with information from the from the HTTP request. Note: The variable name $httpRequest is case sensitive. To achieve the described behavior, you must use the exact combination of letters and symbols, including upper and lower case."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:HTTPResponse",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#reference_D829A14C508E4CF5BD4B6A4D25F38DFA__title__1",
+      "element_type": "document_type",
+      "description": [
+        "WmPublic. Document type that specifies the HTTP response information to be returned by Integration Server to the client."
+      ],
+      "fields": [
+        {
+          "name": "headers",
+          "type": "Document",
+          "description": [
+            "Optional. Contains the header fields to be returned in the HTTP response."
+          ]
+        },
+        {
+          "name": "responseCode",
+          "type": "String",
+          "description": [
+            "Optional. HTTP status code to be returned to the client. The response codes and phrases are defined in https://tools.ietf.org/html/rfc7231#section-6. If you provide a value for responseCode that is not listed in RFC 7321, Section 6, you must also provide a value for reasonPhrase."
+          ],
+          "references": [
+            {
+              "title": "https://tools.ietf.org/html/rfc7231#section-6",
+              "url": "https://tools.ietf.org/html/rfc7231#section-6"
+            }
+          ]
+        },
+        {
+          "name": "responsePhrase",
+          "type": "String",
+          "description": [
+            "Optional. HTTP reason phrase to be returned to the client. If no reason is provided, the default reason phrase associated with responseCode will be used. You must provide a reasonPhrase for any responseCode that is not listed in RFC 7321, Section 6."
+          ]
+        },
+        {
+          "name": "responseString",
+          "type": "String",
+          "description": [
+            "Optional. Response to be returned to the client, specified as a string."
+          ]
+        },
+        {
+          "name": "responseBytes",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. Response to be returned to the client, specified as a byte array."
+          ]
+        },
+        {
+          "name": "responseStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Optional. Response to be returned to the client, specified as an InputStream."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can set an HTTP response by adding a document reference to the pub.flow:HTTPResponsedocument type in the pipeline of the service and naming the variable as $httpResponse. Using the values set in the $httpResponse, Integration Server sends the response back to the client. The variable name $httpResponse is case sensitive. To achieve the described behavior, you must use the exact combination of letters and symbols, including upper and lower case. If multiple documents named $httpResponse exist in a flow service, (multiple nested flow services), Integration Server uses the last $httpResponse value set in the flow service the response header. If a service adds $httpResponse to the pipeline and also calls the pub.flow:setResponse, pub.flow:setResponse2, pub.flow:setResponseHeader, or pub.flow:setResponseHeaders service, then Integration Server uses the values set in$httpResponse pipeline variable. Note: Integration Server does not support the use of the pub.flow:HTTPResponse document type for Enterprise Gateway that is configured to use the custom filter."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:invokeService",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#ided8c927b-c207-4beb-b41e-c59cc50be728__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Dynamically invokes any Integration Server public service and optionally returns the output from the invoked service in the pipeline for pub.flow:invokeService."
+      ],
+      "input_parameters": [
+        {
+          "name": "ifcname",
+          "type": "String",
+          "description": [
+            "The flow interface name of the service to be invoked. For example, pub.math."
+          ]
+        },
+        {
+          "name": "svcname",
+          "type": "String",
+          "description": [
+            "The name of the service to invoke. For example, addInts."
+          ]
+        },
+        {
+          "name": "pipeline",
+          "type": "Document",
+          "description": [
+            "Optional. The name of the pipeline for the pub.flow:invokeService service. Note: If pipeline is not specified, the invoked service returns the output parameters in its own pipeline."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the parameters specified by the service invoked by pub.flow:invokeService are not present or not properly specified, Integration Server issues an exception appropriate for the invoked service. Integration Server issues a ServiceException for pub.flow:invokeService if either of the following is not present in the flow service: - The interface specified by ifcname - The service specified by svcname"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:iterator",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#idb05ee3f5-e081-4260-aebb-607ecdd0cbf5__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Returns IData arrays as batches with a specified batch size."
+      ],
+      "input_parameters": [
+        {
+          "name": "$internal",
+          "type": "IData",
+          "description": [
+            "A document that specifies the information required to batch output."
+          ],
+          "children": [
+            {
+              "name": "batchContext",
+              "type": "String",
+              "description": [
+                "Optional. Unique handle for this specific batch request. For the first call, this parameter must be null or empty. On subsequent calls, it will contain a universally unique identifier (UUID) that Integration Server uses as the key to retrieve the current state of the batching request."
+              ]
+            },
+            {
+              "name": "batchSize",
+              "type": "Integer",
+              "description": [
+                "Optional. Number of records (IData) to return in the result set array. The value must be greater than 0. The default is 100."
+              ]
+            },
+            {
+              "name": "timeToLive",
+              "type": "Integer",
+              "description": [
+                "Length of time in seconds that the request remains in the cache. The value must be greater than 0. The default is 60."
+              ]
+            },
+            {
+              "name": "resultSetKey",
+              "type": "String",
+              "description": [
+                "Pipeline key name of the IData array that should be batched. If not specified, the service creates batches from the first IData array in the pipeline. If no IData array exists in the service signature, the service will not batch results, and Integration Server returns all records at once."
+              ]
+            },
+            {
+              "name": "serviceName",
+              "type": "String",
+              "description": [
+                "Fully qualified service name from which pub.flow:iterator receives the IData array. This parameter is required for the first invocation, and is optional for subsequent calls."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "$internal",
+          "type": "IData",
+          "description": [
+            "A document that specifies the results of the batch request."
+          ],
+          "children": [
+            {
+              "name": "batchContext",
+              "type": "String",
+              "description": [
+                "Conditional. Unique handle for this specific request. Returned only if hasMore is true ."
+              ]
+            },
+            {
+              "name": "hasMore",
+              "type": "Boolean",
+              "description": [
+                "Indicates whether there are still records to process in the result set ( true ), or if there are no more to process ( false )."
+              ]
+            },
+            {
+              "name": "resultSetKey",
+              "type": "String",
+              "description": [
+                "Indicates the pipeline key name of the IData array that was batched. If resultSetKey is specified in the input, Integration Server returns that value. If resultSetKey is not specified in the input, this parameter contains the key of the first IData array that was processed."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The output service signature of the service specified by the serviceName input parameter must contain at least one IData array. If there are multiple IData arrays in the output signature and the resultSetKey input parameter is not specified, pub.flow:iterator batches the first IData array in the pipeline. If there are no IData arrays in the pipeline, pub.flow:iterator returns the output all at once instead of in batches. The pub.flow:iterator service sends the rest of the pipeline to the service specified by the serviceName parameter in the case that multiple calls are required to get all of the data in the result set."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:restorePipeline",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_restorePipeline__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Restores a pipeline previously saved by pub.flow:savePipeline."
+      ],
+      "input_parameters": [
+        {
+          "name": "$name",
+          "type": "String",
+          "description": [
+            "Name of the saved pipeline. Because multiple pipelines can be saved, this parameter is necessary to identify the pipeline in memory. If this value is left null or the name is unknown, an exception will be thrown."
+          ]
+        },
+        {
+          "name": "$merge",
+          "type": "String",
+          "description": [
+            "Optional. Flag that indicates whether or not to merge the values in the existing pipeline with the values in the saved pipeline. Set to: - false to clear the existing pipeline before restoring the saved pipeline. This is the default. - true to merge the existing pipeline with the saved pipeline. If a field exists in the saved pipeline and the existing pipeline, the saved field takes precedence."
+          ]
+        },
+        {
+          "name": "$remove",
+          "type": "String",
+          "description": [
+            "Optional. Flag that indicates whether or not the saved pipeline will remain in memory after this service is executed. Set to: - false to retain the saved pipeline in memory so that future calls to restorePipeline with the same $name will still return the saved pipeline. This is the default. - true to remove the saved pipeline from memory after the service executes."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "After a successful invocation of restorePipeline, the pipeline will contain all fields that were present immediately before pub.flow:savePipeline was invoked. restorePipeline clears existing pipeline values unless the optional $merge field is specified. When using MTOM streaming for SOAP attachments, messageContext variables and/or XOPObject fields will not be available in the saved pipeline. A messageContext variable is used by many pub.soap services to hold the SOAP message on which the service acts. XOPObject fields are Objects that use the com.wm.util.XOPObject Java wrapper type. For more information about MTOM Streaming, see the Web Services Developer’s Guide . This service is helpful in the interactive development or debugging of an application."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.flow:savePipeline - pub.flow:restorePipelineFromFile"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:restorePipelineFromFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_restorePipelineFromFile__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Restores a pipeline that was previously saved to a file."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "Relative or absolute path and file name of a file containing a saved pipeline on the Integration Server . If the file is not found at run time, Integration Server throws an exception. For a filename that does not include an absolute path, Integration Server calculates the relative path from the default pipeline directory which is located here: Integration Server_directory /instances/instance_name/pipeline When you specify a path for the fileName input parameter and the path is outside of the default pipeline directory, Integration Server verifies whether it is specified in the watt.server.file.canReadPaths server configuration parameter. If the file path is not specified in the watt.server.file.canReadPaths parameter, Integration Server throws an exception. For more information about watt.server.file.canReadPaths server configuration parameter, see Server Configuration Parameters"
+          ],
+          "references": [
+            {
+              "title": "Server Configuration Parameters",
+              "url": "../is_administrators_guide/z_server_config_parameters/watt_server.html#A_Ref462651821"
+            }
+          ]
+        },
+        {
+          "name": "merge",
+          "type": "String",
+          "description": [
+            "Optional. Flag that determines whether or not to merge the saved values into the existing pipeline. Set to: - false to replace the existing pipeline with the saved values. This is the default. - true to merge the saved values into the existing pipeline."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is helpful in the interactive development or debugging of an application. In some cases, however, using the Pipeline debug property for the debugging of an application is more efficient. For more information about the Pipeline debug property, see IBM webMethods Service Development Help . Be aware that variables that exist in the saved pipeline but are not defined in the flow will not appear on the Pipeline tab and, therefore, will not be available for explicit mapping. When using MTOM streaming for SOAP attachments, messageContext variables and/or XOPObject fields will not be available in the saved pipeline. A messageContext variable is used by many pub.soap services to hold the SOAP message on which the service acts. XOPObject fields are Objects that use the com.wm.util.XOPObject Java wrapper type. For more information about MTOM Streaming, see the Web Services Developer’s Guide . The watt.server.checkPath.restorePipelineFromFile server configuration parameter determines whether Integration Server verifies that the provided filename is in the watt.server.file.canReadPaths. When watt.server.checkPath.restorePipelineFromFile is set to true, the default, Integration Server verifies that the path or directory specified in filename is in the default pipeline directory or is included in the watt.server.file.canReadPaths parameter. If the file is outside of the default pipeline directory and it is not in the watt.server.file.canReadPaths, the service ends with a ServiceException. When the watt.server.checkPath.restorePipelineFromFile parameter is set to false Integration Server does not verify that the specified filename is in the default pipeline directory or the watt.server.file.canReadPaths parameter. The pub.flow:restorePipelineFromFile can always read from files in the default pipeline directory which is located here: Integration Server_directory /instances/instance_name/pipeline. You do not need to include the default pipeline directory in the watt.server.file.canReadPaths parameter."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.flow:savePipelineToFile - pub.flow:restorePipeline"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:savePipeline",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_savePipeline__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Saves a pipeline into memory, for later retrieval with pub.flow:restorePipeline."
+      ],
+      "input_parameters": [
+        {
+          "name": "$name",
+          "type": "String",
+          "description": [
+            "Name that will identify the pipeline in memory. An exception will be thrown if this value is not specified."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "After a successful invocation of savePipeline, a snapshot of pipeline fields will be saved in memory under the key provided by $name. Note that because the pipeline is saved to memory, it will not be available after a server restart. When using MTOM streaming for SOAP attachments, messageContext variables and/or XOPObject fields will not be available in the saved pipeline. A messageContext variable is used by many pub.soap services to hold the SOAP message on which the service acts. XOPObject fields are Objects that use the com.wm.util.XOPObject Java wrapper type. For more information about MTOM Streaming, see the Web Services Developer’s Guide . This service is helpful in the interactive development or debugging of an application."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.flow:restorePipeline - pub.flow:savePipelineToFile"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:savePipelineToFile",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_savePipelineToFile__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Saves the current pipeline to a file on the machine running Integration Server."
+      ],
+      "input_parameters": [
+        {
+          "name": "fileName",
+          "type": "String",
+          "description": [
+            "Relative or absolute path to a file on the server file system in which Integration Server saves the contents of the pipeline. If the file or directory is not found at run time, the service creates it. For a filename that does not include an absolute path, Integration Server calculates the relative path from the default pipeline directory which is located here: Integration Server_directory /instances/instance_name/pipeline When you specify a path for the fileName input parameter and the path is outside of the pipeline directory, Integration Server verifies whether it is specified in the watt.server.file.canWritePaths server configuration parameter. If the file path is not specified in the watt.server.file.canWritePaths parameter, Integration Server throws an exception. Otherwise, Integration Server either creates the file if it does not yet exist or overwrites the existing file if one already exists."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is helpful in the interactive development or debugging of an application. In some cases, however, using the Pipeline debug property for the debugging of an application is more efficient. For more information about the Pipeline debug property, see IBM webMethods Service Development Help . The watt.server.checkPath.savePipelineToFile server configuration parameter determines whether Integration Server verifies that the provided filename is in the default pipeline directory or is in the watt.server.file.canWritePaths server configuration parameter. When watt.server.checkPath.savePipelineToFile is set to true, the default, Integration Server verifies that the path or directory specified in filename is in the default pipeline directory or is specified in the watt.server.file.canWritePaths parameter. If the file is outside of the default pipeline directory and it is not in the watt.server.file.canWritePaths parameter, the service ends with a ServiceException. When the watt.server.checkPath.savePipelineToFile parameter is set to false Integration Server does not verify that the specified filename is in the default pipeline directory or in the watt.server.file.canWritePaths parameter. The pub.flow:savePipelineToFile can always write files to the default pipeline directory which is located here: Integration Server_directory /instances/instance_name/pipeline. You do not need to include the default pipeline directory in the watt.server.file.canWritePaths parameter. If fileName specifies a filename with an invalid character the pub.flow:savePipelineToFile service appears to work but, in fact, does not persist the file to disk. If a subsequent call to pub.flow:restorePipelineFromFile that specifies the same invalid filename is made within the same server session, the service restores the pipeline successfully. However, if pub.flow:restorePipelineFromFile specifies the invalid filename after Integration Server restarted, the service fails with a FileNotFoundException. To avoid this situation, make sure the fileName value does not include any invalid characters. When using MTOM streaming for SOAP attachments, messageContext variables and/or XOPObject fields will not be available in the saved pipeline. A messageContext variable is used by many pub.soap services to hold the SOAP message on which the service acts. XOPObject fields are Objects that use the com.wm.util.XOPObject Java wrapper type. For more information about MTOM Streaming, see the Web Services Developer’s Guide . The following table shows the data types and classes that this service can write to the output file if they are included in the pipeline:",
+            {
+              "table": [
+                [
+                  "For",
+                  "pub.flow:savePipelineToFile supports"
+                ],
+                [
+                  "Java data types",
+                  "byte[] Date GregorianCalendar IData IData[] (IData list) String String[] (String list) String[][] (String table) Vector"
+                ],
+                [
+                  "Java wrapper classes",
+                  "Boolean Byte Character Double Float Integer Long Short Single dimension arrays of any of the above"
+                ],
+                [
+                  "webMethods classes",
+                  "MBoolean MByte MDouble MFloat MInteger MLong MShort Single dimension arrays of any of the above"
+                ],
+                [
+                  "Object arrays",
+                  "Any non-array item listed in this table."
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.flow:restorePipelineFromFile - pub.flow:savePipeline"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setActivityLog",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#reference_49992FC40DF64D6EB6DE4EF509F6185E__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Logs user-defined messages to the WMSERVICEACTIVITYLOG table or the WMSERVICEACTIVITYLOG_ yyyymmdd_hhmmss.log file."
+      ],
+      "input_parameters": [
+        {
+          "name": "fullMessage",
+          "type": "String",
+          "description": [
+            "Optional. Complete message to record in the WMSERVICEACTIVITYLOG table or the WMSERVICEACTIVITYLOG_ yyyymmdd_hhmmss.log file. The message can be up to 1024 bytes."
+          ]
+        },
+        {
+          "name": "briefMessage",
+          "type": "String",
+          "description": [
+            "Optional. Shortened version of the full message. The message can be up to 240 bytes."
+          ]
+        },
+        {
+          "name": "entryType",
+          "type": "String",
+          "description": [
+            "Flag indicating the type of message. Set to: - MESSAGE to indicate that the message is informational and no action is needed. - WARNING to indicate that the message is a warning message. The parent service can complete successfully even if the circumstance causing the warning is not addressed. - ERROR to indicate that the message is an error message. The parent service cannot complete successfully until the circumstance causing the error is resolved. This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can invoke the pub.flow:setActivityLog service in a flow service to log messages for debugging or auditing purposes. If pub.flow:setActivityLog fails, the flow service execution is not interrupted. Note: You do not need to enable service auditing for the service to capture activity logs. If you do not specify both fullMessage and briefMessage, the pub.flow:setActivityLog service logs an empty string."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setAuditLogFields",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#reference_9E45562098E042DE873708617A9DD53A__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Sets the service auditing properties for one or more custom services."
+      ],
+      "input_parameters": [
+        {
+          "name": "serviceList",
+          "type": "Document List",
+          "description": [
+            "One or more custom services for which you want to set the service auditing properties. Set the following fields for each custom service."
+          ]
+        },
+        {
+          "name": "nsName",
+          "type": "String",
+          "description": [
+            "Specify the fully qualified name of the service for which you want to set the service auditing properties. Note: You can use pub.flow:setAuditLogFields to set service auditing properties for a custom service only."
+          ]
+        },
+        {
+          "name": "enableAuditing",
+          "type": "String",
+          "description": [
+            "Determines when service auditing is performed for the service specified in nsName . Set to: - topLevelService to generate audit data only when a client request or a trigger invokes the service. The service does not generate audit data when it is invoked by another service (that is, when it is a nested service). - always to generate audit data every time the service executes. Select this option if the service is a critical service that you want to audit every time it executes. - never to never generate audit data. Select this option if you do not want to audit this service. This is the default."
+          ]
+        },
+        {
+          "name": "logOn",
+          "type": "String",
+          "description": [
+            "Specifies when the service logs the audit data. Set to: - onError to log audit data only when the service execution fails. - errorAndSuccess to log audit data when the service execution ends because of success or failure. - always to log audit data when the service execution starts and ends because of success or failure."
+          ]
+        },
+        {
+          "name": "includePipeline",
+          "type": "String",
+          "description": [
+            "Specifies when Integration Server should include a copy of the input pipeline in the service log. - onError to log pipeline data only when the service execution fails. - always to log pipeline data when the service execution starts and ends because of success or failure. Note: To log pipeline data in the service log always, set logOn to always. - never to never log pipeline data. This is the default. Note: Configure the service to save a copy of the input pipeline only if you intend to re-invoke the service using the re-submission capabilities of IBM webMethods Monitor."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "serviceList",
+          "type": "Document List",
+          "description": [
+            "The following parameters are displayed for each custom service specified in the input."
+          ]
+        },
+        {
+          "name": "nsName",
+          "type": "String",
+          "description": [
+            "The custom service for which you set the audit properties."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether the service auditing properties for the service are successfully updated or not."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "If the pub.flow:setAuditLogFields service execution is successful, the message indicates that the audit properties for the custom service are successfully updated. Otherwise, the message provides the reason for failure."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "In Designer , you can set the audit logging properties for a custom service in the Properties panel > Audit category. However, you can set the properties only for a single service at a time. The pub.flow:setAuditLogFields public service enables you to set the properties for multiple custom services at a time with or without Designer . Consider the following points to run the pub.flow:setAuditLogFields service successfully. - The custom service must be locked for editing. Otherwise, the pub.flow:setAuditLogFields service fails. For more information about locking and unlocking elements, see IBM webMethods Service Development Help . - An invalid or incorrect custom service name in the nsName parameter leads to an error. Similarly, if the service name is not fully qualified or is a system service, the pub.flow:setAuditLogFields service fails."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setCustomContextID",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#id29be98cc-8293-426b-ac3f-028855f1df8a__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Associates a custom value with an auditing context. This custom value can be used to search for service audit records in the IBM webMethods Monitor."
+      ],
+      "input_parameters": [
+        {
+          "name": "id",
+          "type": "String",
+          "description": [
+            "Optional. The custom value for the current auditing context. Specify a value that you want to associate with the auditing context."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": []
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setCustomLoggedFields",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#reference_72997662E9BC460E9EEDAFC87A1CE278__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Selects the fields of one or more custom services for logging."
+      ],
+      "input_parameters": [
+        {
+          "name": "serviceList",
+          "type": "Document List",
+          "description": [
+            "One or more custom services for which you want to select the input and output fields for logging. Set the following parameters for each custom service."
+          ],
+          "children": [
+            {
+              "name": "nsName",
+              "type": "String",
+              "description": [
+                "Specify the fully qualified name of the service for which you want to select the fields for logging. Note: You can use pub.flow:setCustomLoggedFields to select the fields of a custom service only."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Key",
+          "description": [
+            "Description"
+          ]
+        },
+        {
+          "name": "inputFields",
+          "type": "Document List",
+          "description": [
+            "Optional. One or more input fields that you want to log for the custom service."
+          ],
+          "children": [
+            {
+              "name": "path",
+              "type": "String",
+              "description": [
+                "Path of the input field that you want to log for the custom service. For example, if the input field is a string (myString) under a document (myDocument), path is myDocument/myString, where myString is the leaf node."
+              ]
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "description": [
+                "The data type of the input field."
+              ]
+            },
+            {
+              "name": "objectWrapperType",
+              "type": "String",
+              "description": [
+                "Optional. The Java wrapper type for a field of type Object or Object List . The default is UNKNOWN."
+              ]
+            },
+            {
+              "name": "alias",
+              "type": "String",
+              "description": [
+                "Optional. A name to easily locate the input field in IBM webMethods Monitor . The default is the leaf node name specified in path ."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "outputFields",
+          "type": "Document List",
+          "description": [
+            "Optional. One or more output fields that you want to log for the custom service."
+          ]
+        },
+        {
+          "name": "Key",
+          "description": [
+            "Description"
+          ]
+        },
+        {
+          "name": "path",
+          "type": "String",
+          "description": [
+            "Path of the output field that you want to log for the custom service. For example, if the output field is a string (myString) under a document (myDocument), path is myDocument/myString, where myString is the leaf node."
+          ]
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "description": [
+            "The data type of the output field."
+          ]
+        },
+        {
+          "name": "objectWrapperType",
+          "type": "String",
+          "description": [
+            "Optional. The Java wrapper type for a field of type Object or Object List . The default is UNKNOWN."
+          ]
+        },
+        {
+          "name": "alias",
+          "type": "String",
+          "description": [
+            "Optional. A name to easily locate the output field in IBM webMethods Monitor . The default is the leaf node name specified in path ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "serviceList",
+          "type": "Document List",
+          "description": [
+            "The following parameters are displayed for each custom service in the input."
+          ]
+        },
+        {
+          "name": "nsName",
+          "type": "String",
+          "description": [
+            "The fully qualified name of the custom service for which you have specified the fields for logging."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "Indicates whether the specified fields of a custom service are selected for logging or not."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "If the pub.flow:setCustomLoggedFields service execution is successful, the message indicates that the specified fields of a custom service are selected for logging. Otherwise, the message provides the reason for failure."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "In Designer , you can select the custom service fields for logging in the Logged Fields tab. However, you can select the fields only for one service at a time. The pub.flow:setCustomLoggedFields public service enables you to select the fields of multiple custom services at once for logging, with or without Designer . Consider the following points to run the pub.flow:setCustomLoggedFields service successfully. - The custom service must be locked for editing. Otherwise, the pub.flow:setCustomLoggedFields service fails. For more information about locking and unlocking elements, see IBM webMethods Service Development Help . - An invalid or incorrect custom service name in the nsName parameter leads to an error. Similarly, if the service name is not fully qualified or is a system service, the pub.flow:setCustomLoggedFields service fails. - If there are multiple custom services in serviceList, and a custom service has invalid inputFields or outputFields, the pub.flow:setCustomLoggedFields service fails to set the fields of that service for logging. - If one or more inputFields or outputFields of a custom service have the incorrect type, pub.flow:setCustomLoggedFields fails to set the fields of that service for logging. - For a custom service, if you manually select the fields in the Logged Fields tab, and then run the pub.flow:setCustomLoggedFields service without specifying inputFields or outputFields, the pub.flow:setCustomLoggedFields service clears the fields that are already selected. If you want audit data for the custom fields in the service log, you must enable service auditing for the custom service. The service logger destination must be a database to log the values of the selected custom fields."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setCustomTransactionId",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#reference_pmm_q4x_j3c__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Specifies a custom transaction ID to use when tracing transactions in End-to-End Monitoring."
+      ],
+      "input_parameters": [
+        {
+          "name": "e2emTransactionId",
+          "type": "String",
+          "description": [
+            "Optional. Specify the transaction ID that gets appended to the transaction trace during the processing of multiple flow services. The maximum length of the transaction ID is limited to 1024 characters. If the character length goes over the maximum limit, the ID is truncated."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.flow:setCustomTransactionIds",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#reference_lgv_bqx_j3c__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Specifies a list of custom transaction IDs to use when tracing transactions in End-to-End Monitoring. When defining the search filter in End-to-End Monitoring, you can search by any of the values specified in the list."
+      ],
+      "input_parameters": [
+        {
+          "name": "e2emTransactionIds",
+          "type": "String List",
+          "description": [
+            "Required. Specify several key=value pairs to use as custom transaction IDs. The comma-separated list of key-value pairs gets appended to the transaction trace during the processing of multiple flow services. The maximum length of the list of transaction IDs is limited to 1024 characters. The maximum limit includes spaces, delimiters, and symbols, such as the equal sign (=). If the character length goes over the maximum limit, the list is truncated."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.flow:setHTTPResponse",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#setHTTPResponse__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Sets the HTTP response information to be returned by Integration Server to a client."
+      ],
+      "input_parameters": [
+        {
+          "name": "httpResponse",
+          "type": "Document",
+          "description": [
+            "Optional. Contains the HTTP response to be returned by Integration Server to the client."
+          ],
+          "children": [
+            {
+              "name": "headers",
+              "type": "Document List",
+              "description": [
+                "Optional. Contains the header fields to set. Specify the following for each header that you want to set."
+              ],
+              "children": [
+                {
+                  "name": "fieldName",
+                  "type": "String",
+                  "description": [
+                    "Name of the header field to set."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "fieldValue",
+              "type": "String",
+              "description": [
+                "Value of the header field to set."
+              ]
+            },
+            {
+              "name": "responseCode",
+              "type": "String",
+              "description": [
+                "Optional. HTTP status code to be returned to the client. The response codes and phrases are defined in https://tools.ietf.org/html/rfc7231#section-6. If you provide a value for responseCode that is not listed in RFC 7321, Section 6, you must also provide a value for reasonPhrase."
+              ],
+              "references": [
+                {
+                  "title": "https://tools.ietf.org/html/rfc7231#section-6",
+                  "url": "https://tools.ietf.org/html/rfc7231#section-6"
+                }
+              ]
+            },
+            {
+              "name": "reasonPhrase",
+              "type": "String",
+              "description": [
+                "Optional. HTTP reason phrase to be returned to the client. If no reason phrase is provided, the default reason phrase associated with responseCode is used."
+              ]
+            },
+            {
+              "name": "responseString",
+              "type": "String",
+              "description": [
+                "Optional. Response to be returned to the client, specified as a string."
+              ]
+            },
+            {
+              "name": "responseBytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. Response to be returned to the client, specified as a byte array."
+              ]
+            },
+            {
+              "name": "responseStream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. Response to be returned to the client, specified as an InputStream."
+              ]
+            },
+            {
+              "name": "responseStreamTransferEncoding",
+              "type": "String",
+              "description": [
+                "Optional. When set to chunked , Integration Server uses chunked transfer encoding for the response and includes the Transfer-Encoding: chunked response header. Using this parameter lets you avoid OutOfMemoryExceptions when using large responseStreams. This parameter is used by Integration Server only if responseStream is not null. This parameter has no default value. To use it, set it to chunked. If responseStream is not null, and this variable is not set or is set to a value other than chunked, Integration Server reads the entire responseStream to calculate the content length."
+              ]
+            },
+            {
+              "name": "contentType",
+              "type": "String",
+              "description": [
+                "Optional. MIME type of the response data. By default, the server's response will match the MIME type of the request. This behavior can be overridden by using the contentType parameter. Note: If you explicitly set this value with Designer, you will see two choices: text/XML and text/HTML. You are not limited to these two values. Select one of these or provide a new value."
+              ]
+            },
+            {
+              "name": "encoding",
+              "type": "String",
+              "description": [
+                "Optional. Character set in which the response is encoded."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.flow:setHTTPResponse service replaces the following deprecated services: - pub.flow:setResponseCode - pub.flow:setResponse - pub.flow:setResponse2 - pub.flow:setResponseHeader - pub.flow:setResponseHeaders Use the pub.flow:setHTTPResponse service to customize an HTTP response from Integration Server . For example, when a HTTP request is successful, the server responds with 200 OK. In this response, 200 is the response code and OK is the reason phrase. However, if you need a custom reason phrase for the response code, select the responseCode parameter as 200, and provide the custom phrase in the reasonPhrase parameter of the service. - The following header fields cannot be set using the pub.flow:setHTTPResponse service: Allow Connection Content-Length WWW-Authenticate Upgrade - If you set the value of the Set-Cookie header and include the SameSite attribute using this service, then Integration Server ignores the value of the watt.server.http.header.sameSite parameter. - You can specify the Content-Type header either using the fieldName and fieldValue keys in the headers parameter, or using the contentType parameter, but not both. - When providing a responseCode, it is optional to include a reasonPhrase if the responseCode is selected from the standard list of HTTP response codes. For a custom responseCode, a reasonPhrase is mandatory. Specifying a reasonPhrase without a responseCode results in an error. - When you invoke pub.flow:setHTTPResponse from Designer and set the responseCode input parameter to 204, the Results view in the Service Development perspective will be empty. This is because an HTTP response code of 204 indicates to the client that there is no content in the response. For Designer, this means there is no output pipeline to display when the service completes. - By default when running the service with response codes 1XX, 204, or 304, Integration Server does not require responseBody. The default behavior enforces the RFC standard for response codes 1XX, 204, and 304 that prohibits responseBody for these codes. If you want to change this default behavior to preserve backward compatibility with existing integrations, use the watt.server.http.rfcstandard.enforceNoBodyStatusCodes parameter. - Specify either responseString, responseBytes, or responseStream, but not all. If you specify all, the service uses responseString and ignores others. responseBytes takes precedence if both responseString and responseBytes are specified. - When using the responseString, responseBytes, or responseStream parameters, you can provide the contentType or encoding parameters. However, the responseStreamTransferEncoding parameter is meant for use with the responseStream parameter only."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setResponse",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_setResponse__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.flow:setHTTPResponse. Forces a specified response to be returned by the IBM webMethods Integration Server to a calling process (such as a browser or application server). Formatting of the response is normally handled by templates, which format values from the pipeline. If templates are not appropriate for a particular integration scenario, a response message can be created within the flow and then returned to the caller using this service."
+      ],
+      "input_parameters": [
+        {
+          "name": "responseString",
+          "type": "String",
+          "description": [
+            "Optional. Response to be returned to the caller, specified as a string."
+          ]
+        },
+        {
+          "name": "responseBytes",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. Response to be returned to the caller, specified as a byte array."
+          ]
+        },
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Deprecated - Replaced by responseString . String . Optional. Response to be returned to the caller, specified as a string."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "Deprecated - Replaced by responseBytes . byte[ ] . Optional. Response to be returned to the caller, specified as a byte array."
+          ]
+        },
+        {
+          "name": "response",
+          "type": "String",
+          "description": [
+            "Deprecated - Replaced by responseString . String . Optional. Response to be returned to the caller, specified as a string."
+          ]
+        },
+        {
+          "name": "contentType",
+          "type": "String",
+          "description": [
+            "Optional. MIME type of the response data. By default, the server's response will match the MIME type of the request. This field allows this behavior to be overridden. Note: If you explicitly set this value with Designer, you will see two choices: text/XML and text/HTML. You are not limited to these two values. You may either select one of these or type a new value."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Character set in which the response is encoded."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Specify responseString or responseBytes, but not both. If you specify both, the pub.flow:setReponse service uses responseString and ignores responseBytes. If neither responseString or responseBytes are specified, Integration Server uses the value of the server configuration parameter watt.server.setReponse.pre82Mode to determine the order in which to look for and use the deprecated fields. - When watt.server.setResponse.pre82Mode is set to “true”, Integration Server follows a precedence order similar to what was available in Integration Server 7.1x and 8.0x. Specifically, Integration Server looks for the deprecated parameters in the following order and uses the value of the first parameter that it finds: response, string, bytes - When watt.server.setResponse.pre82Mode is set to “false”, Integration Server follows a precedence order similar to what was available in Integration Server 8.2 and later. Specifically, Integration Server looks for the deprecated parameters in the following order and uses the value of the first parameter that it finds: string, bytes, response One possible usage of this service is to create an XML response to an XML request. A flow that creates an XML document by calling pub.xml:documentToXMLString can use pub.flow:setResponse to return the XML document to the caller. In your flow, you would map xmldata (output of pub.xml:documentToXMLString) to responseString and set contentType to text/xml (inputs to pub.flow:setResponse). Calling pub.flow:setResponse will cause the server to return the XML document that you've mapped to responseString instead of processing the pipeline through a template. Your client might be expecting binary data in the response, such as a JPEG image. In this case, map a byte array that represents the image to responseBytes and set contentType to image/jpeg. Integration Server detects the type of request and sets the Content-Type value to text/XML (for requests in XML format) or text/HTML (for requests in all other formats). Be aware that if you specify a value for contentType, Designer will not able to decode or display output from flows that include this service. This is because your contentType setting will override the Content-Type value that the Integration Server uses to return output to Designer. If you use Run to test the flow, Designer will not display any results. If you specify a contentType value that is not supported, Integration Server sets the Content-Type of the response to text/XML. If the contentType input parameter and the Content-Type header of the request are not set, Integration Server uses the value of the request Accept header to set the Content-Type header of the response. For more information about how Integration Server handles Accept headers to set Content-Types, see the section Accept Header Field in the IBM webMethods Integration Server Administrator’s Guide . Accept Header Field. Keep in mind that when returning the processed XML document to the client that originally submitted it, you may need to modify the encoding. Java String objects are always stored using a Unicode encoding. If your original XML document used an encoding other than UTF-8 or UTF-16, it will still contain an encoding tag that indicates what this encoding was. However, if you did not modify the encoding during document processing, you need to set the encoding parameter when you invoke the pub.flow:setResponse service. Specifically, do one of the following: - Set the encoding parameter to match the tag in the file, or - Set the encoding parameter to \"autoDetect\" to use the encoding specified in the XML string encoding tag."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setResponse2",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#id20bd0329-51bc-43d0-8fef-f99dcfd0c37a__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.flow:setHTTPResponse. Forces a specified response to be returned by the IBM webMethods Integration Server to a calling process (such as a browser or application server). Formatting of the response is normally handled by templates, which format values from the pipeline. If templates are not appropriate for a particular integration scenario, a response message can be created within the flow and then returned to the caller using this service."
+      ],
+      "input_parameters": [
+        {
+          "name": "responseString",
+          "type": "String",
+          "description": [
+            "Optional. Response to be returned to the caller, specified as a string."
+          ]
+        },
+        {
+          "name": "responseBytes",
+          "type": "byte[ ]",
+          "description": [
+            "Optional. Response to be returned to the caller, specified as a byte array."
+          ]
+        },
+        {
+          "name": "responseStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Optional. Response to be returned to the caller, specified as an InputStream."
+          ]
+        },
+        {
+          "name": "responseStream​TransferEncoding",
+          "type": "String",
+          "description": [
+            "Optional. When set to chunked , causes Integration Server to use chunked transfer encoding for the response and include the Transfer-Encoding: chunked response header. Using this variable lets you avoid OutOfMemoryExceptions when using large responseStreams. This variable is used by Integration Server only if responseStream is not null. This variable has no default value; to use it, set it to chunked. If responseStream is not null, and this variable is not set or is set to a value other than chunked, Integration Server reads the entire responseStream to calculate the content length."
+          ]
+        },
+        {
+          "name": "contentType",
+          "type": "String",
+          "description": [
+            "Optional. MIME type of the response data. By default, the server's response will match the MIME type of the request. This field allows this behavior to be overridden. Note: If you explicitly set this value with Designer, you will see two choices: text/XML and text/HTML. You are not limited to these two values. You may either select one of these or type a new value."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Character set in which the response is encoded."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "By default when running the service with response codes 1XX, 204, or 304, Integration Server does not require responseBody. The default behavior enforces the RFC standard for response codes 1XX, 204, and 304 that prohibits responseBody for these codes. If you want to change this default behavior to preserve backward compatibility with existing integrations, use the watt.server.http.rfcstandard.enforceNoBodyStatusCodes parameter. Specify responseString, responseBytes, or responseStream. If you specify more than one, the pub.flow:setReponse2 service looks for the parameters in the following order and uses the first one that it finds: responseString, responseBytes, responseStream. One possible usage of this service is to create an XML response to an XML request. A flow that creates an XML document by calling pub.xml:documentToXMLString can use pub.flow:setResponse2 to return the XML document to the caller. In your flow, you would map xmldata (output of pub.xml:documentToXMLString) to responseString and set contentType to text/xml (inputs to pub.flow:setResponse2). Calling pub.flow:setResponse2 will cause the server to return the XML document that you've mapped to responseString instead of processing the pipeline through a template. Your client might be expecting binary data in the response, such as a JPEG image. In this case, map a byte array that represents the image to responseBytes and set contentType to image/jpeg. Integration Server detects the type of request and sets the Content-Type value to text/XML (for requests in XML format) or text/HTML (for requests in all other formats). Be aware that if you specify a value for contentType, Designer will not able to decode or display output from flows that include this service. This is because your contentType setting will override the Content-Type value that the Integration Server uses to return output to Designer. If you use Run to test the flow, Designer will not display any results. If you specify a contentType value that is not supported, Integration Server sets the Content-Type of the response to text/XML. If the contentType input parameter and the Content-Type header of the request are not set, Integration Server uses the value of the request Accept header to set the Content-Type header of the response. For more information about how Integration Server handles Accept headers to set Content-Types, see the section Accept Header Field in the IBM webMethods Integration Server Administrator’s Guide . Accept Header Field. Keep in mind that when returning the processed XML document to the client that originally submitted it, you may need to modify the encoding. Java String objects are always stored using a Unicode encoding. If your original XML document used an encoding other than UTF-8 or UTF-16, it will still contain an encoding tag that indicates what this encoding was. However, if you did not modify the encoding during document processing, you need to set the encoding parameter when you invoke the pub.flow:setResponse2 service. Specifically, do one of the following: - Set the encoding parameter to match the tag in the file, or - Set the encoding parameter to \"autoDetect\" to use the encoding specified in the XML string encoding tag."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setResponseCode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#A36823__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.flow:setHTTPResponse. Specifies the HTTP response code to be returned by Integration Server to a calling process (such as a browser or application server)."
+      ],
+      "input_parameters": [
+        {
+          "name": "responseCode",
+          "type": "String",
+          "description": [
+            "HTTP status code to be returned to the caller. The response codes and phrases are defined in RFC 2616, Section 10. If you provide a value for responseCode that is not listed in RFC 2616, Section 10, you must also provide a value for reasonPhrase."
+          ],
+          "references": [
+            {
+              "title": "RFC 2616, Section 10",
+              "url": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10"
+            }
+          ]
+        },
+        {
+          "name": "reasonPhrase",
+          "type": "String",
+          "description": [
+            "Optional. HTTP reason phrase to be returned to the caller. If no reason is provided, the default reason phrase associated with responseCode will be used. You must provide a reasonPhrase for any responseCode that is not listed in RFC 2616, Section 10"
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When you invoke pub.flow:setResponseCode from Designer and set the responseCode input variable to 204, the Results view in the Service Development perspective will be empty. This is because an HTTP response code of 204 indicates to the client that there is no content in the response. For Designer, this means there is no output pipeline to display when the service completes."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setResponseHeader",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#idd8709f2d-9e45-41ee-90e0-5d88424284ba__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.flow:setHTTPResponse. Sets a header field in the HTTP response to a calling process (such as a browser or application server) or in the JMS message that contains the SOAP response from a web service invocation."
+      ],
+      "input_parameters": [
+        {
+          "name": "fieldName",
+          "type": "String",
+          "description": [
+            "Name of the header field to set."
+          ]
+        },
+        {
+          "name": "fieldValue",
+          "type": "String",
+          "description": [
+            "Value of the header field to set."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "pub.flow:setResponseHeader sets a single field in the response header. To set multiple response header fields, use pub.flow:setResponseHeaders. You can use pub.flow:setResponse to set the Content-Type of the HTTP header field. Content-Type specifies the format of the service response. For example, to specify a JSON response, set Content-Type to application/json. For more information about content types Integration Server supports, see the section Accept Header Field in the IBM webMethods Integration Server Administrator’s Guide . Content Handlers for HTTP and FTP Requests. Important: If you set the value of the Set-Cookie header and include the SameSite attribute using this or the pub.flow:setResponseHeaders service, then Integration Server ignores the value of the watt.server.http.header.sameSite parameter. The following HTTP header fields cannot be set by calling this service or by Integration Server applications: - Allow - Connection - Content-Length - WWW-Authenticate - Transfer-Encoding - Upgrade Keep the following points in mind when adding headers for a JMS message that contains a SOAP response: - You can specify custom headers. - You can set some JMS message header fields directly and set others using run-time properties specific to Integration Server. You can set JMSType directly. This header name is case-sensitive. You can set the following headers indirectly using run-time properties: JMSDeliveryMode, JMSExpiration, and JMSPriority. The following table identifies these properties and indicates the JMS message header fields affected by each property. Property Name Description jms.deliveryMode Specifies the message delivery mode for the message. Integration Server uses this value to set the JMSDeliveryMode header. Value Description PERSISTENT Indicates the request message is persistent. 2 Default. Indicates the request message is persistent. NON_PERSISTENT Indicates the request message is not persistent. 1 Indicates the request message is not persistent. Note: If the jms.deliveryMode is not one of the above values, Integration Server ignores the name/value pair and uses the default value of 2. jms.timeToLive Length of time, in milliseconds, that the JMS provider retains the message. A value of 0 means that the message does not expire. The JMS provider uses this value to set the JMSExpiration header in the sent JMS message. Note: If the jms.timeToLivevalue is not a valid Long, Integration Server ignores the property and uses the default value of 0. jms.priority Specifies the message priority. The JMS standard defines priority levels from 0 to 9, with 0 as the lowest priority and 9 as the highest. Integration Server uses this value to set the JMSPriority header. If the jms.priority value is not a value between 0 to 9, Integration Server ignores the property and uses the default value of 4. - You can specify the following JMS-defined properties: JMSXGroupID JMSXGroupSeq If the value of JMSXGroupSeq is not an String that contains a number, Integration Server ignores the name/value pair and does not place it in the message header. Note: The JMSXGroupID and JMSXGroupSeq names are case-sensitive. - You can set any provider-specific property whose name starts with “JMS_” in fieldName. Because the JMS standard reserves the prefix “JMS_<vendor_name>” for provider-specific properties, Integration Server does not validate the name or value of this content. Note: The JMS provider determines which provider-specific properties to accept and include in the JMS message properties. For more information about provider-specific message properties how the JMS provider handles them, review the JMS provider documentation. - The lowercase “jms.” prefix is reserved for run-time properties used by Integration Server. If a header starts with “jms.” and is not one of the “jms.” properties defined by Integration Server, Integration Server ignores the property. - The “JMSX” prefix is reserved for JMS-defined properties. If a header whose name starts with “JMSX” is passed into fieldName and it is not named JMSXGroupID or JMSXGroupSeq, Integration Server throws a ServiceException. - You cannot set any of the SOAP over JMS message header properties. These header names start with “SOAPJMS”."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:setResponseHeaders",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#id12AGC08M05Z__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Deprecated - Replaced by pub.flow:setHTTPResponse. Sets one or more header fields in the HTTP response to a calling process (such as a browser or application server) or in the JMS message that contains the SOAP response from a web service invocation."
+      ],
+      "input_parameters": [
+        {
+          "name": "headers",
+          "type": "Document List",
+          "description": [
+            "Contains the header fields to set. Specify the following for each header that you want to set."
+          ],
+          "children": [
+            {
+              "name": "fieldName",
+              "type": "String",
+              "description": [
+                "Name of the header field to set."
+              ]
+            },
+            {
+              "name": "fieldValue",
+              "type": "String",
+              "description": [
+                "Value of the header field to set."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "pub.flow:setResponseHeaders sets one or more fields in the response header. If any of the fields specified by fieldName have already been set, they will be overwritten. See the Usage Notes of pub.flow:setResponseHeader for more information."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:throwExceptionForRetry",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#A74127__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Throws an ISRuntimeException and instructs the Integration Server to re-execute a service using the original service input."
+      ],
+      "input_parameters": [
+        {
+          "name": "wrappedException",
+          "type": "Object",
+          "description": [
+            "Optional. Any exception that you want to include as part of this ISRuntimeException. This might be the exception that causes the pub.flow:throwExceptionForRetry service to execute. For example, if the service attempts to connect to a database and the connection attempt fails, you might map the exception generated by the database connection failure to the wrappedException parameter."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Optional. A message to be logged as part of this exception."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use the pub.flow:throwExceptionForRetry service to handle transient errors that might occur during service execution. A transient error is an error that arises from a condition that might be resolved quickly, such as the unavailability of a resource due to network issues or failure to connect to a database. The service might execute successfully if the Integration Server waits and then retries the service. If a transient error occurs, the service can catch this error and invoke pub.flow:throwExceptionForRetry to instruct the Integration Server to retry the service. The pub.flow:throwExceptionForRetry service should be used for transient errors only. Only top-level services or trigger services can be retried. That is, a service can be retried only when it is invoked directly by a client request or by a trigger. The service cannot be retried when it is invoked by another service (that is, when it is a nested service). You can invoke the pub.flow:getRetryCount service to retrieve the current retry count and the maximum specified retry attempts for a service. If the trigger service is written in Java, the service can use ISRuntimeException() to throw an exception and retry the service. For more information about constructing ISRuntimeExceptions in Java services, see the IBM webMethods Integration Server Java API Reference for the com.wm.app.b2b.server.ISRuntimeException class. For information about configuring retry for services or triggers, see IBM webMethods Service Development Help ."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.flow:getRetryCount"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:tracePipeline",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_tracePipeline__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Writes the names and values of all fields in the pipeline to the server log."
+      ],
+      "input_parameters": [
+        {
+          "name": "level",
+          "type": "String",
+          "description": [
+            "Optional. Debug level at which to write the pipeline. Defaults to Fatal . If the debug level on the IBM webMethods Integration Server is set to a value less than this parameter, the pipeline will not be written to the server log."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Prior to Integration Server 7.1, Integration Server used a number-based system to set the level of debug information written to the server log. Integration Server maintains backward compatibility with this system. For more information about logging levels, see the description of the watt.debug.level parameter in IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.flow:transportInfo",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-flow-folder#Apub_flow_transportInfo__title__1",
+      "element_type": "document_type",
+      "description": [
+        "WmPublic. Document type used to return information about the protocol through which a service was invoked."
+      ],
+      "fields": [
+        {
+          "name": "protocol",
+          "type": "String",
+          "description": [
+            "Name of protocol about which transportInfo contains information. Will be one of the following values",
+            "A value of email indicates that SMTP was used to invoke the service. Detailed information is contained in the email parameter.",
+            "A value of filePolling indicates that File polling protocol was used to invoke this service. Detailed information is contained in the filePolling parameter.",
+            "A value of ftp indicates that FTP was used to invoke the service. Detailed information is contained in the ftp parameter.",
+            "A value of http indicates that HTTP was used to invoke the service. Detailed information is contained in the http parameter.",
+            "A value of jms indicates that JMS was used to invoke the service. When a standard JMS trigger or a SOAP-JMS trigger invokes a service, the protocol is JMS. Detailed information is contained in the jms parameter.",
+            "A value of messaging indicates that webMethods messaging was used to invoke the service. Specifically, IBM webMethods messaging trigger invoked the service. Detailed information is contained in the messaging parameter."
+          ]
+        },
+        {
+          "name": "subprotocol",
+          "type": "String",
+          "description": [
+            "Conditional. Subprotocol used to invoke the service.",
+            "A value of broker indicates that The service was invoked by IBM webMethods messaging trigger that received a document from the Broker or a locally published document. This subprotocol can only occur if protocol is messaging.",
+            "A value of HTTP indicates that The service was invoked through HTTP. This subprotocol can only occur if protocol is http.",
+            "A value of HTTPS indicates that The service was invoked through HTTPS. This subprotocol can only occur if protocol is http.",
+            "A value of jndi indicates that Integration Server uses JNDI to connect to the JMS provider. The JMS connection alias assigned to the JMS trigger specifies how Integration Server connects to the JMS provider. A value of jndi also indicates that the jms/destinationName value is a lookup name. This subprotocol can only occur if protocol is jms.",
+            "A value of native indicates that Integration Server uses the native webMethods API to connect to the IBM webMethods Broker being used as the JMS provider directly. The JMS connection alias assigned to the JMS trigger specifies how Integration Server connects to the JMS provider. A value of native also indicates that the jms/destinationName value is the name of the actual destination. This subprotocol can only occur if protocol is jms.",
+            "A value of um indicates that The service was invoked by IBM webMethods messaging trigger that received a document from the Universal Messaging. This subprotocol can only occur if protocol is messaging."
+          ]
+        },
+        {
+          "name": "email",
+          "type": "Document",
+          "description": [
+            "Conditional. Information about the SMTP transport. This parameter is returned only if the service was invoked via SMTP."
+          ],
+          "children": [
+            {
+              "name": "to",
+              "type": "String List",
+              "description": [
+                "E-mail addresses for the recipients of the e-mail."
+              ]
+            },
+            {
+              "name": "from",
+              "type": "String List",
+              "description": [
+                "E-mail addresses for the senders of the e-mail."
+              ]
+            },
+            {
+              "name": "cc",
+              "type": "String List",
+              "description": [
+                "Conditional. E-mail addresses receiving a copy of the e-mail."
+              ]
+            },
+            {
+              "name": "bcc",
+              "type": "String List",
+              "description": [
+                "Conditional. E-mail addresses receiving a blind copy of the e-mail."
+              ]
+            },
+            {
+              "name": "replyto",
+              "type": "String List",
+              "description": [
+                "Conditional. E-mail address to which replies of this e-mail should be sent"
+              ]
+            },
+            {
+              "name": "subject",
+              "type": "String",
+              "description": [
+                "Subject of the e-mail."
+              ]
+            },
+            {
+              "name": "filename",
+              "type": "String",
+              "description": [
+                "Conditional. Name of the attached file."
+              ]
+            },
+            {
+              "name": "contenttype",
+              "type": "String",
+              "description": [
+                "Conditional. Content-Type of the attached file."
+              ]
+            },
+            {
+              "name": "content",
+              "type": "java.io.InputStream",
+              "description": [
+                "Conditional. Contents of the attached file."
+              ]
+            },
+            {
+              "name": "recvdate",
+              "type": "String",
+              "description": [
+                "Conditional. Date the e-mail was received in String format. recvdate may be passed as parameter for the java.util.Date constructor."
+              ]
+            },
+            {
+              "name": "sentdate",
+              "type": "String",
+              "description": [
+                "Conditional. Date the e-mail was sent in String format. sentdate may be passed as parameter for the java.util.Date constructor."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "http",
+          "type": "Document",
+          "description": [
+            "Conditional. Information about the http transport. This parameter is returned only if the service was invoked via http."
+          ],
+          "children": [
+            {
+              "name": "requestUrl",
+              "type": "String",
+              "description": [
+                "URL used by the client to invoke the service."
+              ]
+            },
+            {
+              "name": "query",
+              "type": "String",
+              "description": [
+                "Conditional. Query portion of request URL."
+              ]
+            },
+            {
+              "name": "method",
+              "type": "String",
+              "description": [
+                "HTTP method used by the client to request the top-level service. Possible values are GET, PUT, POST, PATCH, and DELETE."
+              ]
+            },
+            {
+              "name": "requestHdrs",
+              "type": "Document",
+              "description": [
+                "Fields in the request header, where key names represent header field names and values represent the header field values."
+              ]
+            },
+            {
+              "name": "ipInfo",
+              "type": "Document",
+              "description": [
+                "Information about the http socket connection. Contains the following information:"
+              ],
+              "children": [
+                {
+                  "name": "clientIp",
+                  "type": "String",
+                  "description": [
+                    "Optional. IP address of the client connecting to this socket. If null, clientIP is not included in the output."
+                  ]
+                },
+                {
+                  "name": "clientPort",
+                  "type": "String",
+                  "description": [
+                    "Optional. Port number used by the client connecting to this socket. If null, clientPort is not included in the output."
+                  ]
+                },
+                {
+                  "name": "localIp",
+                  "type": "String",
+                  "description": [
+                    "Local IP address for this socket connection to client."
+                  ]
+                },
+                {
+                  "name": "localPort",
+                  "type": "String",
+                  "description": [
+                    "Local port number for this socket connection to client."
+                  ]
+                },
+                {
+                  "name": "remoteIp",
+                  "type": "String",
+                  "description": [
+                    "Remote IP address for this socket connection to client."
+                  ]
+                },
+                {
+                  "name": "remotePort",
+                  "type": "String",
+                  "description": [
+                    "Remote port number for this socket connection to client."
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ftp",
+          "type": "Document",
+          "description": [
+            "Conditional. Information about the ftp transport. This parameter is returned only if the ftp transport invoked the service."
+          ],
+          "children": [
+            {
+              "name": "filename",
+              "type": "String",
+              "description": [
+                "Name of file that was put into the service directory."
+              ]
+            },
+            {
+              "name": "mimetype",
+              "type": "String",
+              "description": [
+                "Conditional. Content type of the file (for example, text/xml , text/plain , or image/jpeg ). The server determines content type based on the extension of the file and the extension's corresponding content type defined in Integration Server_directory \\instances\\ instance_name \\lib\\mime.types."
+              ]
+            },
+            {
+              "name": "ipInfo",
+              "type": "Document",
+              "description": [
+                "Information about the FTP socket connection. Contains the following information:"
+              ],
+              "children": [
+                {
+                  "name": "localIp",
+                  "type": "String",
+                  "description": [
+                    "Local IP address for this socket connection to client."
+                  ]
+                },
+                {
+                  "name": "localPort",
+                  "type": "String",
+                  "description": [
+                    "Local port number for this socket connection to client."
+                  ]
+                },
+                {
+                  "name": "remoteIp",
+                  "type": "String",
+                  "description": [
+                    "Remote IP address for this socket connection to client."
+                  ]
+                },
+                {
+                  "name": "remotePort",
+                  "type": "String",
+                  "description": [
+                    "Remote port number for this socket connection to client."
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "filePolling",
+          "type": "Document",
+          "description": [
+            "Conditional. Information about the file polling transport. Returned only if the file polling transport invoked the service."
+          ],
+          "children": [
+            {
+              "name": "filename",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the file submitted to the file polling listener."
+              ]
+            },
+            {
+              "name": "originalFilename",
+              "type": "String",
+              "description": [
+                "Name of the file when it was submitted to the file polling listener."
+              ]
+            },
+            {
+              "name": "contenttype",
+              "type": "String",
+              "description": [
+                "Conditional. Content type of the file (for example, text/xml , text/plain , or image/jpeg ). The server determines content type based on the extension of the file and the extension's corresponding content type defined in Integration Server_directory \\instances\\ instance_name \\lib\\mime.types."
+              ]
+            },
+            {
+              "name": "length",
+              "type": "String",
+              "description": [
+                "The original file length in bytes."
+              ]
+            },
+            {
+              "name": "lastModified",
+              "type": "java.util.Date",
+              "description": [
+                "Java date object indicating when the original file was last modified."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "jms",
+          "type": "Document",
+          "description": [
+            "Conditional. Information about the JMS transport. This parameter is returned only if the JMS transport invoked the service."
+          ],
+          "children": [
+            {
+              "name": "connectionAliasName",
+              "type": "String",
+              "description": [
+                "Name of the JMS connection alias used by the JMS trigger to retrieve the message."
+              ]
+            },
+            {
+              "name": "triggerName",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the JMS trigger that retrieved the JMS message that resulted in invocation of the service."
+              ]
+            },
+            {
+              "name": "destinationName",
+              "type": "String",
+              "description": [
+                "Name or lookup name of the destination from which the message that invoke the service was received. When the subprotocol is jndi, the destinationName value is the lookup name of the destination on the JNDI provider. When the subprotocol is native, the destinationName value is the name of the destination at the IBM webMethods Broker."
+              ]
+            },
+            {
+              "name": "destinationType",
+              "type": "String",
+              "description": [
+                "Type of destination from which the JMS trigger received the message. The destination type for the JMS trigger specified in triggerName subscribes determines the destinationType value. destinationType will be one of the following: QUEUE indicates the destination is a queue. TOPIC indicates the destination is a topic."
+              ]
+            },
+            {
+              "name": "requestHdrs",
+              "type": "Document",
+              "description": [
+                "Fields in the request header of the JMS message, where key names represent header field names and values represent header field values. The requestHdrs includes all of the JMS message headers and JMS message properties. When a SOAP-JMS trigger receives a message, Integration Server passes the body of the message to the web services stack for processing. The body of the JMS message is the SOAP message. Integration Server does not pass the JMS headers on to the web services stack. If you want to review the contents of the JMS request header, you must use pub.flow:getTransportInfo to obtain the headers. For a standard JMS trigger, Integration Server passes the entire JMS message, including request headers, on to the trigger service for processing."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "messaging",
+          "type": "Document",
+          "description": [
+            "Conditional. Information about the messaging transport. This parameter is returned only if the messaging transport invoked the service."
+          ],
+          "children": [
+            {
+              "name": "connectionAliasName",
+              "type": "String",
+              "description": [
+                "Name of the webMethods messaging connection alias used by the IBM webMethods messaging trigger to retrieve the document. If the IBM webMethods messaging trigger received a locally published document and the publishable document type is not associated with a messaging connection alias, the connectionAliasName field is blank."
+              ]
+            },
+            {
+              "name": "triggerName",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the IBM webMethods messaging trigger that retrieved the document that resulted in invocation of the service."
+              ]
+            },
+            {
+              "name": "documentTypeName",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the publishable document type for which the received document is an instance. If the trigger services executes because an AND join condition in the IBM webMethods messaging trigger was satisfied, the documentTypeName contains the name of the publishable document type that completed the AND join. For example, suppose that an AND join condition specifies folder.subfolder:documentA and folder.subfolder:documentB. If the trigger receives an instance of documentB first and then an instance of documentA, the documentTypeName parameter contains folder.subfolder:documentA."
+              ]
+            },
+            {
+              "name": "redeliveryCount",
+              "type": "String",
+              "description": [
+                "Number of times the messaging provider has redelivered the document to the trigger."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "streaming",
+          "type": "Document",
+          "description": [
+            "Conditional. Information about the streaming transport. This parameter is returned only if an event trigger invoked the service."
+          ],
+          "children": [
+            {
+              "name": "topic",
+              "type": "String",
+              "description": [
+                "Topic that received the events processed by the event trigger."
+              ]
+            },
+            {
+              "name": "partition",
+              "type": "String",
+              "description": [
+                "Partition that received the events processed by the event trigger."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "A document with this structure is produced by the pub.flow:getTransportInfo service."
+          ]
+        }
+      ]
+    }
+  ]
+}

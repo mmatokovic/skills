@@ -1,0 +1,103 @@
+{
+  "folder": "SYNC",
+  "description": [
+    "You use the elements in the sync folder to coordinate the execution of services. You can coordinate services so that a waiting service will execute if and only if a notifying service produces the input required by the waiting service within a specified time period. The synchronization services wait for and send notification using a key. A notifying service only delivers input to waiting services with the same key."
+  ],
+  "total_services": 3,
+  "services": [
+    {
+      "name": "pub.sync:notify",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-sync-folder#Apub_sync_notify__title__1",
+      "description": [
+        "WmPublic. Notifies services waiting on the specified key and delivers the input document to the services."
+      ],
+      "input_parameters": [
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Name of the key. Waiting services with the same key will receive notification and input from this service."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "Document",
+          "description": [
+            "Input for the waiting services."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "notified",
+          "type": "String",
+          "description": [
+            "Number of waiting services that received the notification. The notified count only includes services waiting at the time the pub.sync:notify service was called. Wait requests that start after pub.sync:notify executes are not included in the notified count."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The value of the server property watt.server.sync.timeout determines the maximum length of time that the notification can exist. However, if a service with an exclusive wait is registered for the notification key, the notification ends as soon as the exclusive wait receives the notification."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.sync:shutdown",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-sync-folder#id68768b2e-b80a-47e1-b830-4b157cbc8684__title__1",
+      "description": [
+        "WmPublic. Releases internal resources used by the pub.sync services. This service is run automatically when the WmPublic package is unloaded and should not be explicitly invoked by a client."
+      ],
+      "input_parameters": [],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.sync:wait",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-sync-folder#Apub_sync_wait__title__1",
+      "description": [
+        "WmPublic. Allows one or more services to wait for delivery of data from a notifying service."
+      ],
+      "input_parameters": [
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Name of the key for which the service is waiting notification. The service receives notification and data from a notifying service with the same key ."
+          ]
+        },
+        {
+          "name": "time",
+          "type": "String",
+          "description": [
+            "Length of time, in seconds, the service waits for notification. If the request times out, an exception is thrown. Note: A time value of -1 or 0 results in undefined behavior."
+          ]
+        },
+        {
+          "name": "exclusive",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether this service waits exclusively for the notification and prevents other services from waiting for a notification for the specified key . Set to: - yes to specify that this service waits exclusively for the notification from the specified key. Integration Server prevents other services from waiting for the specified notification. - no to allow multiple services to wait for notification. This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "Document",
+          "description": [
+            "Input delivered by the notifying service."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Any service that is waiting for the key notification, receives the notification as long as the lifespan of the wait request overlaps with the lifespan of the notification. However, if a service with an exclusive wait registers for the notification key, the notification ends as soon as the exclusive wait is notified. An exclusive wait might not be the only wait that receives the notification. For example, an exclusive wait might be registered after other non-exclusive waits have been notified. However, once an exclusive wait is registered, it will be the last wait to be notified. Notification must occur within the time period specified by the time parameter. If the wait request expires before receiving a notification, Integration Server throws a ServiceException: [ISS.0086.9067] wait timed out. If the pub.sync.wait service specifies a key for which an exclusive wait already exits, Integration Server returns a ServiceException: [ISS.0086.9065] already in exclusive wait. If the pub.sync.wait service specifies an exclusive wait for a key for which regular wait threads already exits, Integration Server throws a ServiceException: [ISS.0086.9066] cannot obtain exclusive wait."
+          ]
+        }
+      ]
+    }
+  ]
+}

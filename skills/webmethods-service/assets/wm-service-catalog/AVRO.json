@@ -1,0 +1,91 @@
+{
+  "folder": "AVRO",
+  "description": [
+    "The services in this folder provide access to Avro serialization and deserialization capabilities. These services transform a document (IData object) to an Avro object and an Avro object back to a document (IData object)."
+  ],
+  "total_services": 2,
+  "services": [
+    {
+      "name": "pub.avro:avroToDocument",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-avro-folder#reference_o1d_hsf_nhc__title__1",
+      "description": [
+        "WmPublic. Converts an Avro object to a document (an IData object)."
+      ],
+      "input_parameters": [
+        {
+          "name": "avroData",
+          "description": [
+            "Object. Avro content of type byte array or string to convert to a Document (IData object)."
+          ]
+        },
+        {
+          "name": "schemaReaderDocumentTypeName",
+          "description": [
+            "String. The transformation from Avro object to Document (IData) is based on the Avro schema, which is accessible in Integration Server through an Avro Document Type. This schema is known as the reader schema because it is used to read the Avro object. The service generates a document that follows the structure of the reader schema. Before using an Avro schema in Integration Server, you must create an Avro Document Type from the schema. See Creating a Document Type from an Avro Schema in IBM webMethods Service Development Help . This schema is known as the reader schema because it is used to read the Avro object. The service generates a document that follows the structure of the reader schema. This parameter must have the fully qualified name of an Avro document type on Integration Server. This parameter must be in the format: <Folder Name>:<Avro Document Type Name>. For example: data:employeeDataV2."
+          ]
+        },
+        {
+          "name": "schemaWriterDocumentTypeName",
+          "description": [
+            "String. Optional. The transformation from an Avro object to a Document (IData) can also use a writer schema, which is the schema that was used by the publisher of the Avro data. This is known as the writer schema because it was used to create (write) the Avro object. This is useful when the publisher created this Avro data with a different version of the schema than the one defined in schemaReaderDocumentTypeName. This parameter must specify the fully qualified name of an Avro Document Type on Integration Server. The parameter must be in the format <Folder Name>:<Document Type Name>. For example: data:employeeDataV1. This service will generate a document that follows the structure of the reader schema, not the writer schema. However, the writer schema may be needed to ensure compatibility when two versions of the schema are used. For example, let’s say version 2 of a schema added a new field. If version 2 is used to write the event and version 1 is used to read it, the parser requires both schemas to ensure proper deserialization. Otherwise, reading may fail or produce incorrect data. The schemaWriterDocumentTypeName field allows you to explicitly specify the writer schema when consuming events. Alternatively, this can be handled dynamically by using a schema registry and encoding the Avro data in binary_framed format. In this case, the schema ID is embedded in the Avro data, enabling the consumer to fetch the schema from the registry (or from local cache) and determine the writer schema automatically."
+          ]
+        },
+        {
+          "name": "wireFormat",
+          "description": [
+            "String. The format in which the Avro object will be consumed. Set to one of the following: - binary (default): The Avro object must be provided as a binary-encoded byte array. - binary_framed: The Avro object must be provided as a binary-encoded byte array that includes framing headers indicating the schema ID from the schema registry.This option can only be used when the Document Type was generated from a schema registry, because such document types contain the necessary registry metadata. - json_string: The Avro object must be provided as a JSON-formatted string.This option should only be used for debugging or when interacting with legacy systems that require a JSON string instead of a binary-encoded byte array. JSON is more readable, but it is slower, larger in size on the network, and can lead to interoperability issues. - json_array: The Avro object must be provided as an array of JSON-formatted strings, where each element represents a separate Avro record.This format is useful when multiple Avro records are batched together as JSON strings. Like json_string, it should only be used for debugging or for legacy systems that require JSON. It is more readable, but slower, larger in size on the network, and can lead to interoperability issues. Additionally, proper array formatting is required; invalid JSON arrays may cause deserialization failures."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "document",
+          "description": [
+            "Document. Document (IData object) resulting from the conversion of avroData ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.avro:documentToAvro",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-avro-folder#jy5_hnz_khc__title__1",
+      "description": [
+        "WmPublic. Converts a document (IData object) to an Avro object."
+      ],
+      "input_parameters": [
+        {
+          "name": "document",
+          "description": [
+            "Document. The document (IData object) to be converted to an Avro object."
+          ]
+        },
+        {
+          "name": "schemaWriterDocumentTypeName",
+          "description": [
+            "String. The transformation from Document (IData) to Avro object is based on the Avro schema, which is accessible in Integration Server through an Avro Document Type. Before using an Avro schema in Integration Server , you must create an Avro Document Type from the schema. See Creating a Document Type from an Avro Schema in IBM webMethods Service Development Help . This schema is known as the writer schema because it is used to create the Avro object. The service generates an Avro object that follows the structure of the writer schema. Any deviations from the provided schema might cause transformation errors. This parameter must have the fully qualified name of the Avro Document Type on Integration Server against which the Avro content in document is validated. This parameter must be in the format: <Folder Name>:<Avro Document Type Name>. For example: data:employeeData"
+          ]
+        },
+        {
+          "name": "wireFormat",
+          "description": [
+            "String. Specifies the format in which the Avro object will be created. Set to one of the following: - binary (default): Returns the Avro object as a binary-encoded byte array. - binary_framed: Returns the Avro object as a binary-encoded byte array that includes framing headers indicating the schema ID from the schema registry. This option can only be used when the document type was generated from a schema registry because such document types contain the necessary registry metadata. - json_string: Returns the Avro object as a JSON-formatted string.This option should only be used for debugging or when interacting with legacy systems that require a JSON string instead of a binary-encoded byte array. JSON is more readable, but it is slower, larger in size over the network, and can lead to interoperability issues."
+          ]
+        },
+        {
+          "name": "prettyPrint",
+          "description": [
+            "String. Optional. Controls whether the output is formatted for human readability. Applies only when wireFormat=json_string ). Set to: - true to format the output with indentation and line breaks. - false (default) to return compact JSON with no additional formatting. Note: This option formats an existing JSON string; it does not convert the document type to JSON."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "avroData",
+          "description": [
+            "Object. Conditional. Avro object as a byte array or JSON string depending on the wireFormat value."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "folder": "GRAPHQL",
+  "description": [
+    "You can use the services in the GraphQL folder to add data loading capability to the GraphQL resolver service in Integration Server."
+  ],
+  "total_services": 2,
+  "services": [
+    {
+      "name": "pub.graphql:load",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-graphql-folder#idef8130d4-3634-41f4-85ac-c11f335ebf82__title__1",
+      "description": [
+        "WmPublic. Loads the data for a single key and returns the values."
+      ],
+      "input_parameters": [
+        {
+          "name": "$internal",
+          "type": "Document",
+          "description": [
+            "Contains the fields that are populated and used internally while loading the data. Important: This parameter is reserved for internal use by Integration Server. Do not modify or delete the value of this parameter."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "Document",
+          "description": [
+            "Contains the field(s) for which you want to fetch the data from the data source. The field(s) in this document must be same as the field(s) in the key document of Dataloader service input signature. For more information on Dataloader service, see IBM webMethods Service Development Help ."
+          ]
+        },
+        {
+          "name": "loaderName",
+          "type": "String",
+          "description": [
+            "Specifies the name of the Dataloader ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "$internal",
+          "type": "Document",
+          "description": [
+            "containing the fields, which are used internally by Dataloader ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.graphql:loadMany",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-graphql-folder#reference_38D4D1CEE8D24D34A11D58CF808104C4__title__1",
+      "description": [
+        "WmPublic. Loads the data for a multiple keys and returns the list of values."
+      ],
+      "input_parameters": [
+        {
+          "name": "$internal",
+          "type": "Document",
+          "description": [
+            "Contains the fields that are populated and used internally while loading the data. Important: This parameter is reserved for internal use by Integration Server. Do not modify or delete the value of this parameter."
+          ]
+        },
+        {
+          "name": "keys",
+          "type": "Document List",
+          "description": [
+            "Contains the field(s) for which you want to fetch the data from the data source. The field(s) in this document must be same as the field(s) in the key document of Dataloader service input signature. For more information on Dataloader service, see IBM webMethods Service Development Help"
+          ]
+        },
+        {
+          "name": "loaderName",
+          "type": "String",
+          "description": [
+            "Specifies the name of the Dataloader ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "$internal",
+          "type": "Document",
+          "description": [
+            "containing the fields, which are used internally by Dataloader ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can only invoke the pub.graphql:load and pub.graphql:loadMany services from a data resolver service and always as a last step. From a data resolver service, you can invoke the pub.graphql:load and pub.graphql:loadMany services only once. You can either use a Dataloader or a resolver service to load data. If you are using a Dataloader to load data for a field, then you cannot use the resolver service to load data for the same field. Resolver service should be used only to identify and map the key(s) to pub.graphql:load or pub.graphql:loadMany service."
+          ]
+        }
+      ]
+    }
+  ]
+}

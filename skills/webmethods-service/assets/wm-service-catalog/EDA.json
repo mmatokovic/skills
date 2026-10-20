@@ -1,0 +1,89 @@
+{
+  "folder": "EDA",
+  "total_services": 1,
+  "services": [
+    {
+      "name": "pub.eda:send",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-eda-folder#pub-eda-send__title__1",
+      "description": [
+        "WmPublic. Sends events to a streaming provider using an event specification. Replaces the deprecated pub.streaming:send service. Note: Event Specifications and Connection Aliases are associated with namespaces. If a service or trigger references an Event Specification or Connection Alias without specifying a namespace, the referenced Event Specification or Connection Alias is automatically assigned a default namespace. The default namespace is: wm_default.eda.alias for Connection Aliases wm_default.eda.eventspec for Event Specifications"
+      ],
+      "input_parameters": [
+        {
+          "name": "connectionAliasName",
+          "type": "String",
+          "description": [
+            "Optional. Name of the streaming connection alias to use to send events. Specify the fully qualified name in the format namespace:name (for example, prod.streaming:kafka-main). The streaming connection alias identifies the streaming provider to which the service sends events. The specified connectionAliasName must be used by the specified eventSpecificationName . If the event specification defines a connection alias, the specified connectionAliasName must match it. If the event specification does not define a connection alias, the connectionAliasName provided here will be used. At least one source (event specification or input parameter) must provide the connection alias."
+          ]
+        },
+        {
+          "name": "eventSpecificationName",
+          "type": "String",
+          "description": [
+            "Name of the event specification that defines the structure of the event, and indicates how to encode and decode event data. Specify the fully qualified name in the format namespace:name (for example, prod.events:order-created). The event specification may optionally define a connection alias and destination. For information about creating event specifications, see Event Specifications ."
+          ],
+          "references": [
+            {
+              "title": "Event Specifications",
+              "url": "../is_administrators_guide/z_streaming-config/co-event_specification_about.html"
+            }
+          ]
+        },
+        {
+          "name": "destinationName",
+          "type": "String",
+          "description": [
+            "Optional. The name of the destination to which events are sent. If specified, this value overrides any destination defined in the event specification. If not specified and the event specification does not define a destination, the service fails."
+          ]
+        },
+        {
+          "name": "destinationType",
+          "type": "String",
+          "description": [
+            "Optional. The type of destination: \"TOPIC\" or \"QUEUE\". Required if destinationName is specified and the event specification does not define a destination type. If not specified, defaults to \"TOPIC\" for backward compatibility."
+          ]
+        },
+        {
+          "name": "events",
+          "type": "Document List",
+          "description": [
+            "(IData object) A document list of the events to send to the streaming provider."
+          ],
+          "children": [
+            {
+              "name": "header",
+              "type": "Document",
+              "description": [
+                "Optional. Metadata about the event."
+              ],
+              "children": [
+                {
+                  "name": "timestamp",
+                  "type": "String",
+                  "description": [
+                    "Optional. Timestamp to assign to the event. If timestamp value is not specified, at execution time, the streaming provider populates timestamp with the current clock time."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "key",
+              "type": "Object",
+              "description": [
+                "Optional. The event key. The provided key must match the key data type set in the event specification."
+              ]
+            },
+            {
+              "name": "value",
+              "type": "Object",
+              "description": [
+                "Optional. The event value. The provided value must match the value data type set in the event specification."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": []
+    }
+  ]
+}

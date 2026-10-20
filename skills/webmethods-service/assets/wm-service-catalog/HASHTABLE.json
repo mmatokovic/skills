@@ -1,0 +1,225 @@
+{
+  "folder": "HASHTABLE",
+  "description": [
+    "This folder contains services that you can use to create, update, and obtain information about the hashtable."
+  ],
+  "total_services": 7,
+  "services": [
+    {
+      "name": "pub.hashtable:containsKey",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-hashtable-folder#A33527__title__1",
+      "description": [
+        "WmPublic. Checks for the existence of a hashtable element."
+      ],
+      "input_parameters": [
+        {
+          "name": "hashtable",
+          "type": "java.util.Hashtable",
+          "description": [
+            "Hashtable in which to check for the existence of a hashtable element."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Hashtable element to be checked for."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "containsKey",
+          "type": "String",
+          "description": [
+            "Indicates whether the specified hashtable element exists. A value of: - true indicates that the element exists. - false indicates that the element does not exist."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.hashtable:createHashtable",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-hashtable-folder#A49046__title__1",
+      "description": [
+        "WmPublic. Creates a hashtable object."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "hashtable",
+          "type": "java.util.Hashtable",
+          "description": [
+            "The new hashtable object."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.hashtable:get",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-hashtable-folder#A26859__title__1",
+      "description": [
+        "WmPublic. Gets the value for a specified key in the hashtable."
+      ],
+      "input_parameters": [
+        {
+          "name": "hashtable",
+          "type": "java.util.Hashtable",
+          "description": [
+            "Hashtable from which to retrieve the specified value."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Key of the hashtable element whose value is to be retrieved."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Value of the input hashtable element."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.hashtable:listKeys",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-hashtable-folder#A25776__title__1",
+      "description": [
+        "WmPublic. Lists all the keys stored in the hashtable."
+      ],
+      "input_parameters": [
+        {
+          "name": "hashtable",
+          "type": "java.util.Hashtable",
+          "description": [
+            "Hashtable from which the keys are to be listed."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "keys",
+          "type": "String[] List",
+          "description": [
+            "List of keys stored in the input hashtable."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.hashtable:put",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-hashtable-folder#A48523__title__1",
+      "description": [
+        "WmPublic. Adds a key/value pair in the hashtable."
+      ],
+      "input_parameters": [
+        {
+          "name": "hashtable",
+          "type": "java.util.Hashtable",
+          "description": [
+            "Hashtable to which the key/value pair is to be added."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Key of the element to be added to the hashtable."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Value of the element to be inserted into the hashtable."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "hashtable",
+          "type": "java.util.Hashtable",
+          "description": [
+            "Hashtable object after the insertion of the key/value pair."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.hashtable:remove",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-hashtable-folder#A90453__title__1",
+      "description": [
+        "WmPublic. Removes a key/value pair from the hashtable."
+      ],
+      "input_parameters": [
+        {
+          "name": "hashtable",
+          "type": "java.util.Hashtable",
+          "description": [
+            "Hashtable from which to remove the key/value pair."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Key of the hashtable element to be removed."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Value of the hashtable element to be removed."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "hashtable",
+          "type": "java.util.Hashtable",
+          "description": [
+            "Hashtable object after the key/value pair is removed."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Value of the hashtable element that was removed. Returns null if the input key is not found in the hashtable."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.hashtable:size",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-hashtable-folder#A25448__title__1",
+      "description": [
+        "WmPublic. Gets the number of elements in the hashtable."
+      ],
+      "input_parameters": [
+        {
+          "name": "hashtable",
+          "type": "java.util.Hashtable",
+          "description": [
+            "Hashtable from which the number of elements stored in it is to be retrieved."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "size",
+          "type": "String",
+          "description": [
+            "Number of elements in the hashtable."
+          ]
+        }
+      ]
+    }
+  ]
+}

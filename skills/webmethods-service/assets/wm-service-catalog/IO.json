@@ -1,0 +1,650 @@
+{
+  "folder": "IO",
+  "description": [
+    "You use the elements in the io folder to convert data between byte[ ], characters, and InputStream representations. The io folder contains services for reading and writing bytes, characters, and streamed data to the file system.",
+    "These services behave like the corresponding methods in the java.io.InputStream class. For more information about InputStreams, see the Java documentation."
+  ],
+  "total_services": 15,
+  "services": [
+    {
+      "name": "pub.io:bytesToStream",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#Apub_io_bytesToInputStream__title__1",
+      "description": [
+        "WmPublic. Converts a byte[ ] to java.io.ByteArrayInputStream."
+      ],
+      "input_parameters": [
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "The byte array to convert."
+          ]
+        },
+        {
+          "name": "length",
+          "type": "String",
+          "description": [
+            "Optional. The maximum number of bytes to read and convert. If length is not specified, the default value for this parameter is the length of the input byte array."
+          ]
+        },
+        {
+          "name": "offset",
+          "type": "String",
+          "description": [
+            "Optional. The offset into the input byte array from which to start converting. If no value specified, the default value is zero."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.ByteArrayInputStream",
+          "description": [
+            "An open InputStream created from the contents of the input bytes parameter."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service constructs stream from the byte array using the constructor ByteArrayInputStream(byte[ ]). This constructor does not make a copy of the byte array, so any changes to bytes will be reflected in the data read from the stream."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:close",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A53444__title__1",
+      "description": [
+        "WmPublic. Closes an InputStream or a reader object and releases the resources."
+      ],
+      "input_parameters": [
+        {
+          "name": "inputStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Optional. An open InputStream. Note: You can use either inputStream or reader to specify the input object. If both the input parameters are provided, then both the objects will be closed."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "Optional. An open reader object."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the InputStream is already closed, invoking this service has no effect. However, leaving an InputStream open may cause errors that are not recoverable until Integration Server is shut down. Use the pub.io:close service to explicitly close the input stream when a service leaves it open. For example, pub.file:getFile and pub.client.ftp:get leave the input stream open in the pipeline."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:createByteArray",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A39724__title__1",
+      "description": [
+        "WmPublic. Creates a byte array of the specified length."
+      ],
+      "input_parameters": [
+        {
+          "name": "length",
+          "type": "String",
+          "description": [
+            "The length of the byte array to be created."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "bytes",
+          "type": "Object",
+          "description": [
+            "The new byte array."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.io:read service reads data from an InputStream into a byte array. You can use this service to create the byte array. Invoking this service is the equivalent of the Java code new byte[length]."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:mark",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A28258__title__1",
+      "description": [
+        "WmPublic. Marks the current position in the InputStream or reader object. A subsequent call to pub.io:reset repositions this stream at the last marked position. Marking and respositioning the input stream allows subsequent service calls to re-read the same bytes."
+      ],
+      "input_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Optional. The InputStream. Note: You can use either stream or reader to specify the input object. If both stream and reader input parameters are provided, then both the objects will be marked."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "Optional. The reader object."
+          ]
+        },
+        {
+          "name": "limit",
+          "type": "String",
+          "description": [
+            "The maximum number of bytes that can be read before the mark position becomes invalid. If more than this number of bytes are read from the stream after the pub.io:mark service is invoked, the pub.io:reset service will have no effect."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Conditional. The InputStream. Returned only if the input parameter is stream ."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "Conditional. The reader object. Returned only if the input parameter is reader ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the InputStream does not support the mark operation, invoking this service has no effect. Either of the optional input parameters, stream or reader, is required."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:markSupported",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A79879__title__1",
+      "description": [
+        "WmPublic. Enables you to test whether your InputStream or reader object supports the mark and reset operations."
+      ],
+      "input_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Optional. The InputStream. Note: You can use either stream or reader to specify the input object. If both stream and reader input parameters are provided, then the stream input parameter is ignored."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "Optional. The reader object."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Conditional. The InputStream. Returned only if the input parameter is stream ."
+          ]
+        },
+        {
+          "name": "supported",
+          "type": "String",
+          "description": [
+            "Indicates whether the stream supports the mark and reset operations. A value of: - true indicates that the InputStream supports the mark and reset operations. - false indicates that the InputStream does not support the mark and reset operations."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "Conditional. The reader object. Returned only if the input parameter is reader ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Either of the input parameters, stream or reader, is required."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:read",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A31265__title__1",
+      "description": [
+        "WmPublic. Reads a specified number of bytes from the InputStream and stores them into a buffer."
+      ],
+      "input_parameters": [
+        {
+          "name": "stream",
+          "type": "Object",
+          "description": [
+            "The InputStream. Object from which the service is to read bytes."
+          ]
+        },
+        {
+          "name": "offset",
+          "type": "String",
+          "description": [
+            "Optional The offset into the byte array in the buffer to which the data is written. If no value is supplied, this defaults to 0."
+          ]
+        },
+        {
+          "name": "length",
+          "type": "String",
+          "description": [
+            "Optional. The maximum number of bytes to read from the InputStream. If no value is supplied, the default is the length of buffer . If the value supplied for length is greater than the length of buffer, an exception will be thrown."
+          ]
+        },
+        {
+          "name": "buffer",
+          "type": "Object",
+          "description": [
+            "The buffer into which data is written. This is a byte array, which can be created from a Flow service by invoking pub.io:createByteArray ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "Object",
+          "description": [
+            "The InputStream. If any bytes were read from the stream, the stream is repositioned after the last byte read."
+          ]
+        },
+        {
+          "name": "buffer",
+          "type": "Object",
+          "description": [
+            "The buffer into which data was written."
+          ]
+        },
+        {
+          "name": "bytesRead",
+          "type": "String",
+          "description": [
+            "The number of bytes read from the InputStream and copied to buffer . If there is no more data because the end of the stream has been reached, bytesRead will be -1."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.io:read service does not close the input stream. To close the input stream, use the pub.io:close service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:readAsString",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A70511__title__1",
+      "description": [
+        "WmPublic. Reads the data from a reader object and returns the contents as a string."
+      ],
+      "input_parameters": [
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "The reader object."
+          ]
+        },
+        {
+          "name": "length",
+          "type": "String",
+          "description": [
+            "The maximum number of characters to read from the input reader object."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "The reader object."
+          ]
+        },
+        {
+          "name": "lengthRead",
+          "type": "String",
+          "description": [
+            "The number of characters read from the input reader object. If there is no more data because the end of the stream has been reached, lengthRead will be -1."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "The data read from the reader object, or null if end of stream has been reached."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The readAsString service does not automatically close the reader object. To close the reader, use the pub.io:close service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:readerToString",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A90332__title__1",
+      "description": [
+        "WmPublic. Reads the data from a reader object and converts it to a string."
+      ],
+      "input_parameters": [
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "The reader object."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Data read from the reader object."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The readerToString service does not automatically close the reader object. To close the reader, use the pub.io:close service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:reset",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A99501__title__1",
+      "description": [
+        "WmPublic. Repositions the InputStream or the reader object to the position at the time the pub.io:mark service was last invoked on the stream."
+      ],
+      "input_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Optional. The InputStream. Note: You can use either stream or reader to specify the input object. If both stream and reader input parameters are provided, then both the objects will be reset."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "Optional. The reader object."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Conditional. The InputStream. Returned only if the input parameter is stream ."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "Conditional. The reader object. Returned only if the input parameter is reader ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the InputStream does not support the reset operation, invoking this service has no effect. Either of the input parameters, stream or reader, is required."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:skip",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A89013__title__1",
+      "description": [
+        "WmPublic. Skips over and discards the specified number of bytes or characters from the input stream or a reader object."
+      ],
+      "input_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Optional. The InputStream. Note: You can use either stream or reader to specify the input object. If both stream and reader input parameters are provided, then the stream and reader object data will be skipped."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "Optional. The reader object."
+          ]
+        },
+        {
+          "name": "length",
+          "type": "String",
+          "description": [
+            "The number of bytes or characters to skip."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "Conditional. The InputStream. Returned only if the input parameter is stream ."
+          ]
+        },
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "Conditional. The reader object. Returned only if the input parameter is reader ."
+          ]
+        },
+        {
+          "name": "bytesSkipped",
+          "type": "String",
+          "description": [
+            "Conditional. The actual number of bytes that were skipped. Returned only if the input parameter is stream ."
+          ]
+        },
+        {
+          "name": "charactersSkipped",
+          "type": "String",
+          "description": [
+            "Conditional. The number of characters that were skipped. Returned only if the input parameter is reader ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Thepub.io:skip service uses the uses the Java methodInputStream.skip, which might skip some smaller number of bytes, possibly zero (0). This happens due to conditions such as reaching the end of file before n bytes have been skipped. For more information about the InputStream.skip method, see the Java documentation on the InputStream class. Either of the optional input parameters, stream or reader, is required. If both stream and reader input parameters are specified and if an exception occurs during the stream object usage, then the operations are not performed on the reader object also."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:streamToBytes",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#Apub_io_streamToBytes__title__1",
+      "description": [
+        "WmPublic. Creates a byte[ ] from data that is read from an InputStream."
+      ],
+      "input_parameters": [
+        {
+          "name": "stream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The InputStream that you want to convert."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "bytes",
+          "type": "byte[ ]",
+          "description": [
+            "The bytes read from stream ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.io:streamToBytes service reads all of the bytes in the input stream. Then the service closes the input stream and produces the byte array. The bytes variable remains in the pipeline until it is explicitly dropped."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:streamToReader",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A57030__title__1",
+      "description": [
+        "WmPublic. Converts a java.io.InputStream to a java.io.Reader object."
+      ],
+      "input_parameters": [
+        {
+          "name": "inputStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The InputStream to convert to a reader object."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Name of a registered, IANA character set (for example, ISO-8859-1). If you specify an unsupported encoding, the system throws an exception. If no value is specified or if the encoding is set to autoDetect , the default operating system encoding is used."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "reader",
+          "type": "java.io.Reader",
+          "description": [
+            "The reader object read from inputStream ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:streamToString",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A47949__title__1",
+      "description": [
+        "WmPublic. Creates a string from data that is read from an InputStream."
+      ],
+      "input_parameters": [
+        {
+          "name": "inputStream",
+          "type": "java.io.InputStream",
+          "description": [
+            "The InputStream to convert to a string."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Name of a registered, IANA character set (for example, ISO-8859-1). If you specify an unsupported encoding, the system throws an exception. If no value is specified or if the encoding is set to autoDetect , the default operating system encoding is used."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "Data read from inputStream and converted to a string."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.io:streamToString service reads all of the bytes in the input stream but does not close the input stream. You must invoke pub.io:close to close the input stream."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:stringToReader",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A16343__title__1",
+      "description": [
+        "WmPublic. Converts a string object to a java.io.StringReader object."
+      ],
+      "input_parameters": [
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "The string to convert to a StringReader object."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "reader",
+          "type": "java.io.StringReader",
+          "description": [
+            "The StringReader object."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.io:stringToStream",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-io-folder#A77117__title__1",
+      "description": [
+        "WmPublic. Converts a string to a byte stream."
+      ],
+      "input_parameters": [
+        {
+          "name": "string",
+          "type": "String",
+          "description": [
+            "The string object to be converted."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Name of a registered, IANA character set (for example, ISO-8859-1). If you specify an unsupported encoding, the system throws an exception. If no value is specified or if the encoding is set to autoDetect , the default operating system encoding is used."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "inputStream",
+          "type": "java.io.ByteArrayInputStream",
+          "description": [
+            "An open InputStream created from the contents of string ."
+          ]
+        }
+      ]
+    }
+  ]
+}

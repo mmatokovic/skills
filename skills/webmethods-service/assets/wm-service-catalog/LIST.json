@@ -1,0 +1,356 @@
+{
+  "folder": "LIST",
+  "description": [
+    "You use the elements in the list folder to retrieve, replace, or add elements in an Object List, Document List, String List, or Vector. You also use list services to convert String Lists to Document Lists or a Vector to an Array."
+  ],
+  "total_services": 8,
+  "services": [
+    {
+      "name": "pub.list:addItemToVector",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-list-folder#A52525__title__1",
+      "description": [
+        "WmPublic. Adds an item or a list of items to a java.util.Vector object."
+      ],
+      "input_parameters": [
+        {
+          "name": "vector",
+          "type": "java.util.Vector",
+          "description": [
+            "Optional. The vector object to which you want to add an item or list of items. If no value is specified, the service creates a new java.util.Vector object to which the item(s) will be added."
+          ]
+        },
+        {
+          "name": "item",
+          "type": "Object",
+          "description": [
+            "Optional. Item to be added to the vector object. Note: You can use either item or itemList to specify the input object. If both item and itemList input parameters are specified, the item as well as the list of items will be added to the vector object."
+          ]
+        },
+        {
+          "name": "itemList",
+          "type": "Object[ ]",
+          "description": [
+            "Optional. List of items to be added to the vector object."
+          ]
+        },
+        {
+          "name": "addNulls",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether a null item can be added to the vector object. Set to: - false to prevent null values from being added to the vector object. This is the default. - true to allow null values to be added to the vector object."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "vector",
+          "type": "java.util.Vector",
+          "description": [
+            "Updated vector object with the list of items added or an empty vector in case no items are added."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The service requires either the item or itemList input parameter."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.list:addToList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-list-folder#reference_hxh_v3m_5fc__title__1",
+      "description": [
+        "WmPublic. Appends an element of any supported type, such as Document, String, or Integer, to a list."
+      ],
+      "input_parameters": [
+        {
+          "name": "toList",
+          "type": "java.util.List",
+          "description": [
+            "Optional. The list to which you want to append an object or a list of objects. If you do not specify a value for toList , the service creates a new list."
+          ]
+        },
+        {
+          "name": "fromList",
+          "type": "Object[]",
+          "description": [
+            "Optional. The list of objects that you want to append to toList ."
+          ]
+        },
+        {
+          "name": "fromItem",
+          "type": "Object",
+          "description": [
+            "Optional. The object that you want to append to toList . If you specify both fromList and fromItem , the service adds the items that are specified in fromItem first and then the items in fromList ."
+          ]
+        },
+        {
+          "name": "allowNulls",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether the service allows adding null items to the object list. Set to: - false to block the addition of null values to the object list. This is the default. - true to permit the addition of null values to the object list."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "toList",
+          "type": "java.util.List",
+          "description": [
+            "The list with objects from the fromItem and fromList parameters, or an empty list if no input is provided."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The service requires either the fromItem or fromList input parameter."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.list:appendToDocumentList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-list-folder#Apub_list_appendToDocList__title__1",
+      "description": [
+        "WmPublic. Adds documents to a document list."
+      ],
+      "input_parameters": [
+        {
+          "name": "toList",
+          "type": "Document List",
+          "description": [
+            "Optional. List to which you want to append documents. If you do not specify toList , the service creates a new list."
+          ]
+        },
+        {
+          "name": "fromList",
+          "type": "Document List",
+          "description": [
+            "Optional. Documents you want to append to the end of toList ."
+          ]
+        },
+        {
+          "name": "fromItem",
+          "type": "Document",
+          "description": [
+            "Optional. Document you want to append to the end of toList . If you specify both fromList and fromItem , the service adds the document specified in fromItem after the documents in fromList ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "toList",
+          "type": "Document List",
+          "description": [
+            "The toList document list with the documents in fromList and fromItem appended to it."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The documents contained in fromList and fromItem are not actually appended as entries to toList. Instead, references to the documents in fromList and fromItem are appended as entries to toList. Consequently, any changes made to the documents in fromList and fromItem also affect the resulting toList."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.list:appendToStringList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-list-folder#A29636__title__1",
+      "description": [
+        "WmPublic. Adds Strings to a String list."
+      ],
+      "input_parameters": [
+        {
+          "name": "toList",
+          "type": "String List",
+          "description": [
+            "Optional. List to which you want to append Strings. If the value of toList is null, a null pointer exception error is thrown. If you do not specify toList , the service creates a new list."
+          ]
+        },
+        {
+          "name": "fromList",
+          "type": "String List",
+          "description": [
+            "Optional. List of Strings to add to toList . Strings are added after the entries of toList ."
+          ]
+        },
+        {
+          "name": "fromItem",
+          "type": "String",
+          "description": [
+            "Optional. String you want to append to the end of toList . If you specify both fromList and fromItem , the service adds the String specified in fromItem after the Strings specified in fromList ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "toList",
+          "type": "String List",
+          "description": [
+            "The toList String list with the Strings from fromList and fromItem appended to it."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The Strings contained in fromList and fromItem are not actually appended as entries to toList. Instead, references to the Strings in fromList and fromItem are appended as entries to toList. Consequently, any changes made to the Strings in fromList and fromItem also affect the resulting toList."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.list:listToArray",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-list-folder#reference_nyb_pr3_vfc__title__1",
+      "description": [
+        "WmPublic. Converts a list of elements, such as Document, String, or Integer into an array."
+      ],
+      "input_parameters": [
+        {
+          "name": "toList",
+          "type": "java.util.List",
+          "description": [
+            "The list that you want to convert into an array. If you do not specify a value for toList , the service creates a new list."
+          ]
+        },
+        {
+          "name": "stronglyType",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether the service enforces that all elements in the input list are of the same Java type. Set to: - false to convert the list into a generic Object[] array without making any type assumptions. The list allows elements of mixed types. This is the default. - true to convert the list into an Object[] array. All elements must match the Java type of the first non-null item. If the service detects an item of a different type, Integration Server throws an error."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "array",
+          "type": "Object[ ]",
+          "description": [
+            "The converted object array."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use stronglyType only when all list elements share the same data type to ensure type-safe and consistent array creation. If you need a list that supports mixed types, use pub.list:addToList followed by pub.list:listToArray for a streamlined and type-safe approach. This combination can effectively replace pub.list:appendToDocumentList and pub.list:appendToStringList."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.list:sizeOfList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-list-folder#Apub_list_sizeOfList__title__1",
+      "description": [
+        "WmPublic. Returns the number of elements in a list."
+      ],
+      "input_parameters": [
+        {
+          "name": "fromList",
+          "type": "Document List, String List, or Object List",
+          "description": [
+            "Optional. List whose size you want to discover. If fromList is not specified, the service returns a size of 0."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "size",
+          "type": "String",
+          "description": [
+            "Number of entries in fromList ."
+          ]
+        },
+        {
+          "name": "fromList",
+          "type": "Document List, String List, or Object List",
+          "description": [
+            "Original list."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For example, if fromList consists of: - fromList[0] = \"a\" - fromList[1] = \"b\" - fromList[2] = \"c\" The result would be: - size=\"3\""
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.list:stringListToDocumentList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-list-folder#Apub_list_stringListToDocList__title__1",
+      "description": [
+        "WmPublic. Converts a String list to a document list."
+      ],
+      "input_parameters": [
+        {
+          "name": "fromList",
+          "type": "String List",
+          "description": [
+            "Optional. List of Strings (a String[ ]) that you want to convert to a list of documents (an IData[ ]). If fromList is not specified, the service returns a zero length array for toList ."
+          ]
+        },
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Optional. Key name to use in the generated document list."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "toList",
+          "type": "Document List",
+          "description": [
+            "Resulting document list."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Creates a document list containing one document for each element in the fromList. Each document will contain a single String element named key. For example, if fromList consists of: - fromList[0] = \"a\" - fromList[1] = \"b\" - fromList[2] = \"c\" - key = \"myKey\" The result would be:"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.list:vectorToArray",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-list-folder#A84419__title__1",
+      "description": [
+        "WmPublic. Converts a java.util.Vector object to an array."
+      ],
+      "input_parameters": [
+        {
+          "name": "vector",
+          "type": "java.util.Vector",
+          "description": [
+            "The object to be converted to an array."
+          ]
+        },
+        {
+          "name": "stronglyType",
+          "type": "String",
+          "description": [
+            "Optional. If this option is specified, the service expects all items in the vector to have the same Java type as the first non-null item in the vector. If the service detects an item of a different type, an error is thrown. Set to: - false to convert the vector to an object array. This is the default. - true to convert the vector to a strongly typed array holding the same type of objects."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "array",
+          "type": "Object[ ]",
+          "description": [
+            "Converted object array."
+          ]
+        }
+      ]
+    }
+  ]
+}

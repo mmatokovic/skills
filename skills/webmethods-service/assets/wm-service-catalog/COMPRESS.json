@@ -1,0 +1,165 @@
+{
+  "folder": "COMPRESS",
+  "description": [
+    "You can use the elements in the compress folder to compress the data before sending the HTTP request and decompress it after receiving the HTTP response."
+  ],
+  "total_services": 2,
+  "services": [
+    {
+      "name": "pub.compress:compressData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-compress-folder#Apub_client_http__title__1",
+      "description": [
+        "WmPublic. Compresses the data before sending the HTTP request using any of the specified compression schemes."
+      ],
+      "input_parameters": [
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "Data that you want the pub.compress:compressData service to compress. Specify data using one of the following keys. Important: When you use more than one key, string is appended first, bytes is appended second, and stream is appended last and Integration Server uses the first key that it encounters."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. Text that you want the pub.compress:compressData service to compress."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. Data that you want the pub.compress:compressData service to compress."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. Data that you want the pub.compress:compressData service to compress."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "compressionScheme",
+          "type": "String",
+          "description": [
+            "The compression method you want the pub.compress:compressData service to apply to compress the data. The supported compression schemes are gzip and deflate ."
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Form in which you want the pub.compress:compressData service to store the output data. Set to: - bytes to store the data as a byte[ ]. - stream to store the data as a java.io.InputStream."
+          ]
+        },
+        {
+          "name": "encoding",
+          "type": "String",
+          "description": [
+            "Optional. Name of a registered, IANA character set that specifies the encoding to use when converting the String to an array of bytes (for example: ISO-8859-1 )."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "compressedData",
+          "type": "Document",
+          "description": [
+            "Compressed data after applying the compression scheme."
+          ],
+          "children": [
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Conditional. Compressed data represented as a byte[ ]. bytes is returned only when the loadAs input parameter is set to bytes ."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Conditional. Compressed data represented as an InputStream. stream is returned only when the loadAs input parameter is set to stream ."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.compress:decompressData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-compress-folder#reference_62637E63EEDE44CBBD3E3AEAC99F057D__title__1",
+      "description": [
+        "WmPublic. Decompresses the data based on the response header of the HTTP response."
+      ],
+      "input_parameters": [
+        {
+          "name": "data",
+          "type": "Document",
+          "description": [
+            "Data that you want the pub.compress:decompressData service to decompress. Specify data using one of the following keys."
+          ],
+          "children": [
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. Data that you want the pub.compress:decompressData service to decompress."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Optional. Data that you want the pub.compress:decompressData service to decompress."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "compressionScheme",
+          "type": "String",
+          "description": [
+            "The compression scheme you want the pub.compress:decompressData service to apply to decompress the data. The supported compression schemes are gzip and deflate ."
+          ]
+        },
+        {
+          "name": "loadAs",
+          "type": "String",
+          "description": [
+            "Form in which you want the pub.compress:decompressData service to store the returned document. Set to: - bytes to return the data as a byte[ ]. - stream to return the data as a java.io.InputStream."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "decompressedData",
+          "type": "Document",
+          "description": [
+            "Decompressed data after applying the compression algorithm."
+          ],
+          "children": [
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Conditional. Decompressed data represented as a byte[ ]. bytes is returned only when the loadAs input parameter is set to bytes ."
+              ]
+            },
+            {
+              "name": "stream",
+              "type": "java.io.InputStream",
+              "description": [
+                "Conditional. The decompressed data represented as an InputStream. stream is returned only when the loadAs input parameter is set to stream ."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

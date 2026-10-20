@@ -1,0 +1,185 @@
+{
+  "folder": "UNIVERSALNAME",
+  "description": [
+    "You use the elements in the universalName folder to list the contents of the Universal Name Registry and to look up services or document types by their universal names."
+  ],
+  "total_services": 4,
+  "services": [
+    {
+      "name": "pub.universalName:find",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-universalname-folder#Apub_universName_find__title__1",
+      "description": [
+        "WmPublic. Returns the fully qualified service name for an explicit universal name."
+      ],
+      "input_parameters": [
+        {
+          "name": "namespaceName",
+          "type": "String",
+          "description": [
+            "Namespace portion of the universal name."
+          ]
+        },
+        {
+          "name": "localName",
+          "type": "String",
+          "description": [
+            "Local portion of the universal name."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "svcName",
+          "type": "String",
+          "description": [
+            "Conditional. Fully qualified name of the service associated with the universal name in namespaceName and localName . If the specified universal name is not in the registry, svcName will be null."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.universalName:findDocumentType",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-universalname-folder#A46768__title__1",
+      "description": [
+        "WmPublic. Returns the fully qualified document type name for a provided explicit universal name."
+      ],
+      "input_parameters": [
+        {
+          "name": "namespaceName",
+          "type": "String",
+          "description": [
+            "Namespace portion of the universal name."
+          ]
+        },
+        {
+          "name": "localName",
+          "type": "String",
+          "description": [
+            "Local name portion of the universal name."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "svcName",
+          "type": "String",
+          "description": [
+            "Conditional. Fully qualified name of the document type associated with the universal name in namespaceName and localName . If the specified universal name is not in the registry, svcName will be null."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.universalName:list",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-universalname-folder#Apub_universName_list__title__1",
+      "description": [
+        "WmPublic. Returns a list of services in the current universal-name registry."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "names",
+          "type": "Document List",
+          "description": [
+            "Service entries in the universal name registry. Each document (IData object) in the list represents a service entry in the universal-name registry. (There is one entry for every explicit universal name that has been defined on the server. Implicit universal names are not maintained in the registry.) Each document in the list contains the following information:"
+          ],
+          "children": [
+            {
+              "name": "universalName",
+              "type": "Document",
+              "description": [
+                "The universal name associated with the entry. This document contains the following information:"
+              ],
+              "children": [
+                {
+                  "name": "namespaceName",
+                  "type": "String",
+                  "description": [
+                    "Namespace portion of the universal name."
+                  ]
+                },
+                {
+                  "name": "localName",
+                  "type": "String",
+                  "description": [
+                    "Local portion of the universal name."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "svcName",
+              "type": "String",
+              "description": [
+                "Fully qualified webMethods service name associated with the entry (for example, gl.post:postEntry )."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To return the entire contents of the universal-name registry, use the pub.universalName:listAll service."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.universalName:listAll",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-universalname-folder#A42750__title__1",
+      "description": [
+        "WmPublic. Returns the contents of the current universal-name registry, including services and document types."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "names",
+          "type": "Document List",
+          "description": [
+            "Entries in the universal name registry. Each document (IData object) in the list represents an entry in the universal-name registry. There is one entry for every explicit universal name that has been defined on the server. Implicit universal names are not maintained in the registry. Each document in the list contains the following information:"
+          ],
+          "children": [
+            {
+              "name": "universalName",
+              "type": "Document",
+              "description": [
+                "Universal name associated with the entry. This document contains the following information:"
+              ],
+              "children": [
+                {
+                  "name": "namespaceName",
+                  "type": "String",
+                  "description": [
+                    "Namespace portion of the universal name."
+                  ]
+                },
+                {
+                  "name": "localName",
+                  "type": "String",
+                  "description": [
+                    "Local portion of the universal name."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "svcName",
+              "type": "String",
+              "description": [
+                "Fully qualified Integration Server service name or document type name associated with the entry (for example, gl.post:postEntry )."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To return a list of the services in the universal-name registry only, use the pub.universalName:listservice."
+          ]
+        }
+      ]
+    }
+  ]
+}

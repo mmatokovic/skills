@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1.0",
+  "name": "Raw source (LLM wiki)",
+  "behavior": "create",
+  "noteContentFormat": "{{content}}",
+  "properties": [
+    { "name": "title", "value": "{{title}}", "type": "text" },
+    { "name": "source_url", "value": "{{url}}", "type": "text" },
+    { "name": "author", "value": "{{author}}", "type": "text" },
+    { "name": "published", "value": "{{published}}", "type": "date" },
+    { "name": "clipped", "value": "{{date}}", "type": "date" },
+    { "name": "description", "value": "{{description}}", "type": "text" },
+    { "name": "tags", "value": "clipping", "type": "multitext" }
+  ],
+  "triggers": [],
+  "noteNameFormat": "{{title}}",
+  "path": "raw/articles"
+}

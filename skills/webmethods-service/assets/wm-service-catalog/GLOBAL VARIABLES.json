@@ -1,0 +1,48 @@
+{
+  "folder": "GLOBAL VARIABLES",
+  "description": [
+    "You can use the element in the global variable folder to get the variable that is defined as a global variable in Integration Server Administrator."
+  ],
+  "total_services": 1,
+  "services": [
+    {
+      "name": "pub.globalVariable:getGlobalVariable",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-global-variables-folder#reference_mvw_j1j_3yb__title__1",
+      "description": [
+        "WmPublic. Returns a global variable value."
+      ],
+      "input_parameters": [
+        {
+          "name": "key",
+          "type": "String",
+          "description": [
+            "Name of a global variable. For more information about global variables, see IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        },
+        {
+          "name": "defaultValue",
+          "type": "String",
+          "description": [
+            "Optional. The default value that Integration Server must return in the absence of a global variable."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Returns the global variable value."
+          ]
+        },
+        {
+          "name": "isSecure",
+          "type": "String",
+          "description": [
+            "Indicates whether the global variable is a password or not."
+          ]
+        }
+      ]
+    }
+  ]
+}

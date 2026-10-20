@@ -1,0 +1,116 @@
+{
+  "folder": "GRPC",
+  "description": [
+    "You can use the services in the grpc folder in the WmGRPC package to send a response or error to the gRPC client. Use these services in the gRPC method flow services generated for a gRPC descriptor."
+  ],
+  "total_services": 3,
+  "services": [
+    {
+      "name": "pub.grpc.observer:onCompleted",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-grpc-folder#id087VB070ZHT__title__1",
+      "description": [
+        "WmGRPC. Notifies the gRPC server of a successful stream completion."
+      ],
+      "input_parameters": [
+        {
+          "name": "streamObserver",
+          "type": "Object",
+          "description": [
+            "A gRPC object used by the gRPC server to return the response to the gRPC client."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For a unary gRPC method, pub.grpc.observer:onCompleted is the final service invoked in a successful execution of the generated gRPC method flow service. Upon completion, the gRPC server sends the response tot the gRPC client. An instance of the streamObserver is present in the pipeline when any gRPC method flow service is invoked by the gRPC server. It is an opaque object to be used only as input to the pub.grpc.observer:onNext, pub.grpc.observer:onCompleted, or pub.grpc.observer:onError services. The gRPC method flow service generated for a gRPC descriptor already contains the call to the pub.grpc.observer:onCompleted service for unary methods. The generated gRPC method flow service includes preset pipeline mapping into the pub.grpc.observer:onCompleted service. You should not need to edit the auto generated pub.grpc.observer:onCompleted step of the gRPC method flow service. If you modify the gRPC method flow service to include an INVOKE step for pub.grpc.observer:onErrorto indicate an error in the processing of the gRPC method flow service, ensure that the pub.grpc.observer:onCompleted will not execute after pub.grpc.observer:onError."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.grpc.observer:onError",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-grpc-folder#id76abb7d6-b391-46c4-865d-c18a6db0e9f7__title__1",
+      "description": [
+        "WmGRPC. Notifies the gRPC client about an unsuccessful gRPC request caused by an error that occurred during the gRPC request processing performed by the gRPC method flow service."
+      ],
+      "input_parameters": [
+        {
+          "name": "streamObserver",
+          "type": "Object",
+          "description": [
+            "A gRPC object used by the gRPC server to return the response to the gRPC client."
+          ]
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "The gRPC error code to be returned. The codes correspond to status codes defined by gRPC.io minus the prefix “ GRPC_STATUS_ ”. Set status to one of the following: - ABORTED - ALREADY_EXISTS - CANCELLED - DATA_LOSS - DEADLINE_EXCEEDED - FAILED_PRECONDITION - INTERNAL - INVALID_ARGUMENT - NOT_FOUND - OK - OUT_OF_RANGE - PERMISSION_DENIED - RESOURCE_EXHAUSTED - UNAVAILABLE - UNAUTHENTICATED - UNIMPLEMENTED - UNKNOWN"
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message text to be returned with the gRPC error, including any specific error details you want to return to the gRPC client."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "An instance of the streamObserver is present in the pipeline when any gRPC method flow service is invoked by the gRPC server. It is an opaque object to be used only as input to the pub.grpc.observer:onNext, pub.grpc.observer:onCompleted, or pub.grpc.observer:onError services. For unary methods, the gRPC method flow service automatically generated for a gRPC descriptor contains the calls to the pub.grpc.observer:onNext and pub.grpc.observer:onCompleted services. When implementing the logic for the RPC method in the RPC method flow service, you can modify the gRPC method flow service to include logic to return a gRPC error by adding an INVOKE step for the pub.grpc.observer:onError service. If you modify the gRPC method flow service to return an error or return a response message, make sure the flow logic ensures that either pub.grpc.observer:onError executes or pub.grpc.observer:onNext and pub.grpc.observer:onCompleted execute. This can be accomplished by using a BRANCH step. Further, the flow service logic must terminate immediately after executing pub.grpc.observer:onError."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.grpc.observer:onNext",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-grpc-folder#id502d20b3-e70c-4746-b343-e8c1d81f03a3__title__1",
+      "description": [
+        "WmGRPC. Converts a document (IData) to a gRPC response and returns it to the gRPC client."
+      ],
+      "input_parameters": [
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "A document (IData object) representing the gRPC response message to be returned to the gRPC client. The document must conform to the document type in documentTypeName ."
+          ]
+        },
+        {
+          "name": "documentTypeName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the gRPC document type representing the gRPC response."
+          ]
+        },
+        {
+          "name": "streamObserver",
+          "type": "Object",
+          "description": [
+            "A gRPC object used by the gRPC framework to return the response to the gRPC client."
+          ]
+        },
+        {
+          "name": "streamType",
+          "type": "Object",
+          "description": [
+            "A gRPC object used by the gRPC framework to identify the gRPC message type of the expected response."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "An instance of the streamObserver is present in the pipeline when any gRPC method flow service is invoked by the gRPC server. It is an opaque object to be used only as input to the pub.grpc.observer:onNext, pub.grpc.observer:onCompleted, or pub.grpc.observer:onError services. An instance of the streamType is present in the pipeline when any gRPC method flow service is invoked by the gRPC server. It is an opaque object be used only as input to the pub.grpc.observer:onNext service when returning a gRPC response."
+          ]
+        }
+      ]
+    }
+  ]
+}

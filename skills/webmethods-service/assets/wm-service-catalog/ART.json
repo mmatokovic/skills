@@ -1,0 +1,1241 @@
+{
+  "folder": "ART",
+  "description": [
+    "You use the elements in the art folder to manage adapter components, including connections, adapter services, listeners, and notifications."
+  ],
+  "total_services": 33,
+  "services": [
+    {
+      "name": "pub.art:listRegisteredAdapters",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A759931__title__1",
+      "description": [
+        "WmART. Returns the display name and adapter type name of all registered adapters."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "registeredAdapterList",
+          "type": "Document List",
+          "description": [
+            "Information for each adapter registered with the WmART package."
+          ],
+          "children": [
+            {
+              "name": "adapterDisplayName",
+              "type": "String",
+              "description": [
+                "The localized name that the Integration Server Administrator displays."
+              ]
+            },
+            {
+              "name": "adapterTypeName",
+              "type": "String",
+              "description": [
+                "The name of the adapter as registered with the WmART package. This value can be used as input for the inventory services that take adapterTypeName as input."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.connection:disableConnection",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A72380__title__1",
+      "description": [
+        "WmART. Disables a connection node."
+      ],
+      "input_parameters": [
+        {
+          "name": "connectionAlias",
+          "type": "String",
+          "description": [
+            "Name of the connection node you want to disable."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.connection:enableConnection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.connection:enableConnection",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A20810__title__1",
+      "description": [
+        "WmART. Enables an existing connection node."
+      ],
+      "input_parameters": [
+        {
+          "name": "connectionAlias",
+          "type": "String",
+          "description": [
+            "Name of the connection node you want to enable."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.connection:disableConnection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.connection:getConnectionStatistics",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A32726__title__1",
+      "description": [
+        "WmART. Returns current usage statistics for a connection node."
+      ],
+      "input_parameters": [
+        {
+          "name": "aliasName",
+          "type": "String",
+          "description": [
+            "Name of the connection node for which you want usage statistics returned."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "connectionStatistics",
+          "type": "Document List",
+          "description": [
+            "Information for each connection node."
+          ],
+          "children": [
+            {
+              "name": "TotalConnections",
+              "type": "Integer",
+              "description": [
+                "Current number of connection instances."
+              ]
+            },
+            {
+              "name": "BusyConnections",
+              "type": "Integer",
+              "description": [
+                "Number of connections currently in use by services, notifications, and listeners."
+              ]
+            },
+            {
+              "name": "FreeConnections",
+              "type": "Integer",
+              "description": [
+                "Total number of connections created and available for use."
+              ]
+            },
+            {
+              "name": "TotalHits",
+              "type": "Integer",
+              "description": [
+                "Number of times this connection node successfully provided connections since the last reset."
+              ]
+            },
+            {
+              "name": "TotalMisses",
+              "type": "Integer",
+              "description": [
+                "Number of times this connection node unsuccessfully provided connections since the last reset (when the request timed out)."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.connection:queryConnectionState"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.connection:listAdapterConnections",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A58174__title__1",
+      "description": [
+        "WmART. Lists connection nodes associated with a specified adapter."
+      ],
+      "input_parameters": [
+        {
+          "name": "adapterTypeName",
+          "type": "String",
+          "description": [
+            "The name of the adapter as registered with the WmART package."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "connectionDataList",
+          "type": "Document List",
+          "description": [
+            "Information for each connection node registered with the specified adapter."
+          ],
+          "children": [
+            {
+              "name": "connectionAlias",
+              "type": "String",
+              "description": [
+                "The name of the connection node."
+              ]
+            },
+            {
+              "name": "packageName",
+              "type": "String",
+              "description": [
+                "The name of the package in which the connection node resides."
+              ]
+            },
+            {
+              "name": "connectionState",
+              "type": "String",
+              "description": [
+                "Current state of the connection node. The state will have one of these values: - disabled - Connection node is disabled - enabled - Connection node is enabled. - shuttingdown - Connection node is in the process of shutting down. - unknown - Connection node is registered but has not yet established its state."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art:listRegisteredAdapters - pub.art.connection:queryConnectionState"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.connection:queryConnectionState",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A30217__title__1",
+      "description": [
+        "WmART. Returns the current connection state (enabled/disabled) and error status for a connection node."
+      ],
+      "input_parameters": [
+        {
+          "name": "connectionAlias",
+          "type": "String",
+          "description": [
+            "Name of the connection node for which you want the connection state and error status returned."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "connectionState",
+          "type": "String",
+          "description": [
+            "Current connection state (enabled/disabled)."
+          ]
+        },
+        {
+          "name": "hasError",
+          "type": "Boolean",
+          "description": [
+            "Flag indicating if any error was detected on connection. The values are: - true if an error was detected. - false if no error was detected."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.connection:getConnectionStatistics - pub.art.connection:enableConnection - pub.art.connection:disableConnection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.listener:disableListener",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A58883__title__1",
+      "description": [
+        "WmART. Disables a listener."
+      ],
+      "input_parameters": [
+        {
+          "name": "listenerName",
+          "type": "String",
+          "description": [
+            "Name of the listener you want to disable. The listener should have a state of enabled or suspended ."
+          ]
+        },
+        {
+          "name": "forceDisable",
+          "type": "String",
+          "description": [
+            "Optional. Flag to disable the listener regardless of whether it is still waiting for data from a back-end resource. The string may have one of these values: - true to disable the listener. - false to keep the listener enabled."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.listener:enableListener"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.listener:enableListener",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A69463__title__1",
+      "description": [
+        "WmART. Enables an existing listener."
+      ],
+      "input_parameters": [
+        {
+          "name": "listenerName",
+          "type": "String",
+          "description": [
+            "Name of the listener you want to enable."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If you do not enable the connection resource associated with the listener, this service will return without performing any action, and the listener will remain disabled. Therefore, you should invoke pub.art.listener:queryListenerState before calling this service to confirm that the listener has been enabled."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.listener:queryListenerState - pub.art.listener:disableListener"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.listener:listAdapterListeners",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A82643__title__1",
+      "description": [
+        "WmART. Lists listeners associated with a specified adapter."
+      ],
+      "input_parameters": [
+        {
+          "name": "adapterTypeName",
+          "type": "String",
+          "description": [
+            "The name of the adapter as registered with the WmART package."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "listenerDataList",
+          "type": "Document List",
+          "description": [
+            "Information for each listener registered with the specified adapter."
+          ],
+          "children": [
+            {
+              "name": "listenerNodeName",
+              "type": "String",
+              "description": [
+                "The name of the listener."
+              ]
+            },
+            {
+              "name": "packageName",
+              "type": "String",
+              "description": [
+                "The name of the package in which the listener resides."
+              ]
+            },
+            {
+              "name": "listenerEnabled",
+              "type": "String",
+              "description": [
+                "Current state of the listener. The state will have one of these values: - disabled if the listener is disabled. - enabled if the listener is enabled. - enablePending if the listener is in the process of starting. - disablePending if the listener is in the process of disabling. - suspended if the listener is suspended. - suspendPending if the listener is in the process of suspending."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art:listRegisteredAdapters - pub.art.listener:queryListenerState"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.listener:queryListenerState",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A70926__title__1",
+      "description": [
+        "WmART. Returns the current state for a listener."
+      ],
+      "input_parameters": [
+        {
+          "name": "listenerName",
+          "type": "String",
+          "description": [
+            "Name of the listener for which you want the current state returned."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "listenerState",
+          "type": "String",
+          "description": [
+            "Current state of the listener. The state will have one of these values: - disabled if the listener is disabled. - enabled if the listener is enabled. - enablePending if the listener is in the process of starting. - disablePending if the listener is in the process of disabling. - suspended if the listener is suspended. - suspendPending if the listener is in the process of suspending."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.listener:enableListener - pub.art.listener:disableListener"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.listener:resumeListener",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A38424__title__1",
+      "description": [
+        "WmART. Resumes a specified listener."
+      ],
+      "input_parameters": [
+        {
+          "name": "listenerName",
+          "type": "String",
+          "description": [
+            "The name of the suspended listener you want to resume. The service returns an error if you specify an invalid listener."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the requested transition is not valid (for example, trying to resume a disabled listener or a listener that is already resumed), the service ignores the request. After you use this service, you can use pub.art.listener:queryListenerState to verify pub.art.listener:resumeListener correctly changed the state of the listener."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.listener:queryListenerState - pub.art.listener:suspendListener"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.listener:setListenerNodeConnection",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A62349__title__1",
+      "description": [
+        "WmART. Changes the connection node used by a specified listener."
+      ],
+      "input_parameters": [
+        {
+          "name": "listenerName",
+          "type": "String",
+          "description": [
+            "Name of the listener for which you want to change the connection node."
+          ]
+        },
+        {
+          "name": "connectionAlias",
+          "type": "String",
+          "description": [
+            "Name of the new connection node to use with the listener."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Calling this service for a listener that is disabled is permitted. Calling this service for a listener that is suspended changes the state of the listener to disabled. The user must enable the listener before using it."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.listener:disableListener"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.listener:suspendListener",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A51324__title__1",
+      "description": [
+        "WmART. Suspends a specified listener."
+      ],
+      "input_parameters": [
+        {
+          "name": "listenerName",
+          "type": "String",
+          "description": [
+            "The name of the listener you want to suspend. The service returns an error if you specify an invalid listener."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the requested transition is not valid (for example, trying to suspend a disabled listener or a listener that is already suspended), the service ignores the request. After you use this service, you can use pub.art.listener:queryListenerState to verify pub.art.listener:suspendListener correctly changed the state of the listener."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.listener:queryListenerState - pub.art.listener:resumeListener"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:disableListenerNotification",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A95533__title__1",
+      "description": [
+        "WmART. Disables a listener notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "The name of the listener notification you want to disable."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.notification:enableListenerNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:disablePollingNotification",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A62477__title__1",
+      "description": [
+        "WmART. Disables a polling notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "The name of the polling notification you want to disable. The polling notification should have a state of enabled or suspended ."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.notification:enablePollingNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:disablePublishEvents",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#idc6282d01-bff4-4f64-87c9-7576bcab7aa5__title__1",
+      "description": [
+        "WmART. Disables the publishing of events for an adapter notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "The name of the notification for which you want to disable the publishing of events."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.notification:enablePublishEvents"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:enableListenerNotification",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A10061__title__1",
+      "description": [
+        "WmART. Enables an existing listener notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "The name of the listener notification you want to enable."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.notification:disableListenerNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:enablePollingNotification",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A54879__title__1",
+      "description": [
+        "WmART. Enables an existing polling notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "Name of the polling notification you want to enable."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You must schedule the polling notification before you can run this service. See your adapter user documentation for instructions to schedule the polling notification."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.notification:disablePollingNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:enablePublishEvents",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#ide1fe5e59-99d4-4a1e-a250-4e8250549ff3__title__1",
+      "description": [
+        "WmART. Enables the publishing of events for an adapter notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "The name of the notification for which you want to enable the publishing of events."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.notification:disablePublishEvents"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:listAdapterListenerNotifications",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A50289__title__1",
+      "description": [
+        "WmART. Lists the listener notifications associated with a specified adapter."
+      ],
+      "input_parameters": [
+        {
+          "name": "adapterTypeName",
+          "type": "String",
+          "description": [
+            "The name of the adapter as registered with the WmART package."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "notificationDataList",
+          "type": "Document List",
+          "description": [
+            "Information for each listener notification registered with the specified adapter."
+          ],
+          "children": [
+            {
+              "name": "notificationNodeName",
+              "type": "String",
+              "description": [
+                "The name of the listener notification."
+              ]
+            },
+            {
+              "name": "packageName",
+              "type": "String",
+              "description": [
+                "The name of the package in which the listener notification resides."
+              ]
+            },
+            {
+              "name": "notificationEnabled",
+              "type": "String",
+              "description": [
+                "The current state of the listener notification. The state will have one of these values: - no if the listener notification is disabled. - yes if the listener notification is enabled."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art:listRegisteredAdapters - pub.art.notification:queryListenerNotificationState"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:listAdapterPollingNotifications",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A87986__title__1",
+      "description": [
+        "WmART. Lists the polling notifications associated with a specified adapter."
+      ],
+      "input_parameters": [
+        {
+          "name": "adapterTypeName",
+          "type": "String",
+          "description": [
+            "The name of the adapter as registered with the WmART package."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "notificationDataList",
+          "type": "Document List",
+          "description": [
+            "Information for each polling notification registered with the specified adapter."
+          ],
+          "children": [
+            {
+              "name": "notificationNodeName",
+              "type": "String",
+              "description": [
+                "The name of the polling notification."
+              ]
+            },
+            {
+              "name": "packageName",
+              "type": "String",
+              "description": [
+                "The name of the package in which the polling notification resides."
+              ]
+            },
+            {
+              "name": "notificationEnabled",
+              "type": "String",
+              "description": [
+                "The current state of the polling notification. The state will have one of these values: - no if the polling notification is disabled. - yes if the polling notification is enabled. - pending if the polling notification is in the process of shutting down. - suspended if the polling notification is suspended."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art:listRegisteredAdapters - pub.art.notification:queryPollingNotificationState"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:queryListenerNotificationState",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A25909__title__1",
+      "description": [
+        "WmART. Returns the current state (enabled/disabled) for a listener notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "The name of the listener notification for which you want the current state (enabled/disabled) returned."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "notificationState",
+          "type": "String",
+          "description": [
+            "The current state (enabled/disabled) for the listener notification."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.notification:enableListenerNotification - pub.art.notification:disableListenerNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:queryPollingNotificationState",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A56019__title__1",
+      "description": [
+        "WmART. Returns the current state for a polling notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "The name of the polling notification for which you want the current state and schedule settings returned."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "notificationState",
+          "type": "String",
+          "description": [
+            "The current state (enabled, disabled, pending disable, pending suspend, or suspended) for the polling notification."
+          ]
+        },
+        {
+          "name": "scheduleSettings",
+          "type": "IData",
+          "description": [
+            "Object that contains the notification's schedule settings as follows:"
+          ],
+          "children": [
+            {
+              "name": "notificationInterval",
+              "type": "Integer",
+              "description": [
+                "Polling frequency of the notification."
+              ]
+            },
+            {
+              "name": "notificationOverlap",
+              "type": "Boolean",
+              "description": [
+                "Flags whether the notification can overlap. The values are: - true if the notification can overlap. - false if the notification cannot overlap."
+              ]
+            },
+            {
+              "name": "notificationImmediate",
+              "type": "Boolean",
+              "description": [
+                "Flags whether the notification can fire immediately. The values are: - true if the notification can fire immediately. - false if the notification cannot fire immediately."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art.notification:enablePollingNotification - pub.art.notification:disablePollingNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:resumePollingNotification",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A59675__title__1",
+      "description": [
+        "WmART. Resumes a specified polling notification node."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "The name of the polling notification you want to resume. The service returns an error if you specify an invalid polling notification."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the requested transition is not valid (for example, trying to resume a disabled polling notification or a polling notification that is already resumed), the service ignores the request. After you use this service, you can use pub.art.notification:queryPollingNotificationState to verify pub.art.notification:resumePollingNotification correctly changed the state of the polling notification to enabled."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.notification:queryPollingNotificationState - pub.art.notification:suspendPollingNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:setListenerNotificationNodeListener",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A18839__title__1",
+      "description": [
+        "WmART. Changes the listener used by a specified listener notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "Name of the listener notification for which you want to change the listener."
+          ]
+        },
+        {
+          "name": "listenerNode",
+          "type": "String",
+          "description": [
+            "Name of the new listener to use with the listener notification."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service returns an error if the listener notification is enabled. You can use this service for synchronous and asynchronous listener notifications."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.notification:disableListenerNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:setPollingNotificationNodeConnection",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A71296__title__1",
+      "description": [
+        "WmART. Changes the connection node used by a specified polling notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "Name of the polling notification for which you want to change the connection node."
+          ]
+        },
+        {
+          "name": "connectionAlias",
+          "type": "String",
+          "description": [
+            "Name of the new connection node to use with the polling notification."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The polling notification must be in a disabled or suspended state before you call this service. This service returns an error if the polling notification is enabled. If you use this service on a suspended polling notification, the service changes the state of the polling notification to disabled."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.notification:disablePollingNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.notification:suspendPollingNotification",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A78353__title__1",
+      "description": [
+        "WmART. Suspends a specified polling notification."
+      ],
+      "input_parameters": [
+        {
+          "name": "notificationName",
+          "type": "String",
+          "description": [
+            "The name of the polling notification you want to suspend. The service returns an error if you specify an invalid polling notification."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the requested transition is not valid (for example, trying to suspend a disabled polling notification or a polling notification that is already suspended), the service ignores the request. After you use this service, you can use pub.art.notification:queryPollingNotificationState to verify pub.art.notification:suspendPollingNotification correctly changed the state of the polling notification to suspended."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.notification:queryPollingNotificationState - pub.art.notification:resumePollingNotification"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.service:listAdapterServices",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A18784__title__1",
+      "description": [
+        "WmART. Lists adapter services associated with a specified adapter."
+      ],
+      "input_parameters": [
+        {
+          "name": "adapterTypeName",
+          "type": "String",
+          "description": [
+            "The name of the adapter as registered with the WmART package."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "serviceDataList",
+          "type": "Document List",
+          "description": [
+            "Information for each adapter service registered with the specified adapter."
+          ],
+          "children": [
+            {
+              "name": "serviceNodeName",
+              "type": "String",
+              "description": [
+                "The name of the adapter service."
+              ]
+            },
+            {
+              "name": "packageName",
+              "type": "String",
+              "description": [
+                "The name of the package in which the adapter service resides."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "see_also": [
+            "- pub.art:listRegisteredAdapters"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.service:setAdapterServiceNodeConnection",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A64582__title__1",
+      "description": [
+        "WmART. Changes the connection node used by a specified adapter service."
+      ],
+      "input_parameters": [
+        {
+          "name": "serviceName",
+          "type": "String",
+          "description": [
+            "Name of an existing adapter service for which you want to change the connection node."
+          ]
+        },
+        {
+          "name": "connectionAlias",
+          "type": "String",
+          "description": [
+            "Name of the new connection node to use with the adapter service."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The new connection node must be enabled before you call this service."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.connection:enableConnection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.transaction:commitTransaction",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A63904__title__1",
+      "description": [
+        "WmART. Commits an explicit transaction."
+      ],
+      "input_parameters": [
+        {
+          "name": "commitTransactionInput",
+          "type": "Document List",
+          "description": [
+            "Information for each commit request."
+          ],
+          "children": [
+            {
+              "name": "transactionName",
+              "type": "String",
+              "description": [
+                "The name of an explicit transaction that you want to commit. The transactionName must have been previously used in a call to pub.art.transaction:startTransaction . This value must be mapped from the most recent pub.art.transaction:startTransaction that has not previously been committed or rolled back."
+              ],
+              "references": [
+                {
+                  "title": "pub.art.transaction:startTransaction",
+                  "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A78958"
+                },
+                {
+                  "title": "pub.art.transaction:startTransaction",
+                  "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A78958"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is available only if your adapter supports built-in transaction management services, which you can confirm by checking the user guide for the adapter. This service must be used in conjunction with the pub.art.transaction:startTransaction service. If the transactionName parameter was not provided in a prior call to pub.art.transaction:startTransaction, a run-time error will be returned."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.transaction:startTransaction - pub.art.transaction:rollbackTransaction"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.transaction:rollbackTransaction",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A62447__title__1",
+      "description": [
+        "WmART. Rolls back an explicit transaction."
+      ],
+      "input_parameters": [
+        {
+          "name": "rollbackTransactionInput",
+          "type": "Document List",
+          "description": [
+            "Information for each rollback request."
+          ],
+          "children": [
+            {
+              "name": "transactionName",
+              "type": "String",
+              "description": [
+                "The name of an explicit transaction that you want to roll back. The transactionName must have been previously used in a call to pub.art.transaction:startTransaction . This value must be mapped from the most recent pub.art.transaction:startTransaction that has not previously been committed or rolled back."
+              ],
+              "references": [
+                {
+                  "title": "pub.art.transaction:startTransaction",
+                  "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A78958"
+                },
+                {
+                  "title": "pub.art.transaction:startTransaction",
+                  "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A78958"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is available only if your adapter supports built-in transaction management services, which you can confirm by checking the adapter's user guide. This service must be used in conjunction with the pub.art.transaction:startTransaction service. If the given transactionName parameter was not provided in a prior call to pub.art.transaction:startTransaction, a run-time error will be returned."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.transaction:startTransaction - pub.art.transaction:commitTransaction"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.transaction:setTransactionTimeout",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A90444__title__1",
+      "description": [
+        "WmART. Manually sets a transaction timeout interval for implicit and explicit transactions."
+      ],
+      "input_parameters": [
+        {
+          "name": "timeoutSeconds",
+          "type": "Integer",
+          "description": [
+            "The number of seconds that the implicit or explicit transaction stays open before the transaction manager marks it for rollback."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is available only if your adapter supports built-in transaction management services, which you can confirm by checking the user guide for the adapter. When you use this service, you are temporarily overriding the Integration Server transaction timeout interval. You must call this service within a flow before the start of any implicit or explicit transactions. Implicit transactions start when you call an adapter service in a flow. Explicit transactions start when you call the pub.art.transaction:startTransaction service. If the execution of a transaction takes longer than the transaction timeout interval, all transacted operations are rolled back. This service only overrides the transaction timeout interval for the flow service in which you call it."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.transaction:startTransaction"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.art.transaction:startTransaction",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-art-folder#A78958__title__1",
+      "description": [
+        "WmART. Starts an explicit transaction."
+      ],
+      "input_parameters": [
+        {
+          "name": "startTransactionInput",
+          "type": "Document List",
+          "description": [
+            "Information for each start transaction request."
+          ],
+          "children": [
+            {
+              "name": "transactionName",
+              "type": "String",
+              "description": [
+                "Optional. Specifies the name of the transaction to be started. If you leave this parameter blank, Integration Server will generate a name for you. In most implementations it is not necessary to provide your own transaction name."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "startTransactionOutput",
+          "type": "Document List",
+          "description": [
+            "Information for each start transaction request."
+          ],
+          "children": [
+            {
+              "name": "transactionName",
+              "type": "String",
+              "description": [
+                "The name of the transaction the service just started."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service is available only if your adapter supports built-in transaction management services, which you can confirm by checking the user guide for the adapter. This service is intended for use with the pub.art.transaction:commitTransaction or pub.art.transaction:rollbackTransaction service. The transactionName value returned by a call to this service can be provided to pub.art.transaction:commitTransaction (to commit the transaction) or pub.art.transaction:rollbackTransaction (to roll back the transaction)."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.art.transaction:commitTransaction - pub.art.transaction:rollbackTransaction"
+          ]
+        }
+      ]
+    }
+  ]
+}

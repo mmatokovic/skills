@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "mmatokovic-skills",
+  "owner": {
+    "name": "Mislav Matoković"
+  },
+  "metadata": {
+    "description": "mmatokovic Skills marketplace — installable, personal skills.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "code-guidelines",
+      "source": "./",
+      "strict": false,
+      "description": "General coding and planning guidelines: Karpathy-style coding discipline, plan grilling, and Claude Code setup reflection.",
+      "skills": [
+        "./skills/grilling",
+        "./skills/karpathy-guidelines",
+        "./skills/reflection"
+      ]
+    },
+    {
+      "name": "magic-bean",
+      "source": "./",
+      "strict": false,
+      "description": "Spring Boot backend conventions: hexagonal layout, JPA, JDBC procedures, Spring Batch, RFC 9457 errors, Error Prone, code review, and unit, slice and integration testing.",
+      "skills": [
+        "./skills/spring-boot"
+      ]
+    },
+    {
+      "name": "integration",
+      "source": "./",
+      "strict": false,
+      "description": "Integration team skills: webMethods platform, webMethods-to-Spring service migration, and Wireshark/tshark analysis. Install magic-bean alongside it — webmethods-service builds on the spring-boot skill.",
+      "skills": [
+        "./skills/webmethods-platform",
+        "./skills/webmethods-service",
+        "./skills/wireshark-analysis"
+      ]
+    },
+    {
+      "name": "devops",
+      "source": "./",
+      "strict": false,
+      "description": "OpenShift/Kubernetes troubleshooting with oc and Helm, and observability: structured logging, Kibana queries, metrics, alerts and SLOs.",
+      "skills": [
+        "./skills/observability",
+        "./skills/openshift-troubleshooter"
+      ]
+    },
+    {
+      "name": "web-craft",
+      "source": "./",
+      "strict": false,
+      "description": "Static sites with Hugo and Tailwind CSS v4: layouts, partials, shortcodes, render hooks, page bundles, image processing, and Hugo upgrades.",
+      "skills": [
+        "./skills/hugo-tailwind"
+      ]
+    },
+    {
+      "name": "llm-wiki",
+      "source": "./",
+      "strict": false,
+      "description": "Karpathy-style LLM-compiled Obsidian wiki: ingest raw sources, ask, lint, and file answers back.",
+      "skills": [
+        "./skills/llm-wiki"
+      ]
+    },
+    {
+      "name": "code-hooks",
+      "source": "./plugins/code-hooks",
+      "description": "Windows toast notifications for Claude Code Stop and Notification hooks."
+    }
+  ]
+}

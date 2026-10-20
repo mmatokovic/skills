@@ -1,0 +1,953 @@
+{
+  "folder": "MATH",
+  "description": [
+    "You use the elements in the math folder to perform mathematical operations on string-based numeric values.",
+    "Note: Services that operate on integer values use Java's long data type (64-bit, two's complement). Services that operate on float values use Java's double data type (64-bit IEEE 754). If extremely precise calculations are critical to your application, you should write your own Java services to perform math functions."
+  ],
+  "total_services": 22,
+  "services": [
+    {
+      "name": "pub.math:absoluteValue",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907973__title__1",
+      "description": [
+        "WmPublic. Returns the absolute value of the input number."
+      ],
+      "input_parameters": [
+        {
+          "name": "num",
+          "type": "String",
+          "description": [
+            "Number whose absolute value is to be returned."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "positiveNumber",
+          "type": "String",
+          "description": [
+            "Absolute value of the input number."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:addFloatList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A68596__title__1",
+      "description": [
+        "WmPublic. Adds a list of floating point numbers (represented in a string list) and returns the sum."
+      ],
+      "input_parameters": [
+        {
+          "name": "numList",
+          "type": "String List",
+          "description": [
+            "Numbers (floating point numbers represented in a string list) to add."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "children": [
+            {
+              "name": "Infinity",
+              "description": [
+                "The computation produces a positive value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "-Infinity",
+              "description": [
+                "The computation produces a negative value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "0.0",
+              "description": [
+                "The computation produces a value that underflows the representable range of a float type (for example, adding a number to infinity)."
+              ]
+            },
+            {
+              "name": "NaN",
+              "description": [
+                "The computation produces a value that cannot be represented as a number (for example, any operation that uses NaN as input, such as 10.0 + NaN = NaN)."
+              ]
+            }
+          ],
+          "type": "String",
+          "description": [
+            "Sum of the numbers in numList . If a sum cannot be produced, value contains one of the following:"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the strings that are passed to the service in numList are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:addFloats",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907974__title__1",
+      "description": [
+        "WmPublic. Adds one floating point number (represented as a String) to another and returns the sum."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "String",
+          "description": [
+            "Number to add."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "String",
+          "description": [
+            "Number to add."
+          ]
+        },
+        {
+          "name": "precision",
+          "type": "String",
+          "description": [
+            "Optional. Number of decimal places to which the sum will be rounded. The default value is null. The precision parameter, if specified, will override the behavior set by the watt.server.math.floatOperation.mode property. For information about the watt.server.math.floatOperation.mode property, see the IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "children": [
+            {
+              "name": "Infinity",
+              "description": [
+                "The computation produces a positive value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "-Infinity",
+              "description": [
+                "The computation produces a negative value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "0.0",
+              "description": [
+                "The computation produces a value that underflows the representable range of a float type (for example, adding a number to infinity)."
+              ]
+            },
+            {
+              "name": "NaN",
+              "description": [
+                "The computation produces a value that cannot be represented as a number (for example, any operation that uses NaN as input, such as 10.0 + NaN = NaN)."
+              ]
+            }
+          ],
+          "type": "String",
+          "description": [
+            "Sum of the numbers in num1 and num2 . If a sum cannot be produced, value contains one of the following:"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the strings that are passed to the service in num1andnum2 are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57. Use the watt.server.math.floatOperation.mode property to specify whether the pub.math:addFloats service return the exact result of an operation involving two floating point numbers, the result as calculated by the JVM, or the result based on a fixed number of decimal places. For information about the watt.server.math.floatOperation.mode property, see the IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:addIntList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907975__title__1",
+      "description": [
+        "WmPublic. Adds a list of integers (represented in a String list) and returns the sum."
+      ],
+      "input_parameters": [
+        {
+          "name": "numList",
+          "type": "String List",
+          "description": [
+            "Numbers (integers represented as Strings) to add."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Sum of the numbers in numList ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the strings that are passed to the service in numList are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:addInts",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907976__title__1",
+      "description": [
+        "WmPublic. Adds one integer (represented as a String) to another and returns the sum."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "String",
+          "description": [
+            "Number (integer represented as a String) to add."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "String",
+          "description": [
+            "Number (integer represented as a String) to add."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Sum of num1 and num2 ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the result of your calculation is less than 64 bits in width (the maximum width for the long data type). If the result exceeds this limit, it will generate a data overflow. Make sure the strings that are passed to the service in num1andnum2 are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:addObjects",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#Apub_math_addObjects__title__1",
+      "description": [
+        "WmPublic. Adds one java.lang.Number object to another and returns the sum."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "Object",
+          "description": [
+            "Number to add. See the Usage Notes for supported sub-classes."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "Object",
+          "description": [
+            "Number to add. See the Usage Notes for supported sub-classes."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Sum of the numeric values of num1 and num2 ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service accepts the following sub-classes of java.lang.Number: java.lang.Byte, java.lang.Double, java.lang.Float, java.lang.Integer, java.lang.Long, java.lang.Short. This service applies the following rules for binary numeric promotion to the operands in order: - If either operand is of type Double, the other is converted to Double. - Otherwise, if either operand is of type Float, the other is converted to Float. - Otherwise, if either operand is of type Long, the other is converted to Long. - Otherwise, both operands are converted to type Integer. These promotion rules mirror the Java rules for numeric promotion of numeric types."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:divideFloats",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907977__title__1",
+      "description": [
+        "WmPublic. Divides one floating point number (represented as a String) by another (num1/num2) and returns the quotient."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "String",
+          "description": [
+            "Number (floating point number represented as a String) that is the dividend."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "String",
+          "description": [
+            "Number (floating point number represented as a String) that is the divisor."
+          ]
+        },
+        {
+          "name": "precision",
+          "type": "String",
+          "description": [
+            "Optional. Number of decimal places to which the quotient will be rounded. The default value is null. The precision parameter, if specified, will override the behavior set by the watt.server.math.floatOperation.mode property. For information about the watt.server.math.floatOperation.mode property, see the IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "children": [
+            {
+              "name": "Infinity",
+              "description": [
+                "The computation produces a positive value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "-Infinity",
+              "description": [
+                "The computation produces a negative value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "0.0",
+              "description": [
+                "The computation produces a value that underflows the representable range of a float type (for example, dividing a number by infinity)."
+              ]
+            },
+            {
+              "name": "NaN",
+              "description": [
+                "The computation produces a value that cannot be represented as a number (for example, the result of an illegal operation such as dividing zero by zero or any operation that uses NaN as input, such as 10.0 + NaN = NaN)."
+              ]
+            }
+          ],
+          "type": "String",
+          "description": [
+            "The quotient of num1 / num2 . If a quotient cannot be produced, value contains one of the following:"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the strings that are passed to the service in num1andnum2 are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57. Use the watt.server.math.floatOperation.mode property to specify whether the pub.math:divideFloats service return the exact result of an operation involving two floating point numbers, the result as calculated by the JVM, or the result based on a fixed number of decimal places. For information about the watt.server.math.floatOperation.mode property, see the IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:divideInts",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907978__title__1",
+      "description": [
+        "WmPublic. Divides one integer (represented as a String) by another (num1/num2) and returns the quotient."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "String",
+          "description": [
+            "Number (integer represented as a String) that is the dividend."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "String",
+          "description": [
+            "Number (integer represented as a String) that is the divisor."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "The quotient of num1 / num2 ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the strings that are passed to the service in num1andnum2 are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:divideObjects",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#Apub_math_divideObjects__title__1",
+      "description": [
+        "WmPublic. Divides one java.lang.Number object by another (num1/num2) and returns the quotient."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "Object",
+          "description": [
+            "Number that is the dividend. See the Usage Notes for supported sub-classes."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "Object",
+          "description": [
+            "Number that is the divisor. See the Usage Notes for supported sub-classes."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Quotient of num1 / num2 ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service accepts the following sub-classes of java.lang.Number: java.lang.Byte, java.lang.Double, java.lang.Float, java.lang.Integer, java.lang.Long, java.lang.Short. This service applies the following rules for binary numeric promotion to the operands in order: - If either operand is of type Double, the other is converted to Double. - Otherwise, if either operand is of type Float, the other is converted to Float. - Otherwise, if either operand is of type Long, the other is converted to Long. - Otherwise, both operands are converted to type Integer. These promotion rules mirror the Java rules for numeric promotion of numeric types."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:max",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A32337__title__1",
+      "description": [
+        "WmPublic. Returns the largest number from a list of numbers."
+      ],
+      "input_parameters": [
+        {
+          "name": "numList",
+          "type": "String List",
+          "description": [
+            "List of numbers from which the largest number is to be returned."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "maxValue",
+          "type": "String",
+          "description": [
+            "Largest number from the list of numbers."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:min",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A31815__title__1",
+      "description": [
+        "WmPublic. Returns smallest number from a list of numbers."
+      ],
+      "input_parameters": [
+        {
+          "name": "numList",
+          "type": "String List",
+          "description": [
+            "List of numbers from which the smallest number is to be returned."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "minValue",
+          "type": "String",
+          "description": [
+            "Smallest number from the list of numbers."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:multiplyFloatList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907979__title__1",
+      "description": [
+        "WmPublic. Multiplies a list of floating point numbers (represented in a String list) and returns the product."
+      ],
+      "input_parameters": [
+        {
+          "name": "numList",
+          "type": "String List",
+          "description": [
+            "Numbers (floating point numbers represented as Strings) to multiply."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "children": [
+            {
+              "name": "Infinity",
+              "description": [
+                "The computation produces a positive value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "-Infinity",
+              "description": [
+                "The computation produces a negative value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "0.0",
+              "description": [
+                "The computation produces a value that underflows the representable range of a float type (for example, multiplying a number by infinity)."
+              ]
+            },
+            {
+              "name": "NaN",
+              "description": [
+                "The computation produces a value that cannot be represented as a number (for example, the result of an illegal operation such as multiplying zero by zero or any operation that uses NaN as input, such as 10.0 + NaN = NaN)."
+              ]
+            }
+          ],
+          "type": "String",
+          "description": [
+            "Product of the numbers in numlist . If a product cannot be produced, value contains one of the following:"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the strings that are passed to the service in numList are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:multiplyFloats",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907980__title__1",
+      "description": [
+        "WmPublic. Multiples one floating point number (represented as String) by another and returns the product."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "String",
+          "description": [
+            "Number (floating point number represented as a String) to multiply."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "String",
+          "description": [
+            "Number (floating point number represented as a String) to multiply."
+          ]
+        },
+        {
+          "name": "precision",
+          "type": "String",
+          "description": [
+            "Optional. Number of decimal places to which the product will be rounded. The default value is null. The precision parameter, if specified, will override the behavior set by the watt.server.math.floatOperation.mode property. For information about the watt.server.math.floatOperation.mode property, see the IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "children": [
+            {
+              "name": "Infinity",
+              "description": [
+                "The computation produces a positive value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "-Infinity",
+              "description": [
+                "The computation produces a negative value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "0.0",
+              "description": [
+                "The computation produces a value that underflows the representable range of a float type (for example, multiplying a number by infinity)."
+              ]
+            },
+            {
+              "name": "NaN",
+              "description": [
+                "The computation produces a value that cannot be represented as a number (for example, the result of an illegal operation such as multiplying zero by zero or any operation that uses NaN as input, such as 10.0 + NaN = NaN)."
+              ]
+            }
+          ],
+          "type": "String",
+          "description": [
+            "Product of the numeric values of num1 and num2 . If a product cannot be produced, value contains one of the following:"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the strings that are passed to the service in num1andnum2 are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57. Use the watt.server.math.floatOperation.mode property to specify whether the pub.math:multiplyFloats service return the exact result of an operation involving two floating point numbers, the result as calculated by the JVM, or the result based on a fixed number of decimal places. See IBM webMethods Integration Server Administrator’s Guide for more information about the watt.server.math.floatOperation.mode property."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:multiplyIntList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907981__title__1",
+      "description": [
+        "WmPublic. Multiplies a list of integers (represented in a String list) and returns the product."
+      ],
+      "input_parameters": [
+        {
+          "name": "numList",
+          "type": "String List",
+          "description": [
+            "Numbers (floating point numbers represented as Strings) to multiply."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Product of the numbers in numList ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the result of your calculation is less than 64 bits in width (the maximum width for the long data type). If the result exceeds this limit, it will generate a data overflow. Make sure the strings that are passed to the service in numList are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:multiplyInts",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907982__title__1",
+      "description": [
+        "WmPublic. Multiplies one integer (represented as a String) by another and returns the product."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "String",
+          "description": [
+            "Number (integer represented as a String) to multiply."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "String",
+          "description": [
+            "Number (integer represented as a String) to multiply."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Product of num1 and num2 ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the result of your calculation is less than 64 bits in width (the maximum width for the long data type). If the result exceeds this limit, it will generate a data overflow. Make sure the strings that are passed to the service in num1andnum2 are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:multiplyObjects",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#Apub_math_multiplyObjects__title__1",
+      "description": [
+        "WmPublic. Multiplies one java.lang.Number object by another and returns the product."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "Object",
+          "description": [
+            "Number to multiply. See the Usage Notes for supported sub-classes."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "Object",
+          "description": [
+            "Number to multiply. See the Usage Notes for supported sub-classes."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Product of num1 and num2 ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service accepts the following sub-classes of java.lang.Number: java.lang.Byte, java.lang.Double, java.lang.Float, java.lang.Integer, java.lang.Long, java.lang.Short. This service applies the following rules for binary numeric promotion to the operands in order: - If either operand is of type Double, the other is converted to Double. - Otherwise, if either operand is of type Float, the other is converted to Float. - Otherwise, if either operand is of type Long, the other is converted to Long. - Otherwise, both operands are converted to type Integer. These promotion rules mirror the Java rules for numeric promotion of numeric types."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:randomDouble",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#Apub_math_randomDouble__title__1",
+      "description": [
+        "WmPublic. Returns the next pseudorandom, uniformly distributed double between 0.0 and 1.0. Random number generators are often referred to as pseudorandom number generators because the numbers produced tend to repeat themselves over time."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "number",
+          "type": "String",
+          "description": [
+            "Generated random number."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:roundNumber",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A18955__title__1",
+      "description": [
+        "WmPublic. Returns a rounded number."
+      ],
+      "input_parameters": [
+        {
+          "name": "num",
+          "type": "String",
+          "description": [
+            "Number to be rounded."
+          ]
+        },
+        {
+          "name": "numberOfDigits",
+          "type": "String",
+          "description": [
+            "Specifies the number of digits to which you want to round the number."
+          ]
+        },
+        {
+          "name": "roundingMode",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the rounding method. Valid values for the roundingMode parameter are RoundHalfUp, RoundUp, RoundDown, RoundCeiling, RoundFloor, RoundHalfDown, and RoundHalfEven. The default value is RoundHalfUp."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "roundedNumber",
+          "type": "String",
+          "description": [
+            "The rounded number."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:subtractFloats",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#Apub_math_subtractFloats__title__1",
+      "description": [
+        "WmPublic. Subtracts one floating point number (represented as a String) from another and returns the difference."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "String",
+          "description": [
+            "Number (floating point number represented as a String)."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "String",
+          "description": [
+            "Number (floating point number represented as a String) to subtract from num1 ."
+          ]
+        },
+        {
+          "name": "precision",
+          "type": "String",
+          "description": [
+            "Optional. Number of decimal places to which the difference will be rounded. The default value is null. The precision parameter, if specified, will override the behavior set by the watt.server.math.floatOperation.mode property. For information about the watt.server.math.floatOperation.mode property, see the IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "children": [
+            {
+              "name": "Infinity",
+              "description": [
+                "The computation produces a positive value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "-Infinity",
+              "description": [
+                "The computation produces a negative value that overflows the representable range of a float type."
+              ]
+            },
+            {
+              "name": "0.0",
+              "description": [
+                "The computation produces a value that underflows the representable range of a float type (for example, subtracting a number from infinity)."
+              ]
+            },
+            {
+              "name": "NaN",
+              "description": [
+                "The computation produces a value that cannot be represented as a number (for example, the result of an illegal operation such as multiplying zero by zero or any operation that uses NaN as input, such as 10.0 - NaN = NaN)."
+              ]
+            }
+          ],
+          "type": "String",
+          "description": [
+            "Difference of num1 - num2 . If a difference cannot be produced, value contains one of the following:"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the strings that are passed to the service in num1andnum2 are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57. Use the watt.server.math.floatOperation.mode property to specify whether the pub.math:subtractFloats service return the exact result of an operation involving two floating point numbers, the result as calculated by the JVM, or the result based on a fixed number of decimal places. For more information about the watt.server.math.floatOperation.mode property, see IBM webMethods Integration Server Administrator’s Guide"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:subtractInts",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A_Toc462907984__title__1",
+      "description": [
+        "WmPublic. Subtracts one integer (represented as a String) from another and returns the difference."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "String",
+          "description": [
+            "Number (integer represented as a String)."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "String",
+          "description": [
+            "Number (integer represented as a String) to subtract from num1 ."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Difference of num1 - num2 ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Make sure the result of your calculation is less than 64 bits in width (the maximum width for the long data type). If the result exceeds this limit, it will generate a data overflow. Make sure the strings that are passed to the service in num1 andnum2 are in a locale-neutral format (that is, using the pattern -####.##). Passing locally formatted strings may result in unexpected results. For example, calling pub.math:addFloats in a German locale with the arguments 1,23 and 2,34 will result in the value 357, not 3.57 or 3,57."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:subtractObjects",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#Apub_math_subtractrObjects__title__1",
+      "description": [
+        "WmPublic. Subtracts one java.lang.Number object from another and returns the difference."
+      ],
+      "input_parameters": [
+        {
+          "name": "num1",
+          "type": "Object",
+          "description": [
+            "Number. See the Usage Notes for supported sub-classes."
+          ]
+        },
+        {
+          "name": "num2",
+          "type": "Object",
+          "description": [
+            "Number to subtract from num1 . See Usage Notes for supported sub-classes."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "value",
+          "type": "Object",
+          "description": [
+            "Difference of num1 - num2 ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service accepts the following sub-classes of java.lang.Number: java.lang.Byte, java.lang.Double, java.lang.Float, java.lang.Integer, java.lang.Long, java.lang.Short. This service applies the following rules for binary numeric promotion to the operands. The following rules are applied in order: - If either operand is of type Double, the other is converted to Double. - Otherwise, if either operand is of type Float, the other is converted to Float. - Otherwise, if either operand is of type Long, the other is converted to Long. - Otherwise, both operands are converted to type Integer. These promotion rules mirror the Java rules for numeric promotion of numeric types."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.math:toNumber",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-math-folder#A97287__title__1",
+      "description": [
+        "WmPublic. Converts a string to numeric data type."
+      ],
+      "input_parameters": [
+        {
+          "name": "num",
+          "type": "String",
+          "description": [
+            "Number (represented as a string) to be converted to numeric format."
+          ]
+        },
+        {
+          "name": "convertAs",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the Java numeric data type to which the num parameter is to be converted. Valid values for the convertAs parameter are java.lang.Double, java.lang.Float, java.lang.Integer,java.math.BigDecimal,java.math.BigInteger, java.lang.Long. The default value is java.lang.Double."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "num",
+          "type": "Object",
+          "description": [
+            "Converted numeric object."
+          ]
+        }
+      ]
+    }
+  ]
+}

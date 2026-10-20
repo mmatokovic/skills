@@ -1,0 +1,354 @@
+{
+  "folder": "PACKAGES",
+  "description": [
+    "You use the elements in the packages folder to install, load, and/or alter the status of a package on the Integration Server."
+  ],
+  "total_services": 9,
+  "services": [
+    {
+      "name": "pub.packages:activatePackage",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#Apub_packages_activatePackage__title__1",
+      "description": [
+        "WmPublic. Activates (makes available to clients) an inactive package. You use this service to activate a package that was not activated when it was initially installed or recovered. Note: This service activates packages from an inactive state (that is, packages that are installed on the server but are not registered in the active-package list). To enable a package that is in a disabled state, you use pub.packages:enablePackage."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Name of the package that you want to activate. Package names are case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message from server. (This is the same message that you receive when you activate a package with the Integration Server Administrator .)"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "This service will throw an exception if the package specified in package does not exist or cannot otherwise be activated. When a package is activated, it is loaded into memory in an enabled state (that is, activatePackage automatically activates and enables the package.) You do not need to explicitly enable it with pub.packages:enablePackage."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.packages:enablePackage - pub.packages:installPackage - pub.packages:recoverPackage"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.packages:backupPackage",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#idefb64e94-4320-4b7f-a8b7-327b1084f167__title__1",
+      "description": [
+        "WmPublic. Creates a backup copy of a specified package."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the package to back up."
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The service creates the backup in a file named packageName.zip, where packageName is the name of the original package installed in Integration Server. The packageName.zip is placed in the following directory: Integration Server_directory \\instances\\instance_name\\replicate\\inbound If a package with the same name as the file produced by this service already exists in the Integration Server_directory \\instances\\instance_name\\replicate\\inbound directory, the service overwrites the existing .zip file with the backup copy that the service creates. The backed up package is an exact copy of the specified package. Package metadata, such as creation timestamp, will be the same in the backup as in the original package. This is unlike package replication or package archiving in which the creation timestamp reflects the time the package was replicated or archived."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.packages:disablePackage",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#Apub_packages_disablePackage__title__1",
+      "description": [
+        "WmPublic. Disables a package, thus prohibiting access to the services in the package."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Name of the package that you want to disable. Package names are case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message from server. (This is the same message that you receive when you disable a package with the Integration Server Administrator .)"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When a package is disabled, the services in the package are no longer available to the clients. To re-enable a package that has been disabled, use pub.packages:enablePackage. Important: Never disable the WmRoot package. Doing so would disable the server. Be aware that if you disable a package while services in the package are being executed, those services will most likely fail. disablePackage does not wait for in-progress services to finish before disabling a package. This service will throw an exception if the package specified in package does not exist or cannot otherwise be disabled."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.packages:enablePackage"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.packages:enablePackage",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#Apub_packages_enablePackage__title__1",
+      "description": [
+        "WmPublic. Enables a package that has been disabled. Note: This service enables a package that is in a disabled state (that is, a package that has been disabled through the Integration Server Administrator or the pub.packages:disablePackage service). To activate a package that is in an inactive state, you use enablePackage."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Name of the package that you want to enable. Package names are case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message from server. (This is the same message that you receive when you enable a package with the Integration Server Administrator .)"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "When you enable a package, the package is reloaded into memory from disk. This service will throw an exception if the package specified in package does not exist, has not been activated, or cannot otherwise be enabled."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.packages:disablePackage - pub.packages:activatePackage - pub.packages:reloadPackage"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.packages.hotdeployment:cancel",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#id2bd79764-1d5f-482f-8611-095ff5b9556d__title__1",
+      "description": [
+        "WmPublic. Cancels a hot deployment operation. You use the hot deployment feature in Integration Server to upgrade custom packages in Integration Server while ensuring that the Integration Server assets are available for processing without any noticeable downtime. You can use the pub.packages.hotdeployment:cancel service to cancel a hot deployment operation if Integration Server is unable to start installing the package because of delay in the completion of in-flight tasks. For more information about hot deployment of packages, see Hot Deployment of Packages ."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Name of the package that is being upgraded using hot deployment operation that you want to cancel. Package names are case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message from server indicating the status of the cancellation of the hot deployment operation."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.packages:installPackage",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#Apub_packages_installPackage__title__1",
+      "description": [
+        "WmPublic. Installs a package that has been published to this server."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageFile",
+          "type": "String",
+          "description": [
+            "Name of the distribution file that contains the package that you want to install. This file must reside in the server's inbound directory ( Integration Server_directory \\instances\\ instance_name \\replicate\\inbound). When specifying packageFile, - Do include the .zip extension in the file name. - Do not include the directory path. For example: myPackageFileAug2001.zip"
+          ]
+        },
+        {
+          "name": "activateOnInstall",
+          "type": "String",
+          "description": [
+            "Flag that specifies whether you want Integration Server to automatically activate the package after it is installed. Set to: - yes to activate the package after installation and make it immediately available to clients. This is the default. - no to install the package without activating it afterwards. If you install a package in this mode, it will not be accessible until it is explicitly activated through the Integration Server Administrator or the pub.packages:activatePackage service."
+          ],
+          "references": [
+            {
+              "title": "pub.packages:activatePackage",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#Apub_packages_activatePackage"
+            }
+          ]
+        },
+        {
+          "name": "archiveOnInstall",
+          "type": "String",
+          "description": [
+            "Optional. Flag that specifies whether you want Integration Server to archive the package automatically after it is installed. Set to: - yes to archive the package after installation. If you choose to archive the package automatically, Integration Server moves the package from the Integration Server_directory \\instances\\instance_name\\replicate\\inbound directory to the Integration Server_directory \\instances\\instance_name\\replicate\\archive directory. This is the default. - no to install the package without archiving it."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message from server. (This is the same message that is displayed when you install a package with the Integration Server Administrator .)"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the installed package replaces an existing package on the server, pub.packages:installPackage will automatically put a backup copy of the existing package in Integration Server_directory \\instances\\instance_name\\replicate\\salvage before it installs the new package. This service will throw an exception if the file named in packageFile does not exist or cannot otherwise be installed correctly. If hot deployment of packages is enabled, Integration Server installs the package using the hot deployment process. The Integration Server must run in a version of the JVM whose major version is greater than or equal to the JVM version required by the package. For example, if the specified JVM version for a package release is 1.8.0_32, the installing Integration Server must be running in a JVM that is 1.8 or higher. If the major version of the Integration Server JVM is less than the JVM version required by the package, Integration Server installs but does not activate the package."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.packages:activatePackage - pub.packages:recoverPackage"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.packages:recoverPackage",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#Apub_packages_recoverPackage__title__1",
+      "description": [
+        "WmPublic. Recovers a package that exists in the server's salvage directory. The salvage directory ( Integration Server_directory \\instances\\instance_name\\replicate\\salvage) is where the server keeps packages that are deleted with the \"safe delete\" option or replaced with newer installed versions."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Name of the package that you want to recover. Package names are case sensitive."
+          ]
+        },
+        {
+          "name": "activateOnRecover",
+          "type": "String",
+          "description": [
+            "Flag that specifies whether you want the server to automatically activate the package after it is recovered. Set to: - yes to activate the package after it is recovered and make it immediately available to clients. - no to recover the package without activating it afterwards. If you recover a package in this mode, it will not be accessible until it is explicitly activated through the Integration Server Administrator or the pub.packages:activatePackage service."
+          ],
+          "references": [
+            {
+              "title": "pub.packages:activatePackage",
+              "url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#Apub_packages_activatePackage"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message from server. (This is the same message that is displayed when you recover a package with the Integration Server Administrator .)"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "You can only recover packages that exist in the server's salvage directory. If you recover a package that is currently installed on the server, the package from the salvage directory replaces the version that is currently installed. (Be aware that the server does not retain a copy of the version that it replaces.) This service will throw an exception if the file named in package does not exist in the server's salvage directory or cannot otherwise be recovered."
+          ]
+        },
+        {
+          "see_also": [
+            "- pub.packages:activatePackage"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.packages:reloadPackage",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#Apub_packages_reloadPackage__title__1",
+      "description": [
+        "WmPublic. Loads a new copy of the package into memory from disk. If you make changes to the service in a package while the server is running, you must use reloadPackage to put those changes into effect."
+      ],
+      "input_parameters": [
+        {
+          "name": "package",
+          "type": "String",
+          "description": [
+            "Name of the package that you want to reload. Package names are case sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Message from server. (This is the same message that is displayed when you reload a package with the Integration Server Administrator .)"
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Be aware that if you reload a package while services in the package are being executed, those services will most likely fail. reloadPackage does not wait for in-progress services to finish before reloading a package. This service will throw an exception if the file named in package does not exist or cannot otherwise be reloaded."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.packages:updateHomePage",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-packages-folder#Apub_packages_updateHomePage__title__1",
+      "description": [
+        "WmPublic. Updates the home page of a custom package. This service does not apply to the system packages. The package home page is at Integration Server_directory \\instances\\instance_name\\packages\\<package Name>\\pub\\index.html"
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the package for which you want to update the home page. Package names are case sensitive."
+          ]
+        },
+        {
+          "name": "replaceHTML",
+          "type": "Boolean",
+          "description": [
+            "Flag that specifies whether to overwrite the existing index.html file. Set to: - true to replace index.html with a predefined home page template for custom package documentation and all the required resources. - false to modify only the resources and not the index.html file."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "success",
+          "type": "Boolean",
+          "description": [
+            "Flag that specifies whether the home page is updated successfully."
+          ]
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Conditional. Message from Integration Server that specifies whether the home page is updated successfully. The message changes based on the replaceHTML value."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "After creating a custom package, you must run the pub.packages:updateHomePage service with replaceHTML set to true to see the updated package documentation. When the replaceHTML value is true, the service overrides the existing content in the index.html file. If the replaceHTML value is false, the index.html file retains the existing content. To see the subsequent changes to the package, run the service again from Integration Server Administrator by regenerating the home page. This invokes the pub.packages:updateHomePage service with replaceHTML as false. If you need to update the changes in the index.html file, run the service with replaceHTML set to true. You can access the package home page even when Integration Server Administrator session expires. For more information on viewing package information and generating package documentation, see the webMethods Integration Server Administrator’s Guide and IBM webMethods Service Development Help . The home page for a custom package generated using the pub.packages:updateHomePage service is available only in English. Integration Server Administrator does not display the home page in other languages. The service updates the home page only for English, which is available in the ../packages/<packagename>/pub/ folder and not for any other language in the ../packages/<packagename>/pub/<other-language> folder that corresponds to the language pack installed for Integration Server and Designer."
+          ]
+        }
+      ]
+    }
+  ]
+}

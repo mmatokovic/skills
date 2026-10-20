@@ -1,0 +1,182 @@
+{
+  "folder": "XSLT",
+  "description": [
+    "You use the elements in the XSLT folder to transform XML into a byte array, file, or XML node, and to maintain the XSLT stylesheet cache."
+  ],
+  "total_services": 3,
+  "services": [
+    {
+      "name": "pub.xslt.Transformations:transformSerialXML",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xslt-folder#Apub_xslt_Transformations_transformSerialXML__title__1",
+      "description": [
+        "WmXSLT. Uses an XSLT stylesheet to transform XML, then stores the transformed XML in a byte array, file, or XML node. To optimize performance, the service stores the XSLT stylesheet in a cache so the stylesheet will be instantly available to the service for later runs."
+      ],
+      "input_parameters": [
+        {
+          "name": "stylesheetSystemId",
+          "type": "String",
+          "description": [
+            "URI (simple file path or URL) for the XSLT stylesheet to use."
+          ]
+        },
+        {
+          "name": "systemId",
+          "type": "String",
+          "description": [
+            "URL of the XML to transform. If you specify this parameter, do not specify the filename , bytes , or xmlStream parameter."
+          ]
+        },
+        {
+          "name": "filename",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the file that contains the XML to transform. The file must be located on the local machine. If you specify this parameter, do not specify the systemId , bytes , or xmlStream parameter."
+          ]
+        },
+        {
+          "name": "bytes",
+          "type": "byte[]",
+          "description": [
+            "XML to transform. If you specify this parameter, do not specify the systemId , filename , or xmlStream parameter."
+          ]
+        },
+        {
+          "name": "xmlStream",
+          "type": "Input stream",
+          "description": [
+            "XML to transform. If you specify this parameter, do not specify the systemId , filename , or bytes parameter."
+          ]
+        },
+        {
+          "name": "xslParamInput",
+          "type": "Document",
+          "description": [
+            "Optional. Name/value pairs to pass to the stylesheet. See the IBM webMethods Service Development Help for instructions on setting up a stylesheet to work with this parameter."
+          ]
+        },
+        {
+          "name": "resultType",
+          "type": "String",
+          "description": [
+            "Tells Designer what to transform the XML into. Must be one of these values: - bytes to transforms the XML into a byte array. - file to transforms the XML into a file. If you specify file, you must also specify the outFileName parameter. - xmlNode to transforms the XML into an XML node."
+          ]
+        },
+        {
+          "name": "outFileName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the file in which to store the transformed XML. The file must be located on the local machine. Use this parameter only if you specified file on the resultType parameter."
+          ]
+        },
+        {
+          "name": "useCompilingProcessor",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether to use the Xalan compiling processor (XSLTC), which creates and uses compiled stylesheets or translets . Set to: - true to use the org.apache.xalan.xsltc.trax.TransformerFactoryImpl class as a transformer factory. - false to use the transformer factory that is specified on the home page of the WmXSLT package. This is the default. If no translet currently exists for the stylesheet, the processor creates one. If a translet exists and the stylesheet has changed since the translet was created, the processor replaces the existing translet with a new one. If the stylesheet has not changed since the translet was created, the processor reuses the existing translet. If the stylesheetSystemId input parameter specifies a simple file path, the service writes the translet to the same folder in which the stylesheet for your XSLT service resides. If the stylesheetSystemId input parameter specifies a URL, the service writes the translet to memory. As a result, the translet will not survive Integration Server restart."
+          ]
+        },
+        {
+          "name": "loadExternalEntities",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether or not to load external entities (file URIs, HTTP URLs, and so on) referenced in the XML that the service receives or in the XSLT stylesheet the service uses to transform the XML. Set to: - true to load content from all external entities that are referenced in the XSLT stylesheet or in the XML. This is the default. - false to not load content from external entities that are referenced in the XSLT stylesheet or in the XML. Use this setting to prevent attacks from external entities by blocking those entities. Important: To help prevent an external entity attack in a production environment, set loadExternalEntities to false in each instance of the transformSerialXML service."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "bytes",
+          "type": "byte[]",
+          "description": [
+            "Byte array that contains the transformed XML. The service places the byte array in the pipeline so that subsequent services can use it. This value is present only if you specified bytes in the resultType input parameter."
+          ]
+        },
+        {
+          "name": "node",
+          "type": "com.wm.lang.xml.Node",
+          "description": [
+            "Node that contains the transformed XML. The service places the XML node in the pipeline so that subsequent services can use it. This value is present only if you specified xmlNode in the resultType input parameter."
+          ]
+        },
+        {
+          "name": "xslParamOutput",
+          "type": "Document",
+          "description": [
+            "that contains name/value pairs that were returned by the stylesheet. The service places the document in the pipeline so that subsequent services can use it. This value is present only if you add name/value pairs to it within your stylesheet. See the section on passing name/value pairs from the stylesheet to the pipeline in IBM webMethods Service Development Help for instructions on setting up your stylesheet to work with this parameter."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "examples": [
+            "You want to transform an XML document named cdCatalog.xml into an HTML document using an XSLT stylesheet named cdCatalog.xsl. You would pass the transformSerialXML service these values:",
+            {
+              "table": [
+                [
+                  "stylesheetSystemId",
+                  "http://localhost:5555/WmXSLT/samples/xdocs/cdCatalog.xsl"
+                ],
+                [
+                  "systemId",
+                  "http://localhost:5555/WmXSLT/samples/xdocs/cdCatalog.xml"
+                ],
+                [
+                  "resultType",
+                  "bytes"
+                ]
+              ]
+            },
+            "The service transforms the XML stream into a byte array containing an HTML document and puts the byte array in the pipeline. You could convert the byte array into a String using the Integration Server built-in service pub.string:bytesToString, then display the String using a dynamic server page (DSP). For information about using DSPs, see Dynamic Server Pages and Output Templates Developer’s Guide ."
+          ]
+        },
+        {
+          "usage_notes": [
+            "If loadExternalEntities is set to false, you can have the service load, read, and transform content from a trusted external entity by doing one of the following: - Place the trusted external entity file in the Integration Server installation directory or subdirectories. - Include the trusted external entity in the list of trusted entities identified in the server parameter watt.core.xml.allowedExternalEntities. For more information about this parameter, see IBM webMethods Integration Server Administrator’s Guide . If loadExternalEntities is not specified in the service signature, Integration Server checks the value of the server parameter watt.core.xml.expandGeneralEntities. If this parameter is set to false, the transformSerialXML service blocks all external entities that are not included in the list of trusted entities specified in watt.core.xml.allowedExternalEntities. For more information about watt.core.xml.expandGeneralEntities, see IBM webMethods Integration Server Administrator’s Guide . Note: If the server configuration parameter watt.server.xslt.transformFile.checkPath is set to true, the service checks whether the file path that is specified in the outFileName input parameter is listed in the watt.server.file.canWritePaths parameter. If the parameter is set to false, the service skips this check and writes to the specified file path, including paths that are not listed in the watt.server.file.canWritePaths parameter. For more information about watt.server.xslt.transformFile.checkPath, see IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xslt.Cache:removeAllTemplates",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xslt-folder#Apub_xslt_cache_removeall__title__1",
+      "description": [
+        "WmXSLT. Clears the XSLT stylesheet cache."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether the service was able to clear the cache."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xslt.Cache:removeTemplate",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xslt-folder#Apub_xslt_cache_removetemplate__title__1",
+      "description": [
+        "WmXSLT. Removes one stylesheet from the XSLT stylesheet cache."
+      ],
+      "input_parameters": [
+        {
+          "name": "stylesheetSystemId",
+          "type": "String",
+          "description": [
+            "URI for the XSLT stylesheet to remove from the cache."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": [
+            "Indicates whether the service was able to remove the stylesheet from the cache."
+          ]
+        }
+      ]
+    }
+  ]
+}

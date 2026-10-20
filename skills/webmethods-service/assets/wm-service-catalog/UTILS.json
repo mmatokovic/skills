@@ -1,0 +1,1082 @@
+{
+  "folder": "UTILS",
+  "description": [
+    "The utils folder contains utility services."
+  ],
+  "total_services": 10,
+  "services": [
+    {
+      "name": "pub.utils:deepClone",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#A82865__title__1",
+      "description": [
+        "WmPublic. Clones an object using the default Java serialization mechanism. For standard Java objects, such as a String, Double, and [] (array), the service performs a deep clone if the Java object is serializable. For custom Java objects, the service uses a whitelist filter to prevent the deserialization of unsafe Java objects. The service only clones the object if the class appears in the whitelist. The pub.utils:deepClone service performs whitelist filtering when the watt.server.checkWhitelist parameter is set to true. The originalObject and all its members must support the java.io.Serializable interface."
+      ],
+      "input_parameters": [
+        {
+          "name": "originalObject",
+          "type": "java.io.Serializable",
+          "description": [
+            "Object to be cloned."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "clonedObject",
+          "type": "Object",
+          "description": [
+            "Copy of the originalObject ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.utils:executeOSCommand",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#A95027__title__1",
+      "description": [
+        "WmPublic. Executes an operating system command such as dir in Windows or ls in UNIX. CAUTION: Use the pub.utils:executeOSCommand service with extreme caution; the commands can affect the production systems where Integration Server is running."
+      ],
+      "input_parameters": [
+        {
+          "name": "command",
+          "type": "String",
+          "description": [
+            "Command to be executed on the target operating system. You can include command parameters only if the command parameters do not contain spaces. Important: You must use arguments to specify all of the command parameters if any one of the parameters contains spaces."
+          ]
+        },
+        {
+          "name": "arguments",
+          "type": "String List",
+          "description": [
+            "Optional. All of the command parameters for the command . Add one element to the parameter for each command parameter that you specify."
+          ]
+        },
+        {
+          "name": "environment",
+          "type": "String List",
+          "description": [
+            "Optional. An array of strings of environment variable settings in the name=value format. Set the value to null if you want the service to use the environment of the current process as the environment for its subprocesses."
+          ]
+        },
+        {
+          "name": "workingDirectory",
+          "type": "String List",
+          "description": [
+            "Optional. The working directory from which the command is to be executed. Set the value to null if you want the service to use the working directory of the current process as the working directory of its subprocesses."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "status",
+          "type": "String",
+          "description": [
+            "The exit value of the executed command. The value 0 (zero) indicates normal termination."
+          ]
+        },
+        {
+          "name": "outputMessage",
+          "type": "String",
+          "description": [
+            "Output of the executed command."
+          ]
+        },
+        {
+          "name": "errorMessage",
+          "type": "String",
+          "description": [
+            "Errors that occurred during command execution."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "parameter_settings": [
+            "The OSCommands.cnf configuration file in the Integration Server_directory \\instances\\instance_name\\packages\\WmPublic\\config directory contains parameters that Integration Server uses to provide validation checks to make the pub.utils:executeOSCommand service secure. Note: If you make any changes to the OSCommands.cnf, you must reload the WmPublic package or restart Integration Server for the changes to take effect. For security reasons, the pub.utils:executeOSCommand service checks the input command parameter against the list of allowedOSCommands in the OSCommands.cnf file. The service also checks the input workingDirectory parameter against the list of allowedWorkingDirectories. If the input command or directory is not on the allowed list, the service throws an exception."
+          ]
+        },
+        {
+          "usage_notes": [
+            "To execute the dir command on Windows XP using the pub.utils:executeOSCommand, the command parameter is passed as cmd.exe /c dir and the working directory parameter is passed as c:/temp. The outputMessage parameter will contain the files of c:/temp directory."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.utils:generateUUID",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#A96317__title__1",
+      "description": [
+        "WmPublic. Generates a random Universally Unique Identifier (UUID)."
+      ],
+      "input_parameters": [],
+      "output_parameters": [
+        {
+          "name": "UUID",
+          "type": "String",
+          "description": [
+            "A randomly generated Universally Unique Identifier (UUID)."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.utils:getServerProperty",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#Apub_utils_getServerProperty__title__1",
+      "description": [
+        "WmPublic. Retrieves the value of a specified server property."
+      ],
+      "input_parameters": [
+        {
+          "name": "propertyName",
+          "type": "String",
+          "description": [
+            "The name of the server property whose value you want to retrieve (for example, watt.server.SOAP.directive)."
+          ]
+        },
+        {
+          "name": "defaultValue",
+          "type": "String",
+          "description": [
+            "Optional. The default value to return if the server property specified in propertyName does not exist. If the server property does exist, the getServerProperty service ignores this value."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "propertyValue",
+          "type": "String",
+          "description": [
+            "The value of the requested server property. If the property does not exist, and you did not set a defaultValue , the getServerProperty service returns null."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.utils.messaging:getUMDependencies",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#idb9d697f5-c4a7-4605-a3d2-63e9bc67d899__title__1",
+      "description": [
+        "WmPublic. Generates a list of Universal Messaging assets on which Integration Server depends, such as channels, queues, durables, and Administered Objects for a JMS messaging connection alias and/or a Universal Messaging connection alias."
+      ],
+      "input_parameters": [
+        {
+          "name": "exportFormat",
+          "type": "String",
+          "description": [
+            "Optional. Format for the output data. Set to one of the following: - IDATA - XML The XML format matches the Universal Messaging import/export schema. This is the default. If you intend to import the list into Universal Messaging, select XML."
+          ]
+        },
+        {
+          "name": "messagingType",
+          "type": "String",
+          "description": [
+            "Optional. Type of messaging for which to export a list of related Universal Messaging assets. Set to: - ALL - To export assets for JMS messaging and IBM webMethods messaging. This is the default. - JMS - To export assets for JMS messaging. - NATIVE - To export assets for IBM webMethods messaging."
+          ]
+        },
+        {
+          "name": "connectionAliasName",
+          "type": "String",
+          "description": [
+            "Optional. Name of the connection alias for which to export a list of related Universal Messaging assets. If you do not provide a value, the pub.utils.messaging:getUMDependencies service exports assets for all the messaging aliases for the specified messagingType . If you specify a connection alias that does not depend on any Universal Messaging assets, the resulting output will be empty."
+          ]
+        },
+        {
+          "name": "includeDefaultUMConfiguration",
+          "type": "String",
+          "description": [
+            "Optional. Whether default Universal Messaging configuration values are included in the output. Set to: - true - If the service adds all Universal Messaging fields to the output including fields that are not relevant to Integration Server but are needed by the IBM webMethods Universal Messaging Enterprise Manager import XML functionality. This is the default. - false - If the service does not include all the Universal Messaging fields needed for Universal Messaging configuration."
+          ]
+        },
+        {
+          "name": "includeWmAssets",
+          "type": "String",
+          "description": [
+            "Optional. Whether to include Integration Server assets (publishable document types and triggers) in system packages that begin with “Wm”. Set to: - true - To include Integration Server assets from system “Wm*” packages the output. - false - To exclude Integration Server assets from system “Wm” packages in the output. This is the default."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "Conditional. An IData containing the exported data. The service returns the document field only when exportFormat is IDATA."
+          ]
+        },
+        {
+          "name": "xmldata",
+          "type": "String",
+          "description": [
+            "Conditional. An XML string containing the exported data. The service returns the xmldata field only when exportFormat is XML."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.utils.messaging:listOutOfSyncProtobufDocs",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#reference_d4m_q25_whc__title__1",
+      "description": [
+        "WmPublic. Compares protocol buffers between Integration Server and Universal Messaging for publishable documents."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageNames",
+          "type": "String List",
+          "description": [
+            "Optional. Name of the packages containing the publishable document types that you want to compare. The service scans documents within these packages to compare Integration Server and Universal Messaging protobuf descriptors. The packageNames and documentTypesNames input parameters are mutually exclusive. - If you provide values for both documentTypeNames and packageNames, the service gives preference to documentTypeNames and compares only the specified document types. - If only packageNames is specified, the service compares all documents within the given packages. - If neither parameter is provided, the service compares all publishable documents synced with Universal Messaging that are available on the Integration Server."
+          ]
+        },
+        {
+          "name": "documentTypeNames",
+          "type": "String List",
+          "description": [
+            "Optional. Fully qualified names of the publishable document types that you want to compare. The service limits the comparison to these specified document type names."
+          ]
+        },
+        {
+          "name": "decompile",
+          "type": "String",
+          "description": [
+            "Optional. Specifies whether the service generates reverse .proto files from compiled binaries. If true , generates reverse .proto files from compiled binaries. The default value is false ."
+          ]
+        },
+        {
+          "name": "protoFileLocation",
+          "type": "String",
+          "description": [
+            "Conditional. Specifies the location to store .proto files. Required only if decompile is true . If the path does not exist, Integration Server attempts to create the folder structure. If the server fails to create the folder, it throws an error."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "outOfSync",
+          "type": "Document List",
+          "description": [
+            "A list of documents where Integration Server and Universal Messaging protobuf descriptors are not in sync. Each entry includes:"
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the document."
+              ]
+            },
+            {
+              "name": "documentName",
+              "type": "String",
+              "description": [
+                "Name of the document type."
+              ]
+            },
+            {
+              "name": "channelName",
+              "type": "String",
+              "description": [
+                "Associated channel name."
+              ]
+            },
+            {
+              "name": "protoFileName",
+              "type": "String",
+              "description": [
+                "Conditional. Name of the .proto file."
+              ]
+            },
+            {
+              "name": "error",
+              "type": "String",
+              "description": [
+                "Description of the mismatch or error encountered."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "- If decompile is true and protoFileLocation is missing, the service returns an error. - Protocol buffers are supported only for Universal Messaging. This service works only for documents synced with Universal Messaging. - All input parameters are optional. If you do not provide any input values, the service compares all publishable documents on the server and generates a report, which can be resource-intensive based on the number of documents and packages."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.utils.messaging:migrateDocTypesTriggersToUM",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#id440b573a-1d86-4f6b-a651-ce3fecff6d88__title__1",
+      "description": [
+        "WmPublic. Changes one or more publishable document types to use a Universal Messaging server as the messaging provider. The pub.utils.messaging.migrateDocTypesTriggersToUM service does one or more of the following depending on the provided input: - Changes the messaging connection alias assigned to the publishable document type to one specified in the service. - Sets the encoding type of the publishable document type to protocol buffers. - Synchronizes the updated publishable document types with the messaging provider. - Converts the filters used by the IBM webMethods messaging trigger that subscribe to the publishable document types. Specifically, the service migrates the filter expressions that can be evaluated by the Universal Messaging server from the Filter field for a trigger condition to the Provider Filter (UM) field. This may include some syntax changes."
+      ],
+      "input_parameters": [
+        {
+          "name": "reportOnly",
+          "type": "java.lang.Boolean",
+          "description": [
+            "Optional. Indicates whether the service changes the document types and IBM webMethods messaging trigger s and returns a summary of the changes or if the service returns only a summary without making any changes. Set to: - true to return a summary of the document types and IBM webMethods messaging trigger that the service would successfully and unsuccessfully update, including the errors and warnings that would be encountered. The service does not modify any document types and triggers. This is the default. - false to update the publishable document types and IBM webMethods messaging triggers, synchronize the publishable document types with the messaging provider, and return a summary of the changes."
+          ]
+        },
+        {
+          "name": "backupPackages",
+          "type": "java.lang.Boolean",
+          "description": [
+            "Optional. Indicates whether the service creates a package archive for each package affected by this service prior to making any updates to the publishable document types and IBM webMethods messaging trigger . Set to: - true to create an archive for each package that contains a publishable document type or IBM webMethods messaging trigger that will be updated by this service. The archive will be named packageName.zip_timeStamp and placed in the following directory: and will be located in the following directory: Integration Server_directory \\instances\\instance_name\\replicate\\archive. This is the default. - false to skip creating an archive of each affected package before making updates. Important: IBM recommends that you set backupPackages to true when reportOnly is set to false if you have not taken other measures to back up the packages containing the publishable document types and triggers to be migrated prior to executing the pub.utils.messaging:migrateDocTypesTriggersToUM service. After the service executes successfully, restoring from a backup file is the only way to revert a change made by the service."
+          ]
+        },
+        {
+          "name": "packageNames",
+          "type": "String List",
+          "description": [
+            "Optional. Name of the packages containing the publishable document types that you want to migrate. Integration Server also migrates any IBM webMethods messaging trigger s in packages that reference publishable document types contained in the specified packages. The packageNames and documentTypesNames input parameters are mutually exclusive. If you specify a value for both parameters, the service fails with an exception. If you do not specify a value for either, the service updates publishable document types and IBM webMethods messaging triggers in all packages that do not start with the letters “wm” in any case combination."
+          ]
+        },
+        {
+          "name": "documentTypeNames",
+          "type": "String List",
+          "description": [
+            "Optional. Fully qualified names of the publishable document types that you want to update. The packageNames and documentTypeNames input parameters are mutually exclusive. If you specify a value for both parameters, the service fails with an exception. If you do not specify a value for either, the service updates publishable document types and IBM webMethods messaging triggers in all packages that do not start with the letters “wm” in any case combination."
+          ]
+        },
+        {
+          "name": "newConnectionAlias",
+          "type": "String",
+          "description": [
+            "Optional. Name of the Universal Messaging (UM) connection alias to assign to the publishable document types. Any IBM webMethods messaging trigger that subscribe to updated publishable document types will use this alias to receive published documents. You must specify a newConnectionAlias to update any publishable document types that currently specify the Broker connection alias or are publishable locally only. If you do not specify a newConnectionAlias, the service skips these publishable document types. If the default connection alias is the Broker connection alias and you do not specify a newConnectionAlias, the service skips any publishable document types that use the default connection alias. However, if you change the default connection alias to be Universal Messaging connection alias and then execute the pub.utils.messaging:migrateDocTypesTriggersToUM service, the service migrates any publishable document types that use the default messaging connection alias as well as any triggers that subscribe to those publishable document types. If a publishable document types already specifies a Universal Messaging connection alias, you do not need to specify a newConnectionAlias. However, you can use the service to change the Universal Messaging connection alias used by one or more publishable document types."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "affectedPackages",
+          "type": "Document",
+          "description": [
+            "Conditional. An IData containing key=value pairs that identify the packages impacted by the migration and the name of the archive created for the package. The service returns an archive name only if reportOnly is set to false and backupPackages is set to true. The archive will be named packageName .zip_ timeStamp and will be located in the following directory: Integration Server_directory \\instances\\ instance_name \\replicate\\archive. The service returns affectedPackages only if the service finds at least one publishable document type or IBM webMethods messaging trigger to update."
+          ]
+        },
+        {
+          "name": "failedPackages",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the packages that could not be archived. If Integration Server cannot create a package archive for any of the affected packages, the service ends with an error and nothing is migrated. The service attempts to archive a package only when backupPackages is set to true. The service returns the failedPackages parameter only if one of the following occurs: - The backupPackages input parameter is set to true and an error prevented the service from archiving at least one package. - A package listed in the packageNames input parameter did not contain any publishable document types or IBM webMethods messaging triggers to update."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package that the service could not archive because of an error."
+              ]
+            },
+            {
+              "name": "errors",
+              "type": "String",
+              "description": [
+                "Text of the error message that caused package archiving to fail."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "updatedDocumentTypes",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the publishable document types updated by the service. The service returns the updatedDocumentTypes parameter only if the service updated one or more publishable document types."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the updated publishable document type."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the updated publishable document type."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "skippedDocumentTypes",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the publishable document types that were not updated because there were no changes to make. Some reasons the service might skip a publishable document type include, but are not limited to: - The publishable document type already uses the messaging connection alias specified in newConnectionAlias and the encoding type for the publishable document type is already set to protocol buffers. - The publishable document type uses a Broker connection alias and a Universal Messaging connection alias was not specified in newConnectionAlias. - Values were not specified for either the packageNames or the documentTypeNames input parameters and Integration Server found publishable document types in packages whose names started with the letters “wm” in any case combination The service returns the skippedDocumentTypes parameter only if the service skipped updating one or more publishable document types."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the skipped publishable document type."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the skipped publishable document type."
+              ]
+            },
+            {
+              "name": "reason",
+              "type": "String",
+              "description": [
+                "Message indicating why the service did not update the publishable document type."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "failedDocumentTypes",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the publishable document types that the service could not update because of an error. The service returns the failedDocumentTypes parameter only if there were one or more publishable document types that the service could not update because of an error."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the publishable document type that the service could not update because of an error."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name of the publishable document type that the service could not update because of an error."
+              ]
+            },
+            {
+              "name": "errors",
+              "type": "String",
+              "description": [
+                "Text of the error message that prevented the service from updating the publishable document type."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "providerSyncResults",
+          "type": "Document List",
+          "description": [
+            "Conditional. Results of synchronizing the updated publishable document types with the messaging provider. The service only produces this output parameter when reportOnly is set to false and the service updated at least one publishable document type."
+          ],
+          "children": [
+            {
+              "name": "successfuPDTs",
+              "type": "String List",
+              "description": [
+                "Fully qualified names of the publishable document types that the service synchronized successfully with the messaging provider."
+              ]
+            },
+            {
+              "name": "unsuccessfulPDTs",
+              "type": "String List",
+              "description": [
+                "Fully qualified names of the publishable document types that the service did not synchronize successfully with the messaging provider."
+              ]
+            },
+            {
+              "name": "errors",
+              "type": "Document List",
+              "description": [
+                "List of any errors that occurred during document type synchronization."
+              ]
+            },
+            {
+              "name": "warnings",
+              "type": "Document List",
+              "description": [
+                "List of any warnings that occurred during document type synchronization"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "updatedTriggers",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the IBM webMethods messaging trigger s updated without warnings by the service. When warnings do not occur when updating the trigger, it indicates that Integration Server migrated the entire contents of the Filter field to the Provider Filter (UM) field for all the conditions in the trigger. The service returns the updatedTriggers parameter only if the service updated at least one trigger without warnings."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the updated IBM webMethods messaging trigger ."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the updated IBM webMethods messaging trigger ."
+              ]
+            },
+            {
+              "name": "reason",
+              "type": "String",
+              "description": [
+                "Identifies any filters that were converted. For a trigger that was updated without warnings, reason displays the contents of the Filter field prior to migration of the trigger filter, the contents of the Provider Filter (UM) field after migration of the trigger filter, and an indication that the filter was converted successfully."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "updatedTriggersWithWarning",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the IBM webMethods messaging trigger s updated but with warnings. Warnings indicate that the service could not migrate the entire contents of the Filter field to the Provider Filter (UM) field for all the conditions in the trigger. Integration Server might have migrated some expressions in the trigger conditions, but not the entire filter. When a trigger is updated with warnings, the service keeps the original filter in the Filter field and places the filter expressions that were migrated in the Provider Filter (UM) field The service returns the updatedTriggersWithWarning parameter only if the service updated at least one trigger for which a warning occurred."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the updated IBM webMethods messaging trigger ."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the updated IBM webMethods messaging trigger ."
+              ]
+            },
+            {
+              "name": "reason",
+              "type": "String",
+              "description": [
+                "Identifies any filters that were converted. For a trigger that was updated with warnings, reason displays the expressions in the Filter field that were migrated, the converted expression in the Provider Filter (UM) , and an indication that the filter was converted successfully."
+              ]
+            },
+            {
+              "name": "warning",
+              "type": "String",
+              "description": [
+                "Warning message indicating why the complete original filter in the Filter field could not be migrated to the Provider Filter (UM) field."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "skippedTriggers",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the IBM webMethods messaging trigger s that the service did not update because no changes were needed. The service returns the skippedTriggers parameter only if the service skipped updating at least one trigger."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the skipped IBM webMethods messaging trigger ."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the skipped IBM webMethods messaging trigger ."
+              ]
+            },
+            {
+              "name": "reason",
+              "type": "String",
+              "description": [
+                "Message indicating why the service did not make any updates for the IBM webMethods messaging trigger . For example, if the trigger conditions did not contain any filters, the reason will be “Trigger did not contain any filters.”"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "failedTriggers",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the IBM webMethods messaging trigger s that the service could not update because of an error. The service returns the failedTriggers parameter only if at least one trigger failed migration."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the IBM webMethods messaging trigger that the service could not update because of an error."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name of the IBM webMethods messaging trigger that the service could not update because of an error."
+              ]
+            },
+            {
+              "name": "errors",
+              "type": "String",
+              "description": [
+                "Text of the error message that prevented the service from updating the IBM webMethods messaging trigger"
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To execute the pub.utils.messaging.migrateDocTypesTriggersToUM, Integration Server must be connected to a Broker. Integration Server must have a Broker connection alias that configures a connection to the Broker that contains the provider definitions for the publishable document types and the trigger subscriptions that you want to updated. The Broker connection alias must be enabled at the time the pub.utils.messaging.migrateDocTypesTriggersToUM executes. Make sure the publishable document types that use a Broker connection alias are synchronized with the associated Broker document types prior to executing the pub.utils.messaging.migrateDocTypesTriggersToUM service. You can synchronize publishable document types using Designer or by executing the pub.publish:syncToProvider service. When using Universal Messaging as the messaging provider, IBM webMethods messaging trigger require more server threads and system threads than needed when using Broker as the messaging provider. Before migrating publishable document types and IBM webMethods messaging triggers to work with Universal Messaging, IBM recommends increasing the size of your server thread pool by at least two additional threads per trigger that will be migrated. For example, if you intend to migrate 100 triggers, increase the server thread pool by 200 threads. As part of updating publishable document types and IBM webMethods messaging triggers to work with Universal Messaging, first run the pub.utils.messaging.migrateDocTypesTriggersToUM service in report only mode, that is with reportOnly set to true. Use the service output to find potential problems in the migration, such as identifying publishable document types and triggers that will not be migrated successfully. When you are confident that all the publishable document types and IBM webMethods messaging triggers that you want to migrate will do so successfully, run the pub.utils.messaging.migrateDocTypesTriggersToUM service is with reportOnly set to false. Prior to executing the pub.utils.messaging:migrateDocTypesTriggersToUM service, if you have not taken other measures to back up the packages containing the publishable document types and triggers to be migrated, IBM recommends that you set backupPackages to true when reportOnly is set to false. After the service executes successfully, restoring from a backup file is the only way to revert a change made by the service. Publishable document types that use a Universal Messaging connection alias cannot be published locally. Do not migrate a publishable document type that is used in local publishing. When determining which publishable document types to migrate, make sure that you migrate all of the document types subscribed to by a group of IBM webMethods messaging triggers at one time. This ensures that the IBM webMethods messaging triggers will subscribe to document types that use the same messaging connection alias. Integration Server considers a trigger to be invalid if it subscribes to publishable document types that use different messaging connection aliases. The pub.utils.messaging.migrateDocTypesTriggersToUM service will save IBM webMethods messaging trigger that uses mixed connection aliases but will disable the trigger. Additionally, the service will not attempt to convert any of the filters in conditions of the disabled trigger. To resolve this issue, you can modify the publishable document types used by the trigger so that the publishable document types all use the same messaging connection alias. You can then re-execute the pub.utils.messaging.migrateDocTypesTriggersToUM service to migrate the encoding type of the publishable document types as well as the trigger filters. Alternatively, you can restore the publishable document types that the trigger subscribes to by replacing the migrated packages with the archive packages created by the service when backupPackages is set to true. For example, suppose that trigger triggerAB subscribes to documentA and documentB both of which use a Broker connection alias. In documentTypeNames, you specify only documentA. When the service executes it migrates documentA. However, the service does not migrate triggerAB because the trigger subscribes to publishable document types that use different messaging connection aliases. This configuration is invalid. The service saves triggerAB in a disabled state. If you do not specify a newConnectionAlias, the publishable document type already uses a Universal Messaging connection alias, and the publishable document type has an encoding type of IData, the pub.utils.messaging.migrateDocTypesTriggersToUM service changes the encoding type of the publishable document type to protocol buffers. The service then updates the filters for any IBM webMethods messaging triggers that subscribe to the document types so that the filters are compatible with protocol buffers. If publishable document type use the default messaging connection alias and the default messaging connection alias is the Broker connection alias, you can migrate your document types and triggers to work with Universal Messaging and use the protocol buffer encoding type by first switching the default connection alias to a Universal Messaging connection alias and then running the pub.utils.messaging:migrateDocTypesTriggersToUM service with reportOnly set to false. Use Integration Server Administrator to change the default messaging connection alias. Note that a publishable document type uses the default messaging connection alias if the Connection alias name property for the document type is set to DEFAULT. The pub.utils.messaging:migrateDocTypesTriggersToUM service automatically attempts to migrate the IBM webMethods messaging triggers that subscribe to the publishable document types updated by the service. Migrating a trigger consists of migrating a filter. To migrate a filter, the service does the following: 1. The pub.utils.messaging:migrateDocTypesTriggersToUM service examines the expressions in the Filter field in a trigger condition and determines which expressions can become a provider filter on Universal Messaging. Some filter expressions that are valid as local filters on Integration Server or valid as filters on Broker contain syntax that is not supported by protocol buffers or Universal Messaging 2. The pub.utils.messaging:migrateDocTypesTriggersToUMservice migrates expressions that are valid filters for protocol buffers to the Provider Filter (UM) field. 3. The service then does one of the flowing: If the pub.utils.messaging:migrateDocTypesTriggersToUM service can migrate all the expressions in the Filter field to the Provider Filter (UM) field, the service deletes the contents of the Filter field. The service lists the trigger in the updatedTriggers/name output parameter. The service lists the successfully migrated filter expressions in updatedTriggers/reason output parameter. If the pub.utils.messaging:migrateDocTypesTriggersToUM service can migrate only some of the expressions in the Filter field, the service migrates the filter expressions that it can in the Provider Filter (UM) field. The service leaves the original filter in the Filter field. The service lists the trigger in the updatedTriggersWithWarning/name output parameter. The service lists the successfully migrated filter expressions in updatedTriggersWithWarning/reason output parameter and lists the filter expressions that it could not migrate in the updatedTriggersWithWarning/warning output parameter. For IBM webMethods messaging trigger that receives messages from Universal Messaging, the contents of the Filter field are used as a local filter. Integration Server applies the local filter after it receives the message from Universal Messaging If the pub.utils.messaging:migrateDocTypesTriggersToUM service cannot migrate any of the expressions in the Filter field, the service leaves the original filter in the Filter field. The service lists the trigger in the updatedTriggersWithWarning/name output parameter. The service lists the filter expressions that it could not migrate in the updatedTriggersWithWarning/warning output parameter. The pub.utils.messaging.migrateDocTypesTriggersToUM updates publishable document types contained in packages that begin with “Wm” when the document type is specified in documentTypeNames or the package is specified in packageNames only. The pub.utils.messaging:migrateDocTypesTriggersToUM service synchronizes updated publishable document types with the provider definition on the messaging provider. Be sure to review the contents of providerSyncResults/errors and providerSyncResults/warnings for errors and warnings that Integration Server generated during synchronization If Integration Server did not successfully synchronize an updated publishable document type use the returned errors in providerSyncResults/errors to determine why Integration Server could not synchronize the publishable document type. Then, fix the cause of the error and synchronize the publishable document type with the messaging provider. You can synchronize documents using Designer or by executing the pub.publish:syncToProvider service. The pub.utils.messaging:migrateDocTypesTriggersToUM service will not modify any publishable document types or IBM webMethods messaging triggers that are locked for edit by another user or checked out at the time the service executes. To use the pub.utils.messaging:migrateDocTypesTriggersToUM service to update a publishable document type and IBM webMethods messaging trigger, the user or client invoking the service must have Write access to the publishable document type and IBM webMethods messaging triggers. Use the IBM webMethods Error Message Reference to find out more information about the error and warning messages returned by pub.utils.messaging:migrateDocTypesTriggersToUM service. To generate additional logging information in the Server log when the pub.utils.messaging:migrateDocTypesTriggersToUM service executes, set the logging level for the server log facilities 0153 Dispatcher (Universal Messaging) and 0154 Protocol Buffer Encoding (Universal Messaging) to Debug or Trace. Increased logging can help you to locate problems that occur during service execution. IBM webMethods Broker is deprecated."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.utils.messaging:syncDocTypesToUM",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#ide2403ca8-23b5-472d-9bb9-fa6d816a4ca6__title__1",
+      "description": [
+        "WmPublic. Synchronizes one or more publishable document types with the associated provider definition (channel) on Universal Messaging. For each publishable document type with an encoding type of protocol buffers, the service: - Creates an updated protocol buffer definition. - Compiles the updated definition into an updated protocol buffer descriptor. - Sends the updated protocol buffer descriptor to Universal Messaging. This is different frompub.publish:syncToProvider which synchronizes the existing protocol buffer descriptor with Universal Messaging."
+      ],
+      "input_parameters": [
+        {
+          "name": "reportOnly",
+          "type": "java.lang.Boolean",
+          "description": [
+            "Optional. Indicates whether the service updates and synchronizes the protocol buffer descriptors with Universal Messaging and returns a summary of the changes or if the service returns only a summary without making any changes. Set to: - true to return a summary of the publishable document types for which the service would successfully and unsuccessfully update the protocol buffer descriptor, including the errors and warnings that would be encountered. The service does not update any protocol buffer descriptors. This is the default. - false to update the protocol buffer descriptor for the selected document types and synchronize the protocol buffer descriptor with the associated channel on Universal Messaging. The service returns a summary of the changes."
+          ]
+        },
+        {
+          "name": "backupPackages",
+          "type": "java.lang.Boolean",
+          "description": [
+            "Optional. Indicates whether the service creates a package archive for each package affected by this service prior to creating a new protocol buffer definition for the publishable document types. Set to: - true to create an archive for each package that contains a publishable document type that will be updated by this service. The archive will be named packageName.zip_timeStamp and placed in the following directory: Integration Server_directory \\instances\\instance_name\\replicate\\archive. This is the default. - false to skip creating an archive of each affected package before making updates. Important: IBM recommends that you set backupPackages to true when reportOnly is set to false if you have not taken other measures to back up the packages containing the publishable document types to be synchronized using the pub.utils.messaging:syncDocTypesToUM service. After the service executes successfully, restoring from a backup file is the only way to revert a change made by the service."
+          ]
+        },
+        {
+          "name": "packageNames",
+          "type": "String List",
+          "description": [
+            "Optional. Name of the packages containing the publishable document types that you want to synchronize. The packageNames and documentTypesNames input parameters are mutually exclusive. If you specify a value for both parameters, the service fails with an exception. If you do not specify a value for either, the service updates publishable document types that use the protocol buffer encoding type in all packages that do not start with the letters \"wm\" in any case combination."
+          ]
+        },
+        {
+          "name": "documentTypeNames",
+          "type": "String List",
+          "description": [
+            "Optional. Fully qualified names of the publishable document types that you want to synchronize."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "affectedPackages",
+          "type": "Document",
+          "description": [
+            "Conditional. An IData containing key=value pairs that identify the packages impacted by the synchronization and the name of the archive created for the package. The service returns an archive name only if reportOnly is set to false and backupPackages is set to true. The archive will be named packageName .zip_ timeStam p and will be located in the following directory: Integration Server_directory \\instances\\ \\replicate\\archive.The service returns affectedPackages only if the service finds at least one publishable document type to update and synchronize."
+          ]
+        },
+        {
+          "name": "failedPackages",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the packages that could not be archived. If Integration Server cannot create a package archive for any of the affected packages, the service ends with an error and nothing is migrated. The service attempts to archive a package only when backupPackages is set to true . The service returns the failedPackages parameter only if one of the following occurs: - The backupPackages input parameter is set to true and an error prevented the service from archiving at least one package. - A package listed in the packageNames input parameter did not contain any publishable document types to update."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package that the service could not archive because of an error."
+              ]
+            },
+            {
+              "name": "errors",
+              "type": "String",
+              "description": [
+                "Text of the error message that caused package archiving to fail."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "updatedDocumentTypes",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the publishable document types updated by the service. The service returns the updatedDocumentTypes parameter only if the service updated one or more publishable document types."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the updated publishable document type."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the updated publishable document type."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "skippedDocumentTypes",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the publishable document types that were not updated because there were no changes to make. Some reasons the service might skip a publishable document type include, but are not limited to: - The publishable document type uses a Broker connection alias. - The publishable document type does not use protocol buffers as the encoding type. - Values were not specified for either the packageNames or the documentTypeNames input and Integration Server found publishable document types in packages whose names started with the letters \"wm\" in any case combination The service returns the skippedDocumentTypes parameter only if the service skipped updating one or more publishable document types."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the skipped publishable document type."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the skipped publishable document type."
+              ]
+            },
+            {
+              "name": "reason",
+              "type": "String",
+              "description": [
+                "Message indicating why the service did not update the publishable document type."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "failedDocumentTypes",
+          "type": "Document List",
+          "description": [
+            "Conditional. List of the publishable document types that the service could not update because of an error. The service returns the failedDocumentTypes parameter only if there were one or more publishable document types that the service could not update because of an error."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the publishable document type that the service could not update because of an error."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Name of the publishable document type that the service could not update because of an error."
+              ]
+            },
+            {
+              "name": "errors",
+              "type": "String",
+              "description": [
+                "Text of the error message that prevented the service from updating the publishable document type."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "providerSyncResults",
+          "type": "Document List",
+          "description": [
+            "Conditional. Results of synchronizing the updated publishable document types with the messaging provider. The service only produces this output parameter when reportOnly is set to false and the service updated at least one publishable document type."
+          ],
+          "children": [
+            {
+              "name": "successfulPDTs",
+              "type": "String List",
+              "description": [
+                "Fully qualified names of the publishable document types that the service synchronized successfully with the messaging provider."
+              ]
+            },
+            {
+              "name": "unsuccessfulPDTs",
+              "type": "String List",
+              "description": [
+                "Fully qualified names of the publishable document types that the service did not synchronize successfully with the messaging provider."
+              ]
+            },
+            {
+              "name": "errors",
+              "type": "Document List",
+              "description": [
+                "List of any errors that occurred during document type synchronization."
+              ]
+            },
+            {
+              "name": "warnings",
+              "type": "Document List",
+              "description": [
+                "List of any warnings that occurred during document type synchronization."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.utils.messaging:syncDocTypesToUM service can be useful for updating the protocol buffer descriptors for multiple publishable document types at once. For example, if an Integration Server fix alters the way in which a protocol buffer descriptor is generated, to see the full effect of the fix, you would need to edit all of the publishable document types that use the protocol buffer encoding type, save them to cause an updated protocol buffer definition to be created and the updated protocol descriptor to be compiled, and then sync the publishable document types with the provider. While this can be done on an individual publishable document type basis with Designer, using the pub.utils.messaging:syncDocTypesToUM service enables the updating and synchronizing of many publishable document types at one time. Thepub.utils.messaging.syncDocTypesToUM updates publishable document types contained in packages that begin with \"Wm\" when the document type is specified in documentTypeNames or the package is specified in packageNames only. The pub.utils.messaging:syncDocTypesToUM service synchronizes the updated protocol buffer descriptor for a publishable document types with the corresponding Universal Messaging channel. Be sure to review the contents of providerSyncResults/errors and providerSyncResults/warnings for errors and warnings that Integration Servergenerated during synchronization. If Integration Server did not successfully synchronize an updated publishable document type use the returned errors in providerSyncResults/errors to determine why Integration Server could not synchronize the publishable document type. Then, fix the cause of the error and synchronize the publishable document type with the messaging provider. You can synchronize documents using Designer or by executing the pub.publish:syncDocTypesToUM service. The pub.utils.messaging:syncDocTypesToUM service will not modify any publishable document types that are locked for edit by another user or checked out at the time the service executes. To use the pub.utils.messaging:sycnDocTypesToUM service to update a publishable document type, the user or client invoking the service must have Write access to the publishable document type. To generate additional logging information in the Server log when the pub.utils.messaging:sycnDocTypesToUM service executes, set the logging level for the server log facility 0154 Protocol Buffer Encoding (Universal Messaging) to Debug or Trace."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.utils:transcode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#id10c9738e-3227-4c0f-b3d3-6296628aac70__title__1",
+      "description": [
+        "WmPublic. Transcodes data from one encoding to another."
+      ],
+      "input_parameters": [
+        {
+          "name": "inputData",
+          "type": "Document",
+          "description": [
+            "Data to be transcoded. Depending on the data type of the source data, use string or bytes variable to specify the data. You must provide input data to string or bytes. If you do not specify input data in either string or bytes, the pub.utils:transcode service ends with an exception. If you specify input data for both string and bytes, the pub.utils:transcode service uses the contents of string, ignoring bytes."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. String containing the data to convert to another encoding"
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. Sequence of bytes to convert to another encoding."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "sourceEncoding",
+          "type": "String",
+          "description": [
+            "Encoding used for the source data. This must be an encoding supported by the JRE used with Integration Server ."
+          ]
+        },
+        {
+          "name": "targetEncoding",
+          "type": "String",
+          "description": [
+            "Encoding to which the source data needs to be transcoded. This must be an encoding supported by the JRE used with Integration Server ."
+          ]
+        },
+        {
+          "name": "onTranscodingError",
+          "type": "String",
+          "description": [
+            "Optional. Specifies the action to take when encountering unmappable characters. When transcoding data from one character set to another, it is possible that a character in the source encoding cannot be mapped to a character in the target encoding. Specify one of the following: - replace to replace an unmappable character with a replacement character. If you select replace, specify a replacement character in replaceWith. - ignore to drop any unmappable characters. - report to throw a ServiceException if the service encounters any unmappable characters. This is the default."
+          ]
+        },
+        {
+          "name": "replaceWith",
+          "type": "Document",
+          "description": [
+            "Optional. Character used to replace an unmappable character found during transcoding. Specify a replacement character for characters that cannot be mapped in string or bytes . The pub.utils:transcode service uses a replacement character only when onTranscodingError is set to replace. If onTranscodingError is set to replace and a replacement character is not specified, the pub.utils:transcode service uses the default replacement character of space (“\\u0020”). If you specify a replacement character for both string and bytes, the pub.utils:transcode service uses the contents of string, ignoring bytes."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Optional. The replacement character to use for unmappable characters in the input data."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "byte[ ]",
+              "description": [
+                "Optional. The replacement character to use for unmappable characters in the input data."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "outputAs",
+          "type": "String",
+          "description": [
+            "Optional. The data type to use for the output data. Specify one of the following: - string - bytes If you do not specify a value for outputAs, the pub.utils:transcode service returns the output in the same data type used for inputData. For example, if you supplied the source data to inputData/string, the service returns the target data to the outputData/string output parameter."
+          ]
+        },
+        {
+          "name": "normalizationForm",
+          "type": "String",
+          "description": [
+            "Optional. The Unicode normalization form to use during transcoding. Specify one of the following: - none indicates that normalization is not done. - NFC (Normalization Form C). Canonical Decomposition, followed by Canonical Composition. This is the default. - NFD (Normalization Form D). Canonical Decomposition. - NFKC (Normalization Form KC). Compatibility Decomposition, followed by Canonical Composition - NFKD (Normalization Form KD) Compatibility Decomposition."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "outputData",
+          "type": "Document",
+          "description": [
+            "Transcoded data. The pub.utils.:transcode service returns the transcoded data in outputData/string or outputData/bytes, depending on the value of the outputAs input parameter. If a value was not specified for outputAs , the service returns the transcoded data in the same data type as the supplied input data."
+          ],
+          "children": [
+            {
+              "name": "string",
+              "type": "String",
+              "description": [
+                "Conditional. Transcoded contents of inputData as a String. The pub.utils:transcode service returns this output parameter if the input data was supplied in inputData/string or outputAs was set to string ."
+              ]
+            },
+            {
+              "name": "bytes",
+              "type": "bytes[]",
+              "description": [
+                "Conditional. Transcoded contents of inputData as a byte[]. The pub.utils:transcode service returns this output parameter if the input data was supplied in inputData/bytes or outputAs was set to bytes ."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.utils.ws:setCompatibilityModeFalse",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-utils-folder#id5250142e-de53-4886-a0ca-15834df354b2__title__1",
+      "description": [
+        "WmPublic. Changes the value of the Pre-8.2 compatibility mode property for a web service descriptor to false."
+      ],
+      "input_parameters": [
+        {
+          "name": "reportOnly",
+          "type": "java.lang.Boolean",
+          "description": [
+            "Optional. Indicates whether the service actually changes the Pre-8.2 compatibility mode property for the web service descriptors and returns a summary of the changes or if the service returns only a summary without making any changes. Set to: - true to return a summary of the web service descriptors that the service would successfully and unsuccessfully change, including the errors and warnings that would be encountered. The service does not modify any web service descriptors. - false to change the Pre-8.2 compatibility mode property to false for the specified web service descriptors, save the web service descriptor, and return a summary of the changes. This is the default."
+          ]
+        },
+        {
+          "name": "convertAllPackages",
+          "type": "java.lang.Boolean",
+          "description": [
+            "Optional. Indicates whether the service changes the Pre-8.2 compatibility mode property for web service descriptors in all of the packages on Integration Server or only web service descriptors in specific packages. Set to: - true to change the web service descriptors in all of the packages on Integration Server. Note: When convertAllPackages is set to true, the pub.utils.ws.setCompatibilityModeFalse service changes the Pre-8.2 compatibility mode property for those web service descriptors in enabled packages only. Additionally, the service skips any packages whose names begin with “Wm”. - false to change the web service descriptors in the packages specified in packageNames only. This is the default. Note: If you set convertAllPackages to false, you must specify packages in packageNames."
+          ]
+        },
+        {
+          "name": "packageNames",
+          "type": "String List",
+          "description": [
+            "Optional. Names of the packages containing the web service descriptors for which you want to change the Pre-8.2 compatibility mode property to false. The packages you specify must be enabled. Note that package names are not case-sensitive. Note: If you do not specify any packages in packageNames, you must set convertAllPackages to true."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "updatedWarningCount",
+          "type": "String",
+          "description": [
+            "Conditional. Number of web service descriptors for which changing the value of the Pre-8.2 compatibility mode property to false resulted in a warning. If reportOnly is set to true, updatedWarningCount indicates the number of web service descriptors for which a warning would be generated. The service returns updatedWarningCount only if Integration Server encountered a warning when successfully changing the value of the Pre-8.2 compatibility mode property from true to false for at least one web service descriptor. If the service did not (or would not if reportOnly is set to true) update any web service descriptors, updatedWarningCount is not returned. Note: Some warnings require further action to be taken, such as regenerating web service connectors. Be sure to review all warnings."
+          ]
+        },
+        {
+          "name": "updated",
+          "type": "Document List",
+          "description": [
+            "Conditional. The web service descriptors for which the service successfully changed the value of the Pre-8.2 compatibility mode property from true to false, including any warnings that occurred. If reportOnly is set to true, updated indicates the number of web service descriptors that the service would successfully change and any warnings that the service would encounter. The service returns the updated parameter only if the service successfully changed the value of the Pre-8.2 compatibility mode property from true to false for at least one web service descriptor."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Package that contains the updated web service descriptor."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the updated web service descriptor."
+              ]
+            },
+            {
+              "name": "warnings",
+              "type": "String List",
+              "description": [
+                "List of any warning that occurred when the service changed the Pre-8.2 compatibility mode property from true to false."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "failed",
+          "type": "Document List",
+          "description": [
+            "Conditional. The web service descriptors for which the service could not change the value of the Pre-8.2 compatibility mode from true to false because an error occurred. The service returns the failed parameter only if an error prevented the service from changing the value of the Pre-8.2 compatibility mode property from true to false for at least one web service descriptor."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Package containing the web service descriptor that could not be changed."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the web service descriptor that could not be changed because of an error."
+              ]
+            },
+            {
+              "name": "warnings",
+              "type": "String List",
+              "description": [
+                "List of the warnings that occurred when the service attempted to change the Pre-8.2 compatibility mode property from true to false."
+              ]
+            },
+            {
+              "name": "errors",
+              "type": "String List",
+              "description": [
+                "List of the errors that prevented the service from changing the value of the Pre-8.2 compatibility mode property from true to false."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "skipped",
+          "type": "Document List",
+          "description": [
+            "Conditional. The web service descriptors for which the Pre-8.2 compatibility mode property is already set to false. The service returns the skipped parameter only if the service encountered web service descriptors for which Pre-8.2 compatibility mode property was already set to false."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Package containing the web service descriptor."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the web service descriptors for which Pre-8.2 compatibility mode property was already set to false."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The Pre-8.2 compatibility mode property and the ability to run in pre-8.2 compatibility mode are deprecated as of Integration Server 10.4 due to the deprecation of the earlier web services implementation introduced in Integration Serverversion 7.1. Even though the convertAllPackages and packageNames input parameters are optional, you must either set convertAllPackages to true or specify packages in packageNames. Use the pub.utils.ws:setCompatibilityModeFalse service to change the Pre-8.2 compatibility mode property value for multiple web service descriptors at one time. The Pre-8.2 compatibility mode property indicates the version of the web service stack with which the web service descriptor is compatible: - When the Pre-8.2 compatibility mode property is set to true, the web service descriptor runs on the earlier version of the web services stack, specifically the web services stack available in Integration Server versions 7.x, 8.0, and 8.0 SP1. web service descriptors running in pre-8.2 compatibility mode have the same design-time features and run-time behavior as web service descriptors run in versions of Integration Server prior to version 8.2. - When the Pre-8.2 compatibility mode property is set to false, the web service descriptor runs on the current version of the web services stack. web service descriptors that do not run in pre-8.2 compatibility mode have the design-time features and run-time behavior available in the current version of the web services stack. For more details about which features are impacted by the compatibility mode of the web service descriptor, see the Web Services Developer’s Guide . Before changing the web service descriptor, the service verifies that the web service descriptor can be deployed to the web services stack that corresponds to the chosen compatibility mode. Warnings indicate that the web service descriptor can be deployed to the web services stack successfully but some run-time behavior might change. If warnings occur for a particular web service descriptor, the service changes the compatibility mode and lists warnings in the updated output parameter. Errors identify the functionality that is incompatible with the web services stack. If errors occur for a particular web service descriptor, the service does not change the compatibility mode for that web service descriptor. the service identifies the errors in the failed output parameter. Some warnings require further action to be taken, such as regenerating web service connectors. Be sure to review all warnings. The pub.utils.ws:setCompatibilityModeFalse service will not modify any web service descriptors that are locked for edit or checked out at the time the service executes. To use the pub.utils.ws:setCompatibilityModeFalse service to change the Pre-8.2 compatibility mode property for a web service descriptor, you or whichever client is invoking the service must have Write access to the web service descriptors. If the Docker image for a Microservices Runtime excludes the web services functionality, then the Docker image for the Microservices Runtime running in the Docker container cannot execute the pub.utils.ws:setCompatibilityModeFalse service. Attempts to execute the pub.utils.ws:setCompatibilityModeFalse service end with a ServiceException."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,904 @@
+{
+  "folder": "XMLDATA",
+  "description": [
+    "You can use the services in the xmldata folder to convert a DOM node to an XMLData formatted document, convert XMLData to an XML String, and retrieve and set instance data from XMLData."
+  ],
+  "total_services": 11,
+  "services": [
+    {
+      "name": "pub.xmldata.domNodeToXMLData",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#id4a50e478-127c-49d2-a445-3bb7d66f61ca__title__1",
+      "description": [
+        "WmPublic. Converts a DOM node and its child nodes to a document in the XMLData format and optionally validates each node. This service converts each element and attribute in the DOM node to the XMLData format. Note that XMLData is an IData document arranged in a particular format that is described by an XML document type. A DOM node tree is a special representation of an XML document that can be consumed by any program that uses standard DOM APIs. For example, the pub.xml:xmlStringtoXMLNode and pub.xmlStringToEnhancedXMLNode services produce a DOM tree. A DOM node tree contains parsed XML content."
+      ],
+      "input_parameters": [
+        {
+          "name": "node",
+          "type": "org.w3c.dom.Node",
+          "description": [
+            "DOM node that is to be converted to an XMLData (Document). Note that com.wm.lang.xml.Node is a DOM node."
+          ]
+        },
+        {
+          "name": "conformsTo",
+          "type": "String",
+          "description": [
+            "Optional. Fully-qualified name of the XML document type on Integration Server against which to validate the DOM node. Specify a value for conformsTo only if you want to do the following: - Validate the DOM node as part of converting it to XMLData. Integration Server validates a DOM node in the tree as part of converting the tree node to and XMLData-formatted Document. - Use the XML document type to direct the conversion of the DOM node. That is, the structure of the XML document type determines the structure of the resulting XMLData. Note: You must specify an XML document type for conformsTo if you intend to modify the generated XMLData using the mapping tools available in the pipeline. Note: One or more XML document types are created from a single XML schema definition. To create an XMLData-formatted Document using the XML document types created from an XML Schema definition, you need specify only one of the XML document types or XML fields created from the schema. Integration Server locates the related XML document types, using the complete collection of XML document types and XML fields created from the schema during conversion and validation. If you do not specify an XML document type for conformsTo, Integration Server does not validate the input nodes as part of the conversion. Additionally, the service formats the resulting XMLData in a generic way instead of in a manner that matches an XML document type."
+          ]
+        },
+        {
+          "name": "maxErrors",
+          "type": "String",
+          "description": [
+            "Optional. Number of errors to be collected. Default value is 1 . When the number of errors found is equal to maxErrors , the validation processor stops validation and returns the result. If maxErrors is set to -1 , the validation processor returns all errors. The service uses the maxErrors input parameter only when a conformsTo value is specified."
+          ]
+        },
+        {
+          "name": "ignoreContent",
+          "type": "String",
+          "description": [
+            "Optional. Flag that specifies whether the validation processor will validate simple content where simple content is content keys of the type String, String List, or String Table. Set to: - true to ignore content (that is, do not validate the content of keys of the type String, String List, or String Table). Integration Server validates the structure and key names of the XML document only. - false to validate content. This is the default. The service uses the ignoreContent input parameter only when a conformsTo value is specified."
+          ]
+        },
+        {
+          "name": "failIfInvalid",
+          "type": "String",
+          "description": [
+            "Optional. Flag that indicates whether the service should fail and throw an exception if the object is invalid. Set to: - true to indicate that the service should fail if the object is invalid. - false to indicate that service should signal success and return errors to the pipeline if object is invalid. This is the default. The service uses the ignoreContent input parameter only when a conformsTo value is specified."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "isValid",
+          "type": "String",
+          "description": [
+            "Conditional. Flag that indicates whether or not validation of the DOM node was successful. A value of: - true indicates that the validation was successful. - false indicates that the validation was unsuccessful. The service returns the isValid parameter only if conformsTo specifies an XML document type."
+          ]
+        },
+        {
+          "name": "errors",
+          "type": "Document List",
+          "description": [
+            "Conditional. Errors encountered during validation. Each document will contain the following information:"
+          ],
+          "children": [
+            {
+              "name": "pathName",
+              "type": "String",
+              "description": [
+                "Location of the error in XQL."
+              ]
+            },
+            {
+              "name": "errorCode",
+              "type": "String",
+              "description": [
+                "Error code (for example, VV-001 )."
+              ]
+            },
+            {
+              "name": "errorMessage",
+              "type": "String",
+              "description": [
+                "Error message (for example, Missing Object )."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "xmlDataDocument",
+          "type": "Document",
+          "description": [
+            "An XMLData-formatted document that represents the elements and attributes in the DOM node."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "If the conformsTo input parameter specifies an XML document type or an XML field, the pub.xmldata:domNodetoXMLData service does the following: - Uses the XML document type (and any other XML document types and XML fields created from the same XML schema definition) to direct the structure of the XMLData. - Validates each DOM node in the tree before converting it to XMLData. You can use the pub.schema:validate service to validate XMLData. When validating XML, Integration Server uses the Java regular expression compiler. When validating XML, Integration Server uses the W3C recommendation XML Schema Part 2: Datatypes. If you want to validate XML for illegal values, set ignoreContent to false and the watt.core.validation.w3cConformant configuration parameter to true. For information about setting this configuration parameter, see IBM webMethods Integration Server Administrator’s Guide ."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xmldata:getAttributes",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#id97dc16b8-e927-486d-895e-38ef6d5c4dca__title__1",
+      "description": [
+        "WmPublic. Retrieves the attributes from a an XMLData document. If an XML Schema definition contains a complex type definition with an anyAttribute declaration, the XML document type created from the schema contains a corresponding *anyAttribute field. As the purpose of the anyAttribute declaration to act as a placeholder or wildcard, the XML document type cannot have a more specific representation. Use the pub.xmldata:getAttributes service to retrieve the attribute and attribute value included in an XML document at run time. That is, use the service to find the unknown attributes that are not declared in the XML document type. To set the attribute value in the XMLData, you must use the pub.xml:setAttribute service."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmlDataAttributes",
+          "type": "Document",
+          "description": [
+            "The *attributes from which you want to retrieve a list of attributes. The *attributes field is an XMLData document. If an element of complex type defines or carries attributes, Integration Server places the attributes in an *attributes document that is of type XMLData."
+          ]
+        },
+        {
+          "name": "ncName",
+          "type": "String",
+          "description": [
+            "Optional. The NCName (non-colonized name), of the attribute. The NCName is also called the local name. If you do not specify a value for ncName , the service returns all attributes belonging to the namespace specified in the namespace input parameter."
+          ]
+        },
+        {
+          "name": "namespace",
+          "type": "String",
+          "description": [
+            "Optional. The namespace URI for the attribute. If you do not specify a value, the service looks for attributes that do not belong to a namespace."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "results",
+          "type": "Document List",
+          "description": [
+            "A list of XMLData documents that contain the attributes that match the supplied ncName and namespace values. If no attributes match the supplied ncName and namespace values, the service returns an empty (zero length) list."
+          ],
+          "children": [
+            {
+              "name": "ncName",
+              "type": "String",
+              "description": [
+                "The NCName of the attribute."
+              ]
+            },
+            {
+              "name": "namespaceName",
+              "type": "String",
+              "description": [
+                "The namespace URI for the attribute."
+              ]
+            },
+            {
+              "name": "value",
+              "type": "String",
+              "description": [
+                "The value of the attribute."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xmldata:getGroupObjects",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#id00c895fc-156c-4648-8c9d-63bc4e412572__title__1",
+      "description": [
+        "WmPublic. Queries the object tags and objects in a group of unknown structure to return information about the tags in the group. The structure of a group is unknown when: - The conversion from XML to XmlData is not directed by an XML document type. - The complexContent model for a group is anyType. - A content model contains any or substitutionGroup particles. The service returns information for a specific tag or set of tags in a group. (A group consists of tags and objects.) This is in contrast to pub.xmldata:getGroupValues which returns information about the values in a group. The service takes a group as input and, for output, produces a list of descriptive information Documents about each tag in the group that meets the provided query criteria. A tag is comprised of a particle-id, a local name, and an optional namespace. The object associated with a tag can be an array if the tag is defined as holding repeating values (maxOccurs > 1)."
+      ],
+      "input_parameters": [
+        {
+          "name": "query",
+          "type": "Document",
+          "description": [
+            "Document containing the group to query and the query parameters."
+          ],
+          "children": [
+            {
+              "name": "groupValue",
+              "type": "Document",
+              "description": [
+                "The group to be queried in an XmlData document."
+              ]
+            },
+            {
+              "name": "ncName",
+              "type": "String",
+              "description": [
+                "Optional. The NCName (non-colonized name) of the tags you want to query in the group. The NCName is also called the local name. If you do not specify a value for ncName , the service queries all tags belonging to the namespace specified in the namespace input parameter."
+              ]
+            },
+            {
+              "name": "namespace",
+              "type": "String",
+              "description": [
+                "Optional. The namespace URI for the tag you want to query in the group. If you specify an empty String, the service queries only tags that do not belong to a namespace. If you do not specify a namespace , the service looks for a tags that belong to any namespace. If no ncName and no namespace is specified, the service queries all tags."
+              ]
+            },
+            {
+              "name": "particleID",
+              "type": "String",
+              "description": [
+                "Optional. The sequential number for the particle in a group that you want to query. A value of 1 refers to the first instance of the field with ncName # namespace name."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "results",
+          "type": "Document List",
+          "description": [
+            "Query results. Returns one document for each tag in the input group that meets the query parameters."
+          ],
+          "children": [
+            {
+              "name": "ncName",
+              "type": "String",
+              "description": [
+                "NCName portion of the tag."
+              ]
+            },
+            {
+              "name": "namespace",
+              "type": "String",
+              "description": [
+                "Namespace portion of the tag."
+              ]
+            },
+            {
+              "name": "particleID",
+              "type": "String",
+              "description": [
+                "ParticleId portion of the tag"
+              ]
+            },
+            {
+              "name": "tagType",
+              "type": "String",
+              "description": [
+                "Type of tag. The tagType is one of the following: - any - group - element - substitution"
+              ]
+            },
+            {
+              "name": "object",
+              "type": "Object",
+              "description": [
+                "The object associated with the tag."
+              ]
+            },
+            {
+              "name": "objectType",
+              "type": "String",
+              "description": [
+                "The base object type. The objectType is one of the following: - String - Document - Object"
+              ]
+            },
+            {
+              "name": "hasRepeatingValues",
+              "type": "String",
+              "description": [
+                "Indicates if the object is an array. A value of: - true indicates the object is an array. - false indicates the object is not an array."
+              ]
+            },
+            {
+              "name": "size",
+              "type": "String",
+              "description": [
+                "The size of the array."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Together, the ncName, namespace, and particleId identify a particular field in the XmlData group."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xmldata.getGroupValues",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#idbbf6fd73-1b4a-4aff-b32c-3866436d9164__title__1",
+      "description": [
+        "WmPublic. Queries the contents of a group with unknown structure to return information about the values in the group. The contents of a group can be unknown when the instance content corresponds to an anyType, substitutionGroup, or content created without using document type-directed conversion. A group consists of tags and values. The pub.xmldatat.getGroupValues service accepts a group as input along with an optional set of query parameters. The service produces a set of descriptive information documents about each value in the group. Because each tag can have repeating values, the length of the result list could be many times the number of tags present in the provided group. However, the result can be thought of as a flattened list of the objects associated with the tags."
+      ],
+      "input_parameters": [
+        {
+          "name": "query",
+          "type": "Document",
+          "description": [
+            "Group from which to obtain values and any query parameters to identify the particular field or fields for which you want to obtain values."
+          ],
+          "children": [
+            {
+              "name": "groupValue",
+              "type": "Document",
+              "description": [
+                "The group to be queried."
+              ]
+            },
+            {
+              "name": "ncName",
+              "type": "String",
+              "description": [
+                "Optional. The NCName (non-colonized name), of the tag you want to query in the group. The NCName is also called the local name. If you do not specify a value for ncName , the service queries all tags belonging to the namespace specified in the namespace input parameter."
+              ]
+            },
+            {
+              "name": "namespace",
+              "type": "String",
+              "description": [
+                "Optional. The namespace URI for the tag you want to query in the group. If you specify an empty String, the service queries tags that do not belong to any namespace. If you do not specify a namespace and a ncName , the service returns information about all tags."
+              ]
+            },
+            {
+              "name": "particleId",
+              "type": "String",
+              "description": [
+                "Optional. The sequential number for the particle in a group that you want to query. A value of 1 refers to the first instance of the field with ncName # namespace name."
+              ]
+            },
+            {
+              "name": "objectIndex",
+              "type": "String",
+              "description": [
+                "Optional. Index of an object in the group. You can supply objectIndex instead of supplying ncname , namespace , and particleId )."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "results",
+          "type": "Document List",
+          "description": [
+            "IData array containing the results of the query for group values. The array contains one document for each value. Because an object can contain multiple values, the length of the list might be longer than the number of tags contained in the group. All the values from all of the tags are combined into a single list, representing the list of values as they appeared in the input XML. This service simplifies obtaining values for content when the object tags are a mixture of any and substitution tags. The returned array has the corresponding tags for the value as it appeared in the original XML rather than the as it appears in the document type object model."
+          ],
+          "children": [
+            {
+              "name": "objectIndex",
+              "type": "String",
+              "description": [
+                "The offset of the object in the list group objects in the provided groupValue . This is the tag to which the value belongs. If a tag has more than one value, then more than one item in the results array will have the same objectIndex ."
+              ]
+            },
+            {
+              "name": "ncName",
+              "type": "String",
+              "description": [
+                "NCName portion of the value tag. If the tagType is a substitution or any tag, the value tag will not have the same NCName as the object tag."
+              ]
+            },
+            {
+              "name": "namespace",
+              "type": "String",
+              "description": [
+                "Namespace portion of the value tag. If the tagType is a substitution or any tag, the value tag will not have the same namespace as the object tag."
+              ]
+            },
+            {
+              "name": "particleId",
+              "type": "String",
+              "description": [
+                "ParticleID portion of the value tag. If the tagType is a substitution or any tag, the particleId is 1."
+              ]
+            },
+            {
+              "name": "index",
+              "type": "String",
+              "description": [
+                "The offset into the repeating values for the object that corresponds to objectIndex ."
+              ]
+            },
+            {
+              "name": "tagType",
+              "type": "String",
+              "description": [
+                "Type of tag. The tagType is one of the following: - group - element"
+              ]
+            },
+            {
+              "name": "value",
+              "type": "Object",
+              "description": [
+                "Value associated with the tag at the returned index ."
+              ]
+            },
+            {
+              "name": "valueType",
+              "type": "String",
+              "description": [
+                "The base value type. The valueType is one of the following: - simple indicates a String value. - group indicates that the value is an IData that does not contain attributes, nor does it contain a repeating top-level group. - complex indicates the value contains attributes and/or a repeating top-level group. - none indicates an empty model."
+              ]
+            },
+            {
+              "name": "complexContent",
+              "type": "Object",
+              "description": [
+                "Conditional. The complexContent for the returned value . The complexContent is returned for complex values only."
+              ]
+            },
+            {
+              "name": "repeatingComplexContent",
+              "type": "String",
+              "description": [
+                "Conditional. Indicates if the top-level group value is an array (. A value of: - true indicates the object is an array. - false indicates the object is not an array. The repeatingComplexContent variable is returned only for complex values (that is, when valueType is complex)."
+              ]
+            },
+            {
+              "name": "complexContentType",
+              "type": "String",
+              "description": [
+                "Conditional. The type of complex content. The complexContentType can be one of the following: - simple - group - none"
+              ]
+            },
+            {
+              "name": "attributes",
+              "type": "Document",
+              "description": [
+                "Conditional. An IData containing the attribute and values. The attributes variable is returned only for complex values (that is, when valueType is complex)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xmldata:getInstanceTag",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#ida5da03bb-9dc4-4ce1-99b9-4d82df2930e7__title__1",
+      "description": [
+        "WmPublic. Retrieves the value of a specified instance tag from a field in XMLData document. An element in an XML document may contain information that is unique to that particular instance document, including instance (xsi) assertions such as type, nil, or schemaLocation. Because instance information cannot be asserted in an XML schema definition, an XML document type cannot contain fields for the instance information. It is impossible for the XML Schema definition and the XML document types generated from that schema to know where the instance assertions might be specified in an instance document. When an XML instance document is parsed and converted to XMLData, specifically an XMLData-formatted document, Integration Server places the instance information in *instance field under the parent of the field that contains the instance information. That is, Integration Server stores the instance information in an *instance field that is a child of the field that corresponds to the element that contains the instance information in the XML document. Use the pub.xmldata:getInstanceTag service to retrieve the instance information from the XMLData created from the XML document. After you retrieve the instance information, you can manipulate or use the instance information in the pipeline. To set the value of the instance information in the XMLData, use the pub.xml:setInstanceTag service."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmlDataParent",
+          "type": "Document",
+          "description": [
+            "The XMLData document that is a parent of the field for which to retrieve the instance tag value."
+          ]
+        },
+        {
+          "name": "ncName",
+          "type": "String",
+          "description": [
+            "The NCName (non-colonized name), of the field for which you want to retrieve an instance tag value. The NCName is also called the local name."
+          ]
+        },
+        {
+          "name": "namespace",
+          "type": "String",
+          "description": [
+            "Optional. The namespace URI for the field for which you want to retrieve an instance tag value. If you do not specify a value, the service looks for tags that do not belong to a namespace."
+          ]
+        },
+        {
+          "name": "particleId",
+          "type": "String",
+          "description": [
+            "The sequential number for the particle in a model group for which you wan to retrieve an instance tag value. A value of 1 refers to the first instance of the field with ncName # namespace name in a model group."
+          ]
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": [
+            "Optional. If the field for which you want to retrieve a tag value is a repeating field ( minOccurs > 0), specify the index for the occurrence for which you want to retrieve a tag value. A value of 0 refers to the first instance of a repeating field. Note: Repeating elements are represented as arrays in XMLData."
+          ]
+        },
+        {
+          "name": "tagName",
+          "type": "String",
+          "description": [
+            "Name of the instance tag for which you want to retrieve a value, such as type, nil, schemaLocation. Note: Tag names are case-sensitive."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "tagValue",
+          "type": "String",
+          "description": [
+            "Value of the tag."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Together, the ncName, namespace, particleId, and index identify a particular field in the XMLData document."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xmldata:getNamespaceTags",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#idd60f984a-ef5a-4264-bac1-530b1bda2281__title__1",
+      "description": [
+        "WmPublic. Retrieves the namespace declarations, specifically the prefix and namespace URI, associated with a particular field in an XMLData Document. An element in an XML document may contain information that is unique to that particular instance document, including namespace declarations and instance assertions such as type, nil, or schemaLocation. A namespace declaration associates a prefix with a namespace URI. Because namespace declarations cannot be asserted for an element in an XML schema definition, an XML document type cannot contain fields for the namespace declarations. It is impossible for the XML Schema definition and the XML document types generated from that schema to know where the namespace declarations might be specified in an instance document. When an XML instance document is parsed and converted to XMLData, specifically an XMLData-formatted document, Integration Server places the namespace declarations in a *namespace field under the parent of the element that contains the namespace declaration. That is, Integration Server stores the namespace declarations in an *namespace field that appears as a child of the field that corresponds to the element containing the namespace declaration in the XML document. Use the pub.xmldata:getNamespaceTag service to retrieve the namespace declarations for a particular field from the XMLData created from the XML document. After you retrieve the namespace declaration, you can manipulate the namespace declarations in the pipeline. To set the value of a namespace declaration for a particular field in the XMLData, use the pub.xml:setNamespaceTag service."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmlDataParent",
+          "type": "Document",
+          "description": [
+            "The XMLData document that is a parent of the field for which to retrieve the namespace tag and value."
+          ]
+        },
+        {
+          "name": "ncName",
+          "type": "String",
+          "description": [
+            "The NCName (non-colonized name), of the field for which you want to retrieve an namespace declaration. The NCName is also called the local name."
+          ]
+        },
+        {
+          "name": "namespace",
+          "type": "String",
+          "description": [
+            "Optional. The namespace URI for the field for which you want to retrieve the namespace declaration. If you do not specify a namespace, the service looks for a field that does not belong to a namespace."
+          ]
+        },
+        {
+          "name": "particleId",
+          "type": "String",
+          "description": [
+            "The sequential number for the particle in a model group for which you want to retrieve a namespace declaration. A value of 1 refers to the first instance of the field with ncName # namespace name in a model group."
+          ]
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": [
+            "Optional. If the field for which you want to retrieve a namespace declaration is a repeating field ( minOccurs > 0), the index for the occurrence for which you want to retrieve the namespace declaration. A value of 0 refers to the first instance of a repeating field. Note: Repeating elements are represented as arrays in XMLData."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "results",
+          "type": "Document List",
+          "description": [
+            "A document (IData) containing namespace declarations for the specified field. A namespace declaration consists of a prefix and a namespace URI."
+          ],
+          "children": [
+            {
+              "name": "tagName",
+              "type": "String",
+              "description": [
+                "Prefix specified in the namespace declaration. The tagName parameter contains an empty string if this is the default namespace declaration."
+              ]
+            },
+            {
+              "name": "tagValue",
+              "type": "String",
+              "description": [
+                "The namespace URI associated with the namespace declaration."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Together, the ncName, namespace, particleId, and index identify a particular field in the XMLData."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xmldata:queryXMLNode",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#id521f0014-6449-4aa2-ae4f-c07b116bab4c__title__1",
+      "description": [
+        "WmPublic. Queries an XML node and returns the results in the XMLData format in which field names are fully qualified with an ncName and a namespace. The fields parameter specifies how data is extracted from the node to produce an output variable. This output variable is called a \"binding\" because the fields parameter binds a certain part of the document node to a particular output variable. At run time, this service must include at least one fields entry and at least one entry in fields. The result of each query you specify in fields is returned in a variable whose name and type you specify. Each fields list defines bindings for one level of the output with the top-level fields being the pipeline and the first level down fields being contents of a document or document list in the pipeline. As such, the top-level fields parameter is not namespace qualified but the lower-level fields are."
+      ],
+      "input_parameters": [
+        {
+          "name": "node",
+          "type": "com.wm.lang.xml.Node",
+          "description": [
+            "The XML node or enhanced XML node that you want to query. This parameter supports the following types of input: - com.wm.lang.xml.Node XML node that you want to query. An XML node can be produced by pub.xml:loadXMLNode, pub.xml:xmlStringToXMLNode, or an XML content handler. - enhanced XML node The enhanced XML node that you want to query. An enhanced XML node can be produced by pub.xml:loadEnhancedXMLNode, pub.xml:xmlStringToEnhancedXMLNode, or an XML content handler that receives a document with an xmlFormat is set to enhanced. If you supply an enhanced XML node, you must use XQL to query the node."
+          ],
+          "references": [
+            {
+              "title": "pub.xml:loadXMLNode",
+              "url": "to-xml_folder.html#Apub_xml_loadXMLNode"
+            },
+            {
+              "title": "pub.xml:xmlStringToXMLNode",
+              "url": "to-xml_folder.html#Apub_xml_xmlStringToXMLNode"
+            },
+            {
+              "title": "pub.xml:loadEnhancedXMLNode",
+              "url": "to-xml_folder.html#CEHBFIHJ"
+            },
+            {
+              "title": "pub.xml:xmlStringToEnhancedXMLNode",
+              "url": "to-xml_folder.html#CEHJAFHA"
+            }
+          ]
+        },
+        {
+          "name": "nsDecls",
+          "type": "Document",
+          "description": [
+            "Optional. Namespaces associated with any namespace prefixes used to specify elements in fields/query. Each entry in nsDecls represents a namespace prefix/URI pair, where a key name represents a prefix and the value of the key specifies the namespace URI. nsDecls is not used for creating output fields. For example, to define the URIs associated with two prefixes called GSX and TxMon, you would set nsDecls as follows: Instead of defining prefix/namespace pairs in nsDecls, you can specify a namespace for each field using the namespace parameter that is an immediate child of the fields variable, (i.e., fields/namespace)"
+          ]
+        },
+        {
+          "name": "defaultNamespace",
+          "type": "String",
+          "description": [
+            "Optional. The namespace to use as the default for each namespace parameter. An empty string indicates no default namespace. You can override the default namespace by specifying a namespace for a field in the fields/namespace parameter."
+          ]
+        },
+        {
+          "name": "fields",
+          "type": "Document List",
+          "description": [
+            "Optional. An array of documents where each document defines a field to be created in the output. Each document contains parameters that describe how data is to be extracted from node . That is, each document in the list contains parameters for a single query."
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Optional. Name to assign to the value resulting from the query. That is, the name of a field output by the service. Typically, this name field is used for top-level fields because top-level fields produced by this service equate to named pipeline variables. However, the name filed may also be used to name the *attributes document."
+              ]
+            },
+            {
+              "name": "resultType",
+              "type": "String",
+              "description": [
+                "Object type that the query is to yield. The following shows the allowed values for resultType ."
+              ]
+            },
+            {
+              "name": "query",
+              "type": "String",
+              "description": [
+                "Query identifying the data to be extracted from node . The query must use the prefix-qualified form for tag names (even though the output is formatted as XmlData). If prefix-qualified names are used, the nsdecls parameter must also be set."
+              ]
+            },
+            {
+              "name": "queryType",
+              "type": "String",
+              "description": [
+                "Query language in which query is expressed. Valid values are WQL and XQL . If the content of node is an enhanced XML node, you must set queryType to XQL. For information about WQL syntax, see the IBM webMethods Service Development Help ."
+              ]
+            },
+            {
+              "name": "childTags",
+              "type": "String",
+              "description": [
+                "Type of tags generated in the child fields produced by this field. Specify one of the following: - element to indicate element tags are created. This is the default. - attribute to indicate attribute tags are created. An attribute tag will not have a particleId."
+              ]
+            },
+            {
+              "name": "onnull",
+              "type": "String",
+              "description": [
+                "Optional. Code indicating what you want queryXMLNode to do when the result is null. Set to one of the following: - continue to indicate that all result values are acceptable for this query (including null). - fail to indicate that the service should fail if the result of this query is null and continue in all other cases. - succeed to indicate that the service should continue if the result of this query is null and fail in all other cases."
+              ]
+            },
+            {
+              "name": "fields",
+              "type": "Document List",
+              "description": [
+                "Parameters that support nested execution of bindings. Each fields list defines bindings for one level of the output with the top level being the pipeline and the first level down being contents of a document or document list in the pipeline. For example, the output variable described by fields/fields is a Document or Document list in the pipeline. The fields/fields variable and any further nested fields variables contain the same input parameters as the top-level fields (name, query, resultType, etc.) with the addition of the following input parameters needed to identify a particular field in the XMLData formatted document. The ncName, namespace, and particleId inputs are only supported from the second level and down because the top-level item cannot be an xmldata-formatted tag."
+              ],
+              "children": [
+                {
+                  "name": "ncName",
+                  "type": "String",
+                  "description": [
+                    "Optional. The NCname for the output field."
+                  ]
+                },
+                {
+                  "name": "namespace",
+                  "type": "String",
+                  "description": [
+                    "Optional. The namespace portion of the output field. An empty string indicates no namespace. This namespace value overrides the defaultNamespace value."
+                  ]
+                },
+                {
+                  "name": "particleID",
+                  "type": "String",
+                  "description": [
+                    "Optional. The particleId portion of the output field."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.xmldata:queryXMLNode is different from the pub.xml:queryXMLNode service which returns the results in the legacy infoset format in which fields are qualified with a prefix and a namespace name. Thepub.xmldata:queryXMLNode service uses the NCName, namespace, and particleID to qualify the output format. Use the pub.xmldata.queryXMLNode service when you are working with XMLData-encoded infoset. Use the pub.xml:queryXMLNode service when you are working with the legacy-encoded infoset."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.xmldata:setAttribute",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#idf879b0e7-8581-41d9-8d1d-5eff544d5615__title__1",
+      "description": [
+        "WmPublic. Sets the value for a specific attribute in an XMLData document. While the primary purpose of this service is to set the value of an attribute that is the runtime replacement for an anyAttribute declaration, you can use this service to set the value of any of the attributes in an XMLData document."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmlDataAttributes",
+          "type": "Document",
+          "description": [
+            "The *attributes document of type XMLData in which you want to set the value of an attribute."
+          ]
+        },
+        {
+          "name": "ncName",
+          "type": "String",
+          "description": [
+            "The NCName (non-colonized name) of the attribute whose value you want to set. The NCName is also called a local name."
+          ]
+        },
+        {
+          "name": "namespace",
+          "type": "String",
+          "description": [
+            "Optional. The namespace URI for the attribute whose value you want to set. Leave namespace blank if the attribute does not belong to a namespace."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "The value that you want to assign to the attribute."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.xmldata:setInstanceTag",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#id74e1e6cd-d01b-4ca4-9b10-b4ba37264ee6__title__1",
+      "description": [
+        "WmPublic. Sets the value of an instance tag for a specific field in an XMLData document."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmlDataParent",
+          "type": "Document",
+          "description": [
+            "The XMLData document that is a parent of the field for which to set the instance tag value."
+          ]
+        },
+        {
+          "name": "ncName",
+          "type": "String",
+          "description": [
+            "The NCName (non-colonized name), of the field for which you want to set an instance tag value. The NCName is also called the local name."
+          ]
+        },
+        {
+          "name": "namespace",
+          "type": "String",
+          "description": [
+            "Optional. The namespace URI for the field for which you want to set an instance tag value. If the field does not belong to a namespace, do not specify a value for the namespace input parameter."
+          ]
+        },
+        {
+          "name": "particleID",
+          "type": "String",
+          "description": [
+            "The sequential number for the particle in a model group for which you want to set an instance tag value. A value of 1 refers to the first instance of the field with ncName # namespace name."
+          ]
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": [
+            "Optional. If the field for which you want to set a tag value is a repeating field (minOccurs > 0), the index for the occurrence for which you want to set a tag value. A value of 0 refers to the first instance of a repeating field. If you specify the array index that is greater than the current size of the array, the array size increases and missing entries are null. Note: Repeating elements are represented as arrays in XMLData."
+          ]
+        },
+        {
+          "name": "tagName",
+          "type": "String",
+          "description": [
+            "Name of the instance tag for which you want to set a value, such as type, nil, schemaLocation. Note: Tag names are case-sensitive."
+          ]
+        },
+        {
+          "name": "tagValue",
+          "type": "String",
+          "description": [
+            "Value to assign to the instance tag. If you specify a null value, the service removes the tag and its value from the XMLData."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.xmldata:setNamepaceTag",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#id847e5f9c-71d1-4703-be05-5ecdab8a1465__title__1",
+      "description": [
+        "WmPublic. Sets the namespace declaration for a particular field."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmlDataParent",
+          "type": "Document",
+          "description": [
+            "The XMLData document that is a parent of the field for which to set a namespace declaration."
+          ]
+        },
+        {
+          "name": "ncName",
+          "type": "String",
+          "description": [
+            "The NCName (non-colonized name), of the field for which you want to set a namespace declaration. The NCName is also called the local name."
+          ]
+        },
+        {
+          "name": "namespace",
+          "type": "String",
+          "description": [
+            "Optional. The namespace URI for the field for which you want to set a namespace declaration. If the field does not belong to a namespace, do not specify a value for the namespace input parameter."
+          ]
+        },
+        {
+          "name": "particleID",
+          "type": "String",
+          "description": [
+            "The sequential number for the particle in a model group for which you want to set a namespace declaration. A value of 1 refers to the first instance of the field with ncName # namespace name."
+          ]
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": [
+            "Optional. If the field for which you want to set a namespace declaration is a repeating element (minOccurs > 0), the index for the occurrence for which you want to set a tag value. A value of 0 refers to the first instance of a repeating field. If you specify the array index that is greater than the current size of the array, the array size increases and missing entries are null. If you specify an index that is beyond the end of the array, the service increases the size of the array and the intervening indexes have a null value. Note: Repeating elements are represented as arrays in XMLData."
+          ]
+        },
+        {
+          "name": "tagName",
+          "type": "String",
+          "description": [
+            "The prefix to associate with the namespace declaration. Specify an empty string to associate a value with the default namespace declaration, that is, specify: “”"
+          ]
+        },
+        {
+          "name": "tagValue",
+          "type": "String",
+          "description": [
+            "The namespace URI to associate with the prefix in tagName . If you specify a null value, the service removes the namespace declaration from the XMLData."
+          ]
+        }
+      ],
+      "output_parameters": []
+    },
+    {
+      "name": "pub.xmldata:xmlDataToXMLString",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-xmldata-folder#id74e03dc9-d4e3-48ac-b1bc-ca7e0cdfdc17__title__1",
+      "description": [
+        "WmPublic. Converts an XMLData document to an XML string. The pub.xmldata:xmlDataToXMLString service recurses through a given document formatted as XMLData, building an XML representation from the elements within it. Key names are turned into XML elements and attributes, and the key values are turned into the contents of those elements."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmlDataDocument",
+          "type": "Document",
+          "description": [
+            "XMLData document that is to be converted to XML."
+          ]
+        },
+        {
+          "name": "encode",
+          "type": "String",
+          "description": [
+            "Optional. Flag indicating whether to HTML-encode the data. Set this parameter to true if your XML data contains special characters, including the following: < > & \" ' Set to: - true to HTML-encode the data. For example, the string expression 5 < 6 would be converted to <expr>5 &lt; 6</expr>, which is valid. - false to not HTML-encode the data. This is the default. For example, the string expression 5 < 6would be converted to <expr>5 < 6</expr>, which is invalid."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "xmlString",
+          "type": "String",
+          "description": [
+            "XML String produced from xmlDataDocument ."
+          ]
+        }
+      ]
+    }
+  ]
+}

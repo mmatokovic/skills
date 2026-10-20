@@ -1,0 +1,682 @@
+{
+  "folder": "DOCUMENT",
+  "description": [
+    "You use the elements in the document folder to perform operations on documents in the pipeline."
+  ],
+  "total_services": 11,
+  "services": [
+    {
+      "name": "pub.document:bytesToDocument",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#Apub_document_documentbytesToDocument__title__1",
+      "description": [
+        "WmPublic. Converts an array of bytes to a document. This service can only be used with byte arrays created by executing the pub.document:documentToBytes service."
+      ],
+      "input_parameters": [
+        {
+          "name": "documentBytes",
+          "type": "Object",
+          "description": [
+            "An array of bytes (byte[]) to convert to a document. - If documentBytes is null, the service does not return a document or an error message. - If documentBytes is not a byte array, the service throws a service exception. - If documentBytes is zero-length, the service produces an empty document."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "A document."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use this service with the pub.document:documentToBytes service, which converts a document into a byte array. You can pass the resulting byte array to the pub.document:bytesToDocument service to convert it back into the original document. In order for the document-to-bytes-to-document conversion to work, the entire content of the document must be serializable. Every object in the document must be of a data type known to Integration Server , or it must support the java.io.Serializable interface. Note: If Integration Server encounters an unknown object in the document that does not support the java.io.Serializable interface, that object's value will be lost. It will be replaced with a string containing the object's class name."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:deleteDocuments",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#A57290__title__1",
+      "description": [
+        "WmPublic. Deletes the specified documents from a set of documents."
+      ],
+      "input_parameters": [
+        {
+          "name": "documents",
+          "type": "Document List",
+          "description": [
+            "Set of documents that contain the documents you want to delete."
+          ]
+        },
+        {
+          "name": "indices",
+          "type": "String List",
+          "description": [
+            "Index values of documents to be deleted from the documents parameter document list."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "documents",
+          "type": "Document List",
+          "description": [
+            "List of documents whose indices do not match the values in indices parameter."
+          ]
+        },
+        {
+          "name": "deletedDocuments",
+          "type": "Document List",
+          "description": [
+            "List of deleted documents."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.document:deleteDocuments service returns an error if the indices parameter value is less than zero or more than the number of documents in the documents input parameter."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:documentListToDocument",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#Apub_document_documentListToDocument__title__1",
+      "description": [
+        "WmPublic. Constructs a document (an IData object) from a document list (an IData[ ]) by generating key/value pairs from the values of two elements that you specify in the document list."
+      ],
+      "input_parameters": [
+        {
+          "name": "documentList",
+          "type": "Document List",
+          "description": [
+            "Set of documents (IData[ ]) that you want to transform into a single document (IData object). Note: If the documentList parameter contains a single document instead of a Document List, the documentListToDocument service does nothing."
+          ]
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Name of the element in the documentList parameter whose value provides the name of each key in the resulting document. Important: The data type of the element that you specify in the name parameter must be String."
+          ]
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Name of the element in the documentList parameter whose values will be assigned to the keys specified in name . This element can be of any data type."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) containing the key/value pairs generated from the documentList parameter."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The following example illustrates how the documentListToDocument service would convert a document list that contains three documents to a single document containing three key/value pairs. When you use the documentListToDocument service, you specify which two elements from the source list are to be transformed into the keys and values in the output document. In the following example, the values from the pName elements in the source list are transformed into key names, and the values from the pValue elements are transformed into the values for these keys. A documentList containing these three documents: Overview on how the documentListToDocument service would convert a document list that contains three documents to a single document containing three key/value pairs.",
+            {
+              "table": [
+                [
+                  "Key",
+                  "Value"
+                ],
+                [
+                  "pName",
+                  "cx_timeout"
+                ],
+                [
+                  "pValue",
+                  "1000"
+                ]
+              ]
+            },
+            {
+              "table": [
+                [
+                  "Key",
+                  "Value"
+                ],
+                [
+                  "pName",
+                  "cx_max"
+                ],
+                [
+                  "pValue",
+                  "2500"
+                ]
+              ]
+            },
+            {
+              "table": [
+                [
+                  "Key",
+                  "Value"
+                ],
+                [
+                  "pName",
+                  "cx_min"
+                ],
+                [
+                  "pValue",
+                  "10"
+                ]
+              ]
+            },
+            "Would be converted to a document containing these three key:",
+            {
+              "table": [
+                [
+                  "Key",
+                  "Value"
+                ],
+                [
+                  "cx_timeout",
+                  "1000"
+                ],
+                [
+                  "cx_max",
+                  "2500"
+                ],
+                [
+                  "cx_min",
+                  "10"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:documentToBytes",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#Apub_document_documentToBytes__title__1",
+      "description": [
+        "WmPublic. Converts a document to an array of bytes."
+      ],
+      "input_parameters": [
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) to convert to bytes. - If document is null, the service does not return an output or an error message. - If document is not a document (IData), the service throws a service exception. - If document contains no elements, the service produces a zero-length byte array."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "documentBytes",
+          "type": "Object",
+          "description": [
+            "A serialized representation of the document as an array of bytes (byte[])."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Use the pub.document:documentToBytes service with the pub.document:bytesToDocument service, which converts the byte array created by this service back into the original document. The pub.document:documentToBytes service is useful when you want to write a document to a file (using the pub.file:bytesToFile service), an input stream (using the pub.io:bytesToStream service), or a cache (using the pub.cache:put service). In order for the document-to-bytes-to-document conversion to work, the entire content of the document must be serializable. Every object in the document must be of a data type known to Integration Server, or it must support the java.io.Serializable interface. If Integration Server encounters an unknown object in the document that does not support the java.io.Serializable interface, that object's value will be lost. Integration Server will replace it with a string containing the object's class name."
+          ]
+        },
+        {
+          "examples": [
+            "This example describes how to use the pub.document:documentToBytes and pub.document:bytesToDocument services to cache a document in the pipeline. 1. A document is not directly serializable, so you must first use the pub.document:documentToBytes service. Invoke the service and map the document to the document input parameter. This will add the output documentBytes to the pipeline. 2. Invoke pub.cache:put and map documentBytes to the value input parameter for that service. Set the key input parameter to a value that is meaningful to your application. 3. At another point in your application, you will need to retrieve the document you cached. You can do so by invoking the pub.cache:get service and supplying the same key input parameter as in step 2. The value output parameter that was added as output to the pipeline will contain the byte array from step 1. 4. Invoke pub.document:bytesToDocument and map the value output parameter to the documentBytes input parameter. This will add the output document to the pipeline, which will match the original document in step 1."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:documentToDocumentList",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#Apub_document_documentToDocumentList__title__1",
+      "description": [
+        "WmPublic. Expands the contents of a document into a list of documents. Each key/value pair in the source document is transformed to a single document containing two keys (whose names you specify). These two keys will contain the key name and value of the original pair."
+      ],
+      "input_parameters": [
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) to transform."
+          ]
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "description": [
+            "Name to assign to the key that will receive the key name from the original key/value pair. (In the example above, this parameter was set to pName .)"
+          ]
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "description": [
+            "Name to assign to the key that will receive the value from the original key/value pair. (In the example above, this parameter was set to pValue .)"
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "documentList",
+          "type": "Document List",
+          "description": [
+            "List containing a document for each key/value pair in the document parameter. Each document in the list will contain two keys, whose names were specified by the name and value parameters. The values of these two keys will be the name and value (respectively) of the original pair."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The following example shows how a document containing three keys would be converted to a document list containing three documents. In this example, the names pName and pValue are specified as names for the two new keys in the document list. A document containing these three keys:",
+            {
+              "table": [
+                [
+                  "Key",
+                  "Value"
+                ],
+                [
+                  "cx_timeout",
+                  "1000"
+                ],
+                [
+                  "cx_max",
+                  "2500"
+                ],
+                [
+                  "cx_min",
+                  "10"
+                ]
+              ]
+            },
+            "Would be converted to a document list containing these three documents:",
+            {
+              "table": [
+                [
+                  "Key",
+                  "Value"
+                ],
+                [
+                  "pName",
+                  "cx_timeout"
+                ],
+                [
+                  "pValue",
+                  "1000"
+                ]
+              ]
+            },
+            {
+              "table": [
+                [
+                  "Key",
+                  "Value"
+                ],
+                [
+                  "pName",
+                  "cx_max"
+                ],
+                [
+                  "pValue",
+                  "2500"
+                ]
+              ]
+            },
+            {
+              "table": [
+                [
+                  "Key",
+                  "Value"
+                ],
+                [
+                  "pName",
+                  "cx_min"
+                ],
+                [
+                  "pValue",
+                  "10"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:documentToXMLValues",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#Apub_document_documentToXMLValues__title__1",
+      "description": [
+        "WmPublic. Converts a document (IData object) to a String by encoding it in the webMethods XMLValues format."
+      ],
+      "input_parameters": [
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) to convert. This document can contain any number of other fields, lists, and other documents."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "xmlvalues",
+          "type": "String",
+          "description": [
+            "representation of the document parameter, encoded in the webMethods XMLValues format."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "To convert the encoded String back into an IData object, use the pub.document:XMLValuesToDocument service. If the watt.server.xmlCoder.getUndefinedDataTypeClassName server configuration parameter is set to true, the xmlvalues output includes the class name of an unsupported data type in the XML document."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:groupDocuments",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#A33773__title__1",
+      "description": [
+        "WmPublic. Groups a set of documents based on specified criteria."
+      ],
+      "input_parameters": [
+        {
+          "name": "documents",
+          "type": "Document List",
+          "description": [
+            "Set of documents to be grouped based on the specified criteria."
+          ]
+        },
+        {
+          "name": "groupCriteria",
+          "type": "Document List",
+          "description": [
+            "The criteria on which the input documents are to be grouped. Valid values for the groupCriteria parameter are: - key. Key in the pipeline. The value for key can be a path expression. For example, \"Family/Chidren[0]/BirthDate\" retrieves the birthday of the first child from the input Family document list. - compareStringsAs. Optional. Valid values for compareStringsAs are string, numeric, and datetime. The default value is string. - pattern. Optional. pattern will be considered only if the compareStringsAs parameter is of type datetime. For information about using patterns, see Time Zones. Note: If key is not found in all the input documents, the documents that do not match the groupCriteria are grouped together as a single group."
+          ],
+          "references": [
+            {
+              "title": "Time Zones",
+              "url": "to-date_folder.html#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "documentGroups",
+          "type": "Document List",
+          "description": [
+            "List of documents where each element represents a set of documents grouped based on the criteria specified."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The following example illustrates how to specify the values for the groupCriteria parameter:",
+            {
+              "table": [
+                [
+                  "key",
+                  "compareStringsAs",
+                  "pattern"
+                ],
+                [
+                  "name",
+                  "string",
+                  ""
+                ],
+                [
+                  "age",
+                  "numeric",
+                  ""
+                ],
+                [
+                  "birthdate",
+                  "datetime",
+                  "yyyy-MM-dd"
+                ]
+              ]
+            },
+            "The input documents will be grouped based on name, age, and birth date."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:insertDocument",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#A74183__title__1",
+      "description": [
+        "WmPublic. Inserts a new document in a set of documents at a specified position."
+      ],
+      "input_parameters": [
+        {
+          "name": "documents",
+          "type": "Document List",
+          "description": [
+            "Set of documents in which a new document is to be inserted."
+          ]
+        },
+        {
+          "name": "insertDocument",
+          "type": "Document",
+          "description": [
+            "The new document to be inserted to the set of documents specified in the documents parameter."
+          ]
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": [
+            "Optional. The position in the seat which the document is to be inserted. The index parameter is zero-based. if the value for the index parameter is not specified, the document will be inserted at the end of the document list specified in the documents parameter."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "documents",
+          "type": "Document List",
+          "description": [
+            "list after inserting the new document."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:searchDocuments",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#A71466__title__1",
+      "description": [
+        "WmPublic. Searches a set of documents for entries matching a set of Criteria."
+      ],
+      "input_parameters": [
+        {
+          "name": "documents",
+          "type": "Document List",
+          "description": [
+            "Set of documents from which the documents meeting the search criteria are to be returned."
+          ]
+        },
+        {
+          "name": "searchCriteria",
+          "type": "Document",
+          "description": [
+            "Criteria on which the documents in the documents parameter are to be searched. Valid values for searchCriteria parameters are: - key. Name of the element in documentList whose value provides the value for the search text. The value for key can be a path expression. For example, \"Family/Chidren[0]/BirthDate\" retrieves the birthday of the first child from the input Family document list. - value. Optional. Any search text. If no value is specified, the service searches for null in the document list. - compareStringsAs. Optional. Allowed values are string, numeric, and datetime. The default value is string. - pattern. Optional. pattern will be considered only if the compareStringsAs value is of type datetime. For information about using patterns, see Time Zones."
+          ],
+          "references": [
+            {
+              "title": "Time Zones",
+              "url": "to-date_folder.html#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            }
+          ]
+        },
+        {
+          "name": "sorted",
+          "type": "String",
+          "description": [
+            "Optional. Indicates whether the document list is already sorted based on the search criteria and the same search key. If the parameter value is: - true: The document list is already sorted. Searches can run faster. - false: The document list is not sorted. Important: If the data is not sorted, you must set sorted as false or omit the parameter. Setting sorted as true for unsorted data may lead to inconsistent or unreliable search results. If the data is properly sorted, you can set sorted as true (for improved performance) or sorted as false. In both cases, the search results will remain accurate and consistent."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "resultdocuments",
+          "type": "Document List",
+          "description": [
+            "List of documents which are matching the search criteria."
+          ]
+        },
+        {
+          "name": "documentListIndices",
+          "type": "String List",
+          "description": [
+            "Positions of search documents in the document list."
+          ]
+        },
+        {
+          "name": "documents",
+          "type": "Document List",
+          "description": [
+            "List of documents that were input."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_note": [
+            "For example, if you want to search a set of documents for documents where BirthDate is 10th January 2008, the values for the searchCriteria parameter would be:",
+            {
+              "table": [
+                [
+                  "key",
+                  "value",
+                  "compareStringsAs",
+                  "pattern"
+                ],
+                [
+                  "Birthdate",
+                  "2008-01-10",
+                  "datetime",
+                  "yyyy-MM-dd"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:sortDocuments",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#A37368__title__1",
+      "description": [
+        "WmPublic. Sorts a set of input documents based on the specified sortCriteria."
+      ],
+      "input_parameters": [
+        {
+          "name": "documents",
+          "type": "Document List",
+          "description": [
+            "Set of documents that are to be sorted."
+          ]
+        },
+        {
+          "name": "sortCriteria",
+          "type": "Document List",
+          "description": [
+            "Criteria based on which the documents in the documents parameter are to be sorted. Valid values for sortCriteria parameters are: - key. Name of the element in documentList whose value provides the value based on which the documents are to be sorted. The value for key can be a path expression. For example, \"Family/Chidren[0]/BirthDate\" retrieves the birthday of the first child from the input Family document list. - order. Optional. Allowed values are ascending and descending. The default value is ascending. - compareStringsAs. Optional. Allowed values are string, numeric, and datetime. Default value is string. - pattern. Optional. The value for pattern will be considered only if the compareStringsAs value is of type datetime. For information about using patterns, see Time Zones. Note: If key is not found in all the input documents, the sorted list of documents appears at the end or start of the list based on the order specified. If the order is ascending, then all the documents that do not match the sort criteria appears at the top of the list, followed by the sorted list. If the order is descending, the sorted list will appear at the top, followed by the documents that do not match the sort criteria."
+          ],
+          "references": [
+            {
+              "title": "Time Zones",
+              "url": "to-date_folder.html#id8ee9d256-1d69-46b9-aefa-19812f2ae648"
+            }
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "documents",
+          "type": "Document List",
+          "description": [
+            "The documents sorted based on the sort criteria specified in the sortCriteria parameter."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "For example, if you want to sort a set of documents based on name, age, and then on birth date, the values for sortCriteria parameter would be:",
+            {
+              "table": [
+                [
+                  "key",
+                  "order",
+                  "compareStringsAs",
+                  "pattern"
+                ],
+                [
+                  "Name",
+                  "ascending",
+                  "string",
+                  ""
+                ],
+                [
+                  "Age",
+                  "descending",
+                  "numeric",
+                  ""
+                ],
+                [
+                  "Birthdate",
+                  "ascending",
+                  "datetime",
+                  "yyyy-MM-dd"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.document:XMLValuesToDocument",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-document-folder#Apub_document_length__title__1",
+      "description": [
+        "WmPublic. Decodes a String containing an XMLValues-encoded document and produces a document (IData object)."
+      ],
+      "input_parameters": [
+        {
+          "name": "xmlvalues",
+          "type": "String",
+          "description": [
+            "An XMLValues encoding of a document. Important: This String must contain a webMethods XMLValues encoding of a document. No other encoding format is accepted."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "document",
+          "type": "Document",
+          "description": [
+            "(IData object) result of the decoding of xmlvalues ."
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "An XMLValues-encoded document is produced using pub.document:documentToXMLValues. If the watt.server.xmlCoder.getUndefinedDataTypeClassName server configuration parameter is set to true, the class name of an unsupported data type appears in the document IData object."
+          ]
+        }
+      ]
+    }
+  ]
+}

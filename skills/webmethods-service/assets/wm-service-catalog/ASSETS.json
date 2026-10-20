@@ -1,0 +1,523 @@
+{
+  "folder": "ASSETS",
+  "description": [
+    "You use the services in the assets folder to get the checksum of one ore more assets on Integration Server."
+  ],
+  "total_services": 6,
+  "services": [
+    {
+      "name": "pub.assets:getAssetInfo",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-assets-folder#reference_dn4_bjc_gcc__title__1",
+      "description": [
+        "WmPublic. Retrieves information for a specific asset in a package."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the package for which to retrieve assets."
+          ]
+        },
+        {
+          "name": "assetName",
+          "type": "String",
+          "description": [
+            "Fully qualified name of the asset from which to retrieve asset information."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "asset",
+          "type": "Document List",
+          "description": [
+            "The list of information about the specified asset."
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the asset."
+              ]
+            },
+            {
+              "name": "displayName",
+              "type": "String",
+              "description": [
+                "Local name of the asset."
+              ]
+            },
+            {
+              "name": "category",
+              "type": "String",
+              "description": [
+                "Asset category, such as Service, Document, and Trigger."
+              ]
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "description": [
+                "Asset type, such as Flow Service, Java Service, and Document Type."
+              ]
+            },
+            {
+              "name": "dependents",
+              "type": "String List",
+              "description": [
+                "A list of assets that depend on or use this asset. If there are no dependents or there are errors retrieving dependents, the service returns an empty list."
+              ]
+            },
+            {
+              "name": "references",
+              "type": "String List",
+              "description": [
+                "A list of assets that are referenced or used by this asset. If there are no references or there are any errors retrieving references, the service returns an empty list."
+              ]
+            },
+            {
+              "name": "dependentsError",
+              "type": "String",
+              "description": [
+                "Conditional. Message indicating the error preventing retrieval of a list of dependent assets. This parameter is returned only if there is an error in retrieving the dependent assets."
+              ]
+            },
+            {
+              "name": "referencesError",
+              "type": "String",
+              "description": [
+                "Conditional. Message indicating the error preventing to retrieve a list of referenced assets. This parameter is returned only if there is an error in retrieving the referenced assets."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.assets:getAssetsFromDependentPackages",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-assets-folder#reference_wl1_cyc_gcc__title__1",
+      "description": [
+        "WmPublic. Retrieves asset information for the specified package and any dependent packages."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the package from which to retrieve assets."
+          ]
+        },
+        {
+          "name": "assetType",
+          "type": "String",
+          "description": [
+            "Optional. A comma-separated list of asset types from which to retrieve information. Asset types include Flow Service, Java Service, Document Type, etc. To retrieve a list of all asset types, call the GET/admin/assettype operation in the Integration Server Administrator API."
+          ]
+        },
+        {
+          "name": "visible",
+          "type": "Boolean",
+          "description": [
+            "Optional. Flag indicating whether the service retrieves dependent assets. Set to: - true to retrieve assets from other packages when flagged as visible. - false to not retrieve assets from other packages. Note: Use IBM webMethods.io Integration to specify whether or not an asset can be referenced from outside the package."
+          ]
+        },
+        {
+          "name": "favorite",
+          "type": "Boolean",
+          "description": [
+            "Optional. Flag indicating whether the service retrieves assets that are marked as favorite. Set to: - true to retrieve the assets that are marked as a favorite. - false to retrieve the assets that are not marked as a favorite. Note: Use IBM webMethods.io Integration to mark an asset as a favorite."
+          ]
+        },
+        {
+          "name": "deprecated",
+          "type": "Boolean",
+          "description": [
+            "Optional. Flag indicating whether the service retrieves assets that are marked as deprecated. Set to: - true to retrieve assets that are marked as deprecated. - false to retrieve assets that are not marked as deprecated. Note: Use IBM webMethods.io Integration to mark an asset as deprecated."
+          ]
+        },
+        {
+          "name": "displayName",
+          "type": "String",
+          "description": [
+            "Optional. Local name for the asset for which to retrieve information."
+          ]
+        },
+        {
+          "name": "since",
+          "type": "String",
+          "description": [
+            "Optional. Version of the package from which to retrieve information. Note: Use IBM webMethods.io Integration to specify the version of the package."
+          ]
+        },
+        {
+          "name": "tag",
+          "type": "String",
+          "description": [
+            "Optional. Tag for which to filter assets. Service results only include assets with the specified tag. You can specify only one tag. Note: Use IBM webMethods.io Integration to assign tags to assets."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "packageName",
+          "type": "Document List",
+          "description": [
+            "List of packages with assets that meet the input criteria."
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the asset."
+              ]
+            },
+            {
+              "name": "displayName",
+              "type": "String",
+              "description": [
+                "Local name for the asset."
+              ]
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "description": [
+                "Asset type, such as Flow Service, Java Service, or Document Type."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.assets:getChecksums",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-assets-folder#idef8130d4-3634-41f4-85ac-c11f335ebf82__title__1",
+      "description": [
+        "WmPublic. Retrieves the checksums for assets, specifically namespace elements, on Integration Server. You can calculate the checksum for specific assets or all of the assets in a package. A checksum is a digest for an asset that is generated using all the properties and contents of the asset. Each asset on Integration Server has a unique checksum. Two assets on different Integration Servers have the same checksum if the assets are identical."
+      ],
+      "input_parameters": [
+        {
+          "name": "packages",
+          "type": "String List",
+          "description": [
+            "Optional. Names of the packages for which you want to get the checksum of each asset in the package. A package must be enabled and loaded for Integration Server to get checksums for the assets. If a package is partially loaded, Integration Server gets checksums for the loaded assets only. You must specify a value for packages or assets. If you specify a value for both packages and assets, Integration Server uses the packages value and ignores assets. If you specify neither, the pub.assets:getChecksums service ends with an exception."
+          ]
+        },
+        {
+          "name": "assets",
+          "type": "String List",
+          "description": [
+            "Optional. List of the fully qualified names of the specific assets for which you want to get the checksum. You must specify a value for packages or assets. If you specify a value for both packages and assets, Integration Server uses the packages value and ignores assets. If you specify neither, the pub.assets:getChecksums service ends with an exception."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "checksums",
+          "type": "Document List",
+          "description": [
+            "List of checksums for the assets in the specified packages or the specified assets."
+          ],
+          "children": [
+            {
+              "name": "package",
+              "type": "String",
+              "description": [
+                "Name of the package containing the asset."
+              ]
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the asset."
+              ]
+            },
+            {
+              "name": "checksum",
+              "type": "String",
+              "description": [
+                "Checksum for the asset. The checksum value is null for an asset listed in assets if the specified asset does not exist on Integration Server."
+              ]
+            }
+          ]
+        }
+      ],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "The pub.assets:getChecksums service ends with an exception if a package identified in packages does not exist or is not enabled. The checksums/checksum output parameter contains a null value if an asset specified in assets does not exist. If you do not have List access to a particular asset, the service returns only the asset name. The package and checksum values for the particular asset are null. You can only compare packages and assets from the same version of Integration Server. Comparison of assets across different versions of Integration Server is not supported. Internal changes in assets from one release to another might result in functionally identical assets being reported as different."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.assets:getGlobalVariableWithDependents",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-assets-folder#reference_gdb_wnd_gcc__title__1",
+      "description": [
+        "WmPublic. Retrieves the global variables used in the package along with a list of assets that depend on (use) the global variable."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the package from which to retrieve global variable usage information."
+          ]
+        },
+        {
+          "name": "keys",
+          "type": "String List",
+          "description": [
+            "Optional. A list of global variables from which you want to retrieve information. If keys are not provided, the service returns all the global variables used in the package."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "result",
+          "type": "Document List",
+          "description": [
+            "The list of global variables in a package."
+          ],
+          "children": [
+            {
+              "name": "key",
+              "type": "String",
+              "description": [
+                "Name of the global variable."
+              ]
+            },
+            {
+              "name": "value",
+              "type": "String",
+              "description": [
+                "Value of the global variable."
+              ]
+            },
+            {
+              "name": "isSecure",
+              "type": "String",
+              "description": [
+                "Indicates whether the global variable value is handled in a secure manner or not. - true indicates that the global variable value is handled in a secure manner. - false indicates that the global variable value is not handled in a secure manner."
+              ]
+            },
+            {
+              "name": "source",
+              "type": "String",
+              "description": [
+                "For a package-level global variable, returns package . For a server-level global variable, returns server."
+              ]
+            },
+            {
+              "name": "dependants",
+              "type": "String List",
+              "description": [
+                "A list of assets that depend on or use this global variable."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.assets:getHostedAPIs",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-assets-folder#reference_4E5B6E006BF64F769B48E3272B63B4B0__title__1",
+      "description": [
+        "WmPublic. Retrieves the list of APIs in a package on Integration Server."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageList",
+          "type": "String List",
+          "description": [
+            "A package or a list of packages for which you want to view APIs."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "packages",
+          "type": "Document List",
+          "description": [
+            "The list of packages that contains APIs."
+          ],
+          "children": [
+            {
+              "name": "packageName",
+              "type": "String",
+              "description": [
+                "Name of a package."
+              ]
+            },
+            {
+              "name": "api",
+              "type": "Document List",
+              "description": [
+                "The list of all APIs in a package."
+              ],
+              "children": [
+                {
+                  "name": "apiName",
+                  "type": "String",
+                  "description": [
+                    "The name of an API."
+                  ]
+                },
+                {
+                  "name": "type",
+                  "type": "String",
+                  "description": [
+                    "Type of the API. Supported types are WSDL, SWAGGER, and OPENAPI."
+                  ]
+                },
+                {
+                  "name": "endpointUrl",
+                  "type": "String",
+                  "description": [
+                    "The URL of the API. Note: The service does not retrieve the endpointUrl for a consumer REST API or REST API descriptor."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.assets:getPackageAssets",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-assets-folder#reference_q1q_rrc_gcc__title__1",
+      "description": [
+        "WmPublic. Retrieves a list of assets in a package, optionally limiting results to a type of asset."
+      ],
+      "input_parameters": [
+        {
+          "name": "packageName",
+          "type": "String",
+          "description": [
+            "Name of the package from which to retrieve asset information."
+          ]
+        },
+        {
+          "name": "assetType",
+          "type": "String List",
+          "description": [
+            "Optional. A list of asset types you want to retrieve information. Asset types include Flow Service, Java Service, Document Type, etc."
+          ]
+        },
+        {
+          "name": "includeDependency",
+          "type": "Boolean",
+          "description": [
+            "Optional. Specifies whether or not to include a list of assets that depend on or reference assets in the package in the service results. Set to: - true to generate a list of dependencies or references for each asset. - false to skip generating the list of dependents and references assets. The dependents, references, dependentsError, and referencesError output parameters are not returned. This is the default setting."
+          ]
+        }
+      ],
+      "output_parameters": [
+        {
+          "name": "asset",
+          "type": "Document List",
+          "description": [
+            "Asset information for the package."
+          ],
+          "children": [
+            {
+              "name": "name",
+              "type": "String",
+              "description": [
+                "Fully qualified name of the asset."
+              ]
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "description": [
+                "Asset type, such as Flow Service, Java Service, or Document Type."
+              ]
+            },
+            {
+              "name": "displayName",
+              "type": "String",
+              "description": [
+                "Local name for the asset."
+              ]
+            },
+            {
+              "name": "category",
+              "type": "String",
+              "description": [
+                "Asset category, such as Service, Document, or Trigger."
+              ]
+            },
+            {
+              "name": "visible",
+              "type": "String",
+              "description": [
+                "Indicates whether the asset can be referenced from outside the package or not. - private indicates that the asset cannot be referenced from outside the package. - public indicates that the asset can be referenced from outside the package. Note: Use IBM webMethods.io Integration to specify whether or not an asset can be referenced from outside the package."
+              ]
+            },
+            {
+              "name": "favorite",
+              "type": "Boolean",
+              "description": [
+                "Indicates whether the asset is a marked as a favorite. - true indicates that the asset is marked as a favorite. - false indicates that the asset is not marked as a favorite. Note: Use IBM webMethods.io Integration to mark an asset as a favorite."
+              ]
+            },
+            {
+              "name": "deprecated",
+              "type": "Boolean",
+              "description": [
+                "Indicates whether the asset has been deprecated. - true indicates that the asset is deprecated. - false indicates that the asset is not deprecated. Note: Use IBM webMethods.io Integration to mark an asset as deprecated."
+              ]
+            },
+            {
+              "name": "since",
+              "type": "String",
+              "description": [
+                "Indicates the version of package in which the asset was created. Note: Use IBM webMethods.io Integration to specify the version of the package."
+              ]
+            },
+            {
+              "name": "tag",
+              "type": "String List",
+              "description": [
+                "A list of tags assigned to the asset. Note: Use IBM webMethods.io Integration to assign tags to assets."
+              ]
+            },
+            {
+              "name": "dependents",
+              "type": "String List",
+              "description": [
+                "A list of assets that depend on or use this asset. If there are no dependents, or there are errors retrieving dependents, the service returns an empty list."
+              ]
+            },
+            {
+              "name": "references",
+              "type": "String List",
+              "description": [
+                "A list of assets that are referenced or used by this asset. If there are no references, or there are errors retrieving references, the service returns an empty list."
+              ]
+            },
+            {
+              "name": "dependentsError",
+              "type": "String",
+              "description": [
+                "Conditional. Message indicating the error preventing retrieval of a list of dependent assets. This parameter is returned only if there is an error in retrieving the dependent assets."
+              ]
+            },
+            {
+              "name": "referencesError",
+              "type": "String",
+              "description": [
+                "Conditional. Message indicating the error preventing to retrieve a list of referenced assets. This parameter is returned only if there is any error in retrieving the referenced assets."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

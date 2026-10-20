@@ -1,0 +1,165 @@
+{
+  "folder": "MQTT",
+  "description": [
+    "You use the elements in the mqtt folder to publish messages to an MQTT server and define the input of MQTT trigger services."
+  ],
+  "total_elements": 2,
+  "elements": [
+    {
+      "name": "pub.mqtt:publish",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mqtt-folder#idb2553113-4b71-4741-b585-d32871defffc__title__1",
+      "element_type": "service",
+      "description": [
+        "WmPublic. Publishes an MQTT message to an MQTT server."
+      ],
+      "input_parameters": [
+        {
+          "name": "connectionAliasName",
+          "type": "String",
+          "description": [
+            "Name of the MQTT connection alias to use to send the MQTT message."
+          ]
+        },
+        {
+          "name": "topicName",
+          "type": "String",
+          "description": [
+            "Name of the topic to which to publish the message."
+          ]
+        },
+        {
+          "name": "MqttMessage",
+          "type": "Document",
+          "description": [
+            "(IData object) A document representing the MQTT message to publish to the MQTT server."
+          ],
+          "children": [
+            {
+              "name": "payload",
+              "type": "Document",
+              "description": [
+                "Optional. A document containing the MQTT message payload. Integration Server supports the following formats for the message payload. If you do not specify a payload, the service sends an empty byte[]."
+              ],
+              "children": [
+                {
+                  "name": "string",
+                  "type": "String",
+                  "description": [
+                    "Optional. Message body in the form of a String."
+                  ]
+                },
+                {
+                  "name": "bytes",
+                  "type": "byte [ ]",
+                  "description": [
+                    "Optional. Message body in the form of a one-dimensional byte array."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "qos",
+              "type": "String",
+              "description": [
+                "Optional. The quality of service (QoS) for publishing the message to the MQTT server. Specify one of the following: - 0 At most once. Integration Server publishes the message to the MQTT server once or not at all. - 1 At least once. Integration Server publishes the message to the MQTT server one or more times. This is the default. - 2 Exactly once. Integration Server publishes the message to the MQTT server once and only once. The QoS for publishing messages to the MQTT server is separate from the QoS for receiving messages. As a result, it is possible for a message to be published to the MQTT server with a higher QoS than which the message is received from the MQTT server."
+              ]
+            },
+            {
+              "name": "isRetained",
+              "type": "String",
+              "description": [
+                "Optional. Flag indicating whether the MQTT server retains the published message as the last known message for the topic. Set to: - true to indicate the message is to be retained by the MQTT server as the last known message for the topic. - false to indicate the MQTT server will not retain this message as the last known message for the topic. This is the default."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": [],
+      "additional_information": [
+        {
+          "usage_notes": [
+            "Integration Server relies on Paho to determine the max inflight property value. The max inflight property determines the maximum number of messages that can be published to the MQTT server at one time using the same MQTT connection alias. Paho uses a default of 10. However you can use the watt.server.mqtt.producer.maxInflight server configuration parameter to set the max inflight property value."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pub.mqtt:triggerSpec",
+      "source_url": "https://www.ibm.com/docs/en/webmethods-integration/wm-integration-server/12.1.0?topic=guide-mqtt-folder#id68b2db2b-4eab-491d-b07f-2ba4bfc9a344__title__1",
+      "element_type": "specification",
+      "description": [
+        "WmPublic. Specification for the signature of an MQTT trigger service."
+      ],
+      "input_parameters": [
+        {
+          "name": "topicName",
+          "type": "String",
+          "description": [
+            "Name of the topic from which the message was received. An MQTT trigger can use wildcards to subscribe to multiple topics."
+          ]
+        },
+        {
+          "name": "MqttMessage",
+          "type": "Document",
+          "description": [
+            "(IData object) A document representing the MQTT message received by the MQTT trigger."
+          ],
+          "children": [
+            {
+              "name": "payload",
+              "type": "Document",
+              "description": [
+                "Optional. A document containing the MQTT message payload. The Decoding Type value for the MQTT trigger determines the format for the message payload passed to the trigger service."
+              ],
+              "children": [
+                {
+                  "name": "bytes",
+                  "type": "byte [ ]",
+                  "description": [
+                    "Optional. MQTT message body in the form of a one-dimensional byte array."
+                  ]
+                },
+                {
+                  "name": "string",
+                  "type": "String",
+                  "description": [
+                    "Optional. The MQTT message body as a String."
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "id",
+              "type": "String",
+              "description": [
+                "Optional. The message ID for the MQTT message which is set only if qos is 1 or 2."
+              ]
+            },
+            {
+              "name": "qos",
+              "type": "String",
+              "description": [
+                "Optional. The Quality of Service (QoS) level used for delivery of the message to the MQTT trigger. The QoS for a message can be different than the QoS value set for the MQTT trigger. The QoS for publishing messages to the MQTT server is separate from the QoS for receiving messages. When sending the message to the MQTT trigger, the MQTT server uses the lower QoS regardless of whether it was set by the message publisher or by the MQTT trigger. MQTT version 3.1.1 does not require MQTT servers to support QoS 2. An MQTT server may downgrade a QoS of 2 to 1."
+              ]
+            },
+            {
+              "name": "isRetained",
+              "type": "String",
+              "description": [
+                "Optional. Flag indicating whether the MQTT message was saved by the MQTT server as the last known good message for the topic. Whether or not a message is retained is determined by the retain flag in the message which is set by the publisher. - true indicates the MQTT message was retained by the MQTT server as the last known good message. - false indicates the MQTT message was not retained by the MQTT server as the last known good message."
+              ]
+            },
+            {
+              "name": "isDuplicate",
+              "type": "String",
+              "description": [
+                "Optional. Flag indicating whether the MQTT message is a duplicate of one previously retrieved by the MQTT trigger. The MQTT server resends messages when the MQTT server does not receive an acknowledgment for the message from the MQTT trigger. isDuplicate applies only when the qos is greater than 0."
+              ]
+            }
+          ]
+        }
+      ],
+      "output_parameters": []
+    }
+  ]
+}
