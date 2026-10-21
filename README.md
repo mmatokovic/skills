@@ -1,4 +1,4 @@
-# mmatokovic Skills
+# mmatokovic skills
 
 A collection of practical, installable skills and plugins for Claude Code.
 
