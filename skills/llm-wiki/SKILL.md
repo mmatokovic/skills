@@ -1,13 +1,17 @@
 ---
-name: wiki
-description: Search and structurally lint this LLM wiki vault (wiki/, raw/). Use when asked to find something in the wiki, check for broken links/orphans/missing index entries, or list raw files not yet ingested.
+name: llm-wiki
+description: Maintain an LLM-compiled Obsidian wiki vault (raw/, wiki/, outputs/). Use to ingest raw sources, ask the wiki a question, search it, lint it (broken links, orphans, missing index entries, uningested files), or file an answer back into it.
 ---
-Operating rules live in the vault-root `CLAUDE.md`; this skill only bundles the helper scripts.
-Run them from the vault root (stdlib-only Python 3).
+Operating rules (layout, conventions, ingest / ask / lint / file workflows) are in this skill's
+[AGENTS.md](AGENTS.md); read it before any operation. A vault can import it from its `CLAUDE.md`
+with `@AGENTS.md` after copying it to the vault root.
 
-- Search: `python .claude/skills/wiki/scripts/search.py "<query>" [--raw] [-n 20] [--json]`
+
+Scripts are stdlib-only Python 3 in this skill's `scripts/` folder. Run them from the vault root:
+
+- Search: `python <skill-dir>/scripts/search.py "<query>" [--raw] [-n 20] [--json]`
   (`--serve` starts a local web UI on port 8765 whose results open in Obsidian)
-- Lint: `python .claude/skills/wiki/scripts/lint.py [--uningested] [--json]`
+- Lint: `python <skill-dir>/scripts/lint.py [--uningested] [--json]`
 
 `assets/web-clipper-template.json` is the Obsidian Web Clipper template (import it in the browser
 extension; clips land in `raw/articles/`).

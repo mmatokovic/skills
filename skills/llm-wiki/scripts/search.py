@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Naive BM25 search over the wiki (and optionally raw sources). Stdlib only.
 
-  python .claude/skills/wiki/scripts/search.py "argo cd rbac"            # top 10 wiki hits
-  python .claude/skills/wiki/scripts/search.py "app of apps" --raw -n 20 # include raw/ sources
-  python .claude/skills/wiki/scripts/search.py "image updater" --json    # machine-readable, for the LLM
-  python .claude/skills/wiki/scripts/search.py --serve                   # web UI on http://localhost:8765
+  python scripts/search.py "argo cd rbac"            # top 10 wiki hits
+  python scripts/search.py "app of apps" --raw -n 20 # include raw/ sources
+  python scripts/search.py "image updater" --json    # machine-readable, for the LLM
+  python scripts/search.py --serve                   # web UI on http://localhost:8765
 """
 import argparse, html, json, math, re, sys, urllib.parse
 from collections import Counter
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[4]
+ROOT = Path.cwd()
 TEXT_EXT = {".md", ".txt", ".csv", ".json"}
 TOKEN = re.compile(r"[\w\-]+", re.UNICODE)
 K1, B, TITLE_BOOST = 1.5, 0.75, 3

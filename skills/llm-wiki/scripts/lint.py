@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Structural health checks for the wiki. Stdlib only. Semantic checks are the LLM's job.
 
-  python .claude/skills/wiki/scripts/lint.py               # full report (Markdown)
-  python .claude/skills/wiki/scripts/lint.py --uningested  # just raw files that have no source page yet
-  python .claude/skills/wiki/scripts/lint.py --json        # machine-readable
+  python scripts/lint.py               # full report (Markdown)
+  python scripts/lint.py --uningested  # just raw files that have no source page yet
+  python scripts/lint.py --json        # machine-readable
 """
 import argparse, json, re, sys
 from collections import defaultdict
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[4]
+ROOT = Path.cwd()
 WIKI, RAW = ROOT / "wiki", ROOT / "raw"
 SPECIAL = {"index", "log"}
 REQUIRED = ("type", "title", "updated")
@@ -38,7 +38,7 @@ def main():
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
 
-    all_files = [p for p in files(ROOT) if ".obsidian" not in p.parts and ".claude" not in p.parts]
+    all_files = [p for p in files(ROOT) if not {".obsidian", ".claude", ".git"} & set(p.parts)]
     by_stem, by_path = defaultdict(list), {}
     for p in all_files:
         rel = p.relative_to(ROOT).as_posix()
@@ -59,7 +59,7 @@ def main():
             r = resolve(tgt)
             if r:
                 inbound[r].add(rel)
-            elif RAW not in p.parents:
+            elif RAW not in p.parents and rel != "wiki/log.md":  # log is history; old links may point at merged or deleted pages
                 broken.append((rel, tgt))
         if p in wiki_pages and p.stem not in SPECIAL:
             fm = frontmatter(text)
