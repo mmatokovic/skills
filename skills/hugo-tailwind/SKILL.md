@@ -12,7 +12,7 @@ Build Hugo sites the way current Hugo documents them: the template system introd
 
 1. **Check versions.** `hugo version` — this skill targets **v0.161+** (Tailwind via npm CLI; the standalone binary is no longer supported). Hugo Modules additionally need `go`; Tailwind needs `node` + `npm`.
 2. **Old site?** If there is a `layouts/_default/`, `layouts/partials/` or `layouts/index.html`, the site predates v0.146. Upgrade first (below) — don't mix old and new layout names.
-3. **Theme or project layouts?** Templates in the project's `layouts/` override the theme's file by file. Change the project, never edit files under `themes/` or the module cache.
+3. **Theme or project layouts?** Templates in the project's `layouts/` override the theme's file by file. Change the project, never edit a third-party theme under `themes/` or the module cache. If the theme is the user's own (a git submodule they commit to), change it in the theme repo instead of overriding it in the project.
 
 ## New site
 

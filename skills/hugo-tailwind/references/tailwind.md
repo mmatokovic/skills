@@ -4,6 +4,7 @@ Hugo runs the Tailwind CLI itself through `css.TailwindCSS`. Tailwind scans `hug
 
 ## Contents
 1. Setup (from the Hugo docs)
+   - npm packages in a theme or module
 2. Theme tokens, fonts, dark mode
 3. Typography for Markdown content
 4. Classes Tailwind cannot see
@@ -83,6 +84,26 @@ The `hugo_stats.json` mount has `disableWatch` and the cachebuster is what trigg
 
 The Tailwind CLI may only read paths in `security.node.permissions.allowRead` (default: the project directory). Add parent paths there for a monorepo with a hoisted `node_modules`.
 
+If the build fails on Node permissions, also allow Tailwind's native addon and worker:
+
+```toml
+[security.node.permissions]
+  allowAddons = ['tailwindcss']
+  allowWorker = ['tailwindcss']
+```
+
+With pnpm, set `nodeLinker: hoisted` in `pnpm-workspace.yaml` so Hugo finds the Tailwind CLI in `node_modules`.
+
+### npm packages in a theme or module
+
+Since Hugo v0.159 a theme or module lists its npm packages in a normal `package.json` at its root. `package.hugo.json` is still read (and wins if both exist), but only for backward compatibility; rename it to `package.json`.
+
+`hugo mod npm pack` in the site collects the packages of every module, including a theme in `themes/` set with `theme = '…'`, into `packages/hugoautogen/package.json`, and adds `"workspaces": ["packages/hugoautogen"]` to the site's `package.json`. Then run `npm install`. Packages the site already lists itself are left out of the generated file.
+
+- pnpm ignores the `workspaces` field; it reads workspaces from `pnpm-workspace.yaml`. A site that lists its packages itself does not need `hugo mod npm pack` at all.
+- A `"comments": { "devDependencies": { "<pkg>": "<theme>" } }` block in a site's `package.json` is output of the pre-v0.159 command and can be deleted.
+- Dependabot can update a theme's `package.json` (npm ecosystem) but never read `package.hugo.json`, which is how the two drift apart.
+
 ## 2. Theme tokens, fonts, dark mode
 
 v4 is configured in CSS — there is no `tailwind.config.js`.
@@ -138,6 +159,8 @@ Tailwind only generates classes that appear in `hugo_stats.json` (rendered HTML)
 - Repeated markup → a partial (`_partials/card.html`), not `@apply`.
 - `@apply` only for content you cannot add classes to (third-party HTML); prefer render hooks.
 - Small interactivity: `<details>`/`<summary>`, or a short script bundled with `js.Build` from `assets/js/main.js`.
+- Keep state in attributes the script toggles (`aria-expanded`, `hidden`, `data-shown`) and style it with Tailwind variants that appear in the markup (`group-aria-expanded:hidden`, `group-data-shown:opacity-100`), so no `@source inline` safelist is needed.
+- Avoid Alpine.js for a couple of toggles: its standard build evaluates attribute expressions with `new Function`, which forces `'unsafe-eval'` into the Content Security Policy.
 
 ## 6. Options
 
